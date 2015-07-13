@@ -1,0 +1,5 @@
+fake-factory
+nose
+nose-parameterized
+coverage
+radon

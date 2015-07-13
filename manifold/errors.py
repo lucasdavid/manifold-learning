@@ -1,0 +1,2 @@
+class ManifoldError(RuntimeError):
+    pass
