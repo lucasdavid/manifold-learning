@@ -1,3 +1,4 @@
+numpy
 fake-factory
 nose
 nose-parameterized

@@ -2,12 +2,12 @@ import numpy as np
 
 from unittest import TestCase
 
-from manifold.services import errors, DataSetRetriever
+from manifold.services import errors, Retriever
 
 
-class DataSetRetrieverTest(TestCase):
+class RetrieverTest(TestCase):
     def test_retrieve_brainwave(self):
-        retriever = DataSetRetriever('datasets/brainwave/plrx.txt', target_column=-1)
+        retriever = Retriever('datasets/brainwave/plrx.txt', target_column=-1)
 
         data, target = retriever.load().split_target().retrieve()
 
@@ -23,7 +23,7 @@ class DataSetRetrieverTest(TestCase):
     def test_retrieve_nonexistent_file(self):
         fake_file = 'nonexistentfile.data'
 
-        r = DataSetRetriever(fake_file)
+        r = Retriever(fake_file)
 
         with self.assertRaises(errors.RetrieverError):
             r.load()
@@ -31,7 +31,7 @@ class DataSetRetrieverTest(TestCase):
     def test_split_target(self):
         fake_file = 'nonexistentfile.data'
 
-        r = DataSetRetriever(fake_file)
+        r = Retriever(fake_file)
 
         r._data = np.array([[1, 2, 3], [4, 5, 6]])
         data, target = r.split_target().retrieve()

@@ -3,7 +3,16 @@ import numpy as np
 from . import errors
 
 
-class DataSetRetriever(object):
+class Retriever(object):
+    """Retriever for machine learning data set files.
+
+    Usage:
+        r = Retriever('path/to/file')
+        data, _ = r.load().retrieve()
+
+        # if you know which column contains the target feature:
+        data, target = r.split_target(target_column=-1).retrieve()
+    """
     def __init__(self, file, target_column=-1):
         self.target_column = target_column
 
@@ -66,4 +75,6 @@ class DataSetRetriever(object):
         return self
 
     def retrieve(self):
+        self.load()
+
         return self._data, self._target
