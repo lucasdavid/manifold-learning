@@ -1,6 +1,7 @@
 import abc
 import copy
 import numpy as np
+import sys
 
 
 class Algorithm(object, metaclass=abc.ABCMeta):
@@ -13,6 +14,32 @@ class Algorithm(object, metaclass=abc.ABCMeta):
 
     def execute(self):
         raise NotImplementedError
+
+
+class FloydWarshall(Algorithm):
+    def __init__(self, distance_matrix):
+        super().__init__(distance_matrix=distance_matrix)
+
+    def execute(self):
+        assert self.data['distance_matrix'] is not None
+
+        m = self.data['distance_matrix']
+        count = len(m)
+
+        V = []
+        for i in range(count):
+            V.append([m[i][j] or sys.maxint for j in range(count)])
+            V[i][i] = 0
+
+        V = np.array(V)
+
+        for k in range(count):
+            for i in range(count):
+                for j in range(count):
+                    if V[i][j] > V[i][k] + V[k][j]:
+                        V[i][j] = V[i][k] + V[k][j]
+
+        return V
 
 
 class Isomap(Algorithm):
