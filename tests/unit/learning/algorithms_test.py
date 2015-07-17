@@ -2,7 +2,30 @@ import numpy as np
 from unittest import TestCase
 from numpy import testing
 
-from manifold.learning.algorithms import Isomap
+from manifold.learning import algorithms
+
+
+class FloydWarshallTest(TestCase):
+    def test_digraph(self):
+        # https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
+        distance = [
+            [0, 0, -2, 0],
+            [4, 0, 3, 0],
+            [0, 0, 0, 2],
+            [0, -1, 0, 0],
+        ]
+
+        expected = [
+            [0, -1, -2, 0],
+            [4, 0, 2, 4],
+            [5, 1, 0, 2],
+            [3, -1, 1, 0],
+        ]
+
+        f = algorithms.FloydWarshall(distance_matrix=distance)
+        actual = f.execute()
+
+        testing.assert_array_almost_equal(actual, expected)
 
 
 class IsomapTest(TestCase):
@@ -21,7 +44,7 @@ class IsomapTest(TestCase):
             [69.388, 18.76340],
         ]
 
-        i = Isomap(proximity_matrix, to_dimension=2)
+        i = algorithms.Isomap(proximity_matrix, to_dimension=2)
 
         actual = i.execute()
 

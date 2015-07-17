@@ -26,9 +26,11 @@ class FloydWarshall(Algorithm):
         m = self.data['distance_matrix']
         count = len(m)
 
+        max = np.max(m)
+
         V = []
         for i in range(count):
-            V.append([m[i][j] or sys.maxint for j in range(count)])
+            V.append([m[i][j] or max + 1 for j in range(count)])
             V[i][i] = 0
 
         V = np.array(V)
