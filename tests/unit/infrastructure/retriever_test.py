@@ -2,7 +2,7 @@ import numpy as np
 
 from unittest import TestCase
 
-from manifold.services import errors, Retriever
+from manifold.infrastructure import errors, Retriever
 
 
 class RetrieverTest(TestCase):

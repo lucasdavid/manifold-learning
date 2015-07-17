@@ -1,4 +1,6 @@
 numpy
+scipy
+sklearn
 fake-factory
 nose
 nose-parameterized

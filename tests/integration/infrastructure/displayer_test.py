@@ -1,7 +1,7 @@
 from unittest import TestCase
 from sklearn import datasets
 
-from manifold.services import Displayer
+from manifold.infrastructure import Displayer
 
 
 class DisplayerTest(TestCase):
@@ -12,4 +12,9 @@ class DisplayerTest(TestCase):
 
         d = Displayer(points=points, neighbors=neighbors)
 
-        d.load(X, color).render()
+        d \
+            .load(X, color) \
+            .load(X, color) \
+            .load(X, color) \
+            .load(X, color) \
+            .render()
