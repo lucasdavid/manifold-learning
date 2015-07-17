@@ -13,8 +13,8 @@ class DisplayerTest(TestCase):
         d = Displayer(points=points, neighbors=neighbors)
 
         d \
-            .load(X, color) \
-            .load(X, color) \
-            .load(X, color) \
-            .load(X, color) \
+            .load(X, color, is_3d=True) \
+            .load(X, color, is_3d=True) \
+            .load(X, color, is_3d=True) \
+            .load(X, color, is_3d=True) \
             .render()
