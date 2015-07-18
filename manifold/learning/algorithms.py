@@ -1,36 +1,49 @@
-import abc
-import copy
 import numpy as np
-import sys
+
+from ..infrastructure.base import Task, EuclideanDistancesFromDataSet
 
 
-class Algorithm(object, metaclass=abc.ABCMeta):
-    def __init__(self, **kwargs):
-        self.data = None
-        self.load(**kwargs)
+class KNearestNeighbors(Task):
+    def __init__(self, distance_matrix, k=4):
+        """Executes the K-Nearest Neighbors algorithm over a given distance matrix.
 
-    def load(self, **kwargs):
-        self.data = copy.deepcopy(kwargs)
+        :param distance_matrix: the iterable structure that contains the euclidean distances
+        between the vertices.
+        :param k: the number of neighbors to be considered. Default is 4.
+        """
+        super().__init__(m=distance_matrix, k=k)
 
-    def execute(self):
-        raise NotImplementedError
+    def run(self):
+        m, k = self.data['m'], self.data['k']
+        nodes = len(m)
+
+        x = np.zeros((nodes, nodes))
+
+        for node in range(nodes):
+            # Gets K closest neighbors, but removes node first.
+            neighbors = np.array(np.argsort(m[node]))
+            neighbors = neighbors[neighbors != node][:k]
+
+            for neighbor in neighbors:
+                # Fill distance matrix with these neighbors distances.
+                x[node][neighbor] = m[node][neighbor]
+
+        return x
 
 
-class FloydWarshall(Algorithm):
+class FloydWarshall(Task):
     def __init__(self, distance_matrix):
-        super().__init__(distance_matrix=distance_matrix)
+        super().__init__(m=distance_matrix)
 
-    def execute(self):
-        assert self.data['distance_matrix'] is not None
-
-        m = self.data['distance_matrix']
+    def run(self):
+        m = self.data['m']
         count = len(m)
 
         max = np.max(m)
 
         V = []
         for i in range(count):
-            V.append([m[i][j] or max + 1 for j in range(count)])
+            V.append([m[i][j] or np.inf for j in range(count)])
             V[i][i] = 0
 
         V = np.array(V)
@@ -38,23 +51,18 @@ class FloydWarshall(Algorithm):
         for k in range(count):
             for i in range(count):
                 for j in range(count):
-                    if V[i][j] > V[i][k] + V[k][j]:
-                        V[i][j] = V[i][k] + V[k][j]
+                    V[i][j] = min(V[i][j], V[i][k] + V[k][j])
 
         return V
 
 
-class Isomap(Algorithm):
-    def __init__(self, proximity_matrix, to_dimension=3):
-        super().__init__(proximity_matrix=proximity_matrix, to_dimension=to_dimension)
+class MDS(Task):
+    def __init__(self, m, to_dimension=3):
+        super().__init__(m=m, to_dimension=to_dimension)
 
-    def execute(self):
-        assert self.data['proximity_matrix'] is not None
-
+    def run(self):
         to_dimension = self.data['to_dimension']
-
-        p = np.array(self.data['proximity_matrix'])
-        p = np.power(p, 2)
+        p = np.array(self.data['m']) ** 2
 
         count = len(p)
 
@@ -73,3 +81,24 @@ class Isomap(Algorithm):
         v = v[:, permutations][:, :to_dimension]
 
         return np.dot(v, np.sqrt(np.diag(w)))
+
+
+class Isomap(Task):
+    def __init__(self, data_set, color, k=4, to_dimension=3):
+        super().__init__(
+            k=k,
+            to_dimension=to_dimension,
+            data_set=data_set,
+            color=color,
+            copying=False
+        )
+
+    def run(self):
+        data_set = self.data['data_set']
+        k = self.data['k']
+        to_dimension = self.data['to_dimension']
+
+        m = EuclideanDistancesFromDataSet(data_set).run()
+        m = KNearestNeighbors(m, k).run()
+        m = FloydWarshall(m).run()
+        return MDS(m, to_dimension=to_dimension).run()

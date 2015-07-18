@@ -18,7 +18,7 @@ class IsomapPrintingTest(TestCase):
     def test_rendering(self):
         i = algorithms.Isomap(self.test_data, to_dimension=2)
 
-        result = i.execute()
+        result = i.run()
 
         Displayer() \
             .load(result, np.random.rand(4)) \
