@@ -110,22 +110,28 @@ class MDS(Task):
         count = len(self.data['m'])
 
         # Converts dictionary to matrix.
-        p = np.array([[cost for cost in links.values()] for links in self.data['m'].values()]) ** 2
+        # Power it by two and multiply by -1/2.
+        p = (-1 / 2) * np.array([[cost for cost in links.values()] for links in self.data['m'].values()]) ** 2
 
+        # Find J = I - (1/n) * 11'
         j = np.identity(count) - (1 / count) * np.ones((count, count))
-        b = (-1 / 2) * np.dot(np.dot(j, p), j)
 
-        w, v = np.linalg.eig(b)
+        # Find the eigenvalues and eigenvectors of J*P*J.
+        w, v = np.linalg.eig(np.dot(np.dot(j, p), j))
+
+        del p, j
 
         # Find set of permutations necessary to order w and v in such way that
         # w[i] <= w[i + 1], for each i in {0, len(w) -1}.
         permutations = w.argsort()[::-1]
 
         # Sort arrays and select only the first to_dimension values,
-        # as only they are necessary to instantiate a space S such that dim(S) == to_dimension.
+        # as only they are necessary to instantiate a space S such that dim(S) is :to_dimension.
         w = w[permutations][:to_dimension]
         v = v[:, permutations][:, :to_dimension]
 
+        # Return v * w ^ (1/2), the list of components (x, y, ...),
+        # len = :to_dimension, corresponding to each sample in the data set.
         return np.dot(v, np.sqrt(np.diag(w)))
 
 

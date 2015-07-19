@@ -25,10 +25,10 @@ class Displayer(object):
 
     def render(self):
         fig = plt.figure(figsize=(16, 9))
-        plt.suptitle("Manifold Learning with " + self.parameters, fontsize=14)
+        plt.suptitle(self.parameters)
 
         count = len(self.items)
-        items_in_row = count // 2 + 1
+        items_in_row = count // 2
         rows_count = math.ceil(count / items_in_row)
 
         for i, item in enumerate(self.items):
