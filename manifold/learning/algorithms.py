@@ -4,6 +4,24 @@ import networkx as nx
 from ..infrastructure.base import Task, EuclideanDistancesFromDataSet
 
 
+class ENearestNeighbors(Task):
+    def __init__(self, distance_matrix, e):
+        super().__init__(m=distance_matrix, e=e)
+
+    def run(self):
+        m = self.data['m']
+        e = self.data['e']
+
+        for v in range(len(m)):
+            links = m[v]
+
+            for neighbor in range(v + 1, v + 1 + len(links)):
+                if links[neighbor] > e:
+                    del links[neighbor]
+
+        return m
+
+
 class KNearestNeighbors(Task):
     def __init__(self, distance_matrix, k=4):
         """Executes the K-Nearest Neighbors algorithm over a given distance matrix.
@@ -16,25 +34,25 @@ class KNearestNeighbors(Task):
 
     def run(self):
         m, k = self.data['m'], self.data['k']
-        nodes = len(m)
+        nodes = len(m) + 1
 
-        for node in range(nodes):
-            links_to_neighbors = [m[neighbor][node] for neighbor in range(node)] \
-                + [0] \
-                + [m[neighbor][node] for neighbor in range(node + 1, nodes)]
+        for v in range(nodes):
+            links_established_count = len([_ for previous in range(v) if v in m[previous]])
+
+            if links_established_count >= k:
+                # Nothing to do if this node already has K neighbors.
+                continue
+
+            candidate_links = [m[neighbor][v] for neighbor in range(v + 1, nodes)]
 
             # Order neighbors by their link cost (min -> max).
-            neighbors = np.argsort(links_to_neighbors)
-            # Select neighbors that are not the current node and are not between the first K less costly links.
-            neighbors = neighbors[neighbors != node][:k]
+            neighbors = np.argsort(candidate_links) + v + 1
+            # Select neighbors that are not between the first K -links_established_count less costly links.
+            neighbors = neighbors[k - links_established_count:]
 
-            for neighbor in neighbors:
-                if node in m:
-                    if neighbor in m[node]:
-                        del m[node][neighbor]
-                elif neighbor in m:
-                    if node in m[neighbor]:
-                        del m[neighbor][node]
+            for n in neighbors:
+                # Remove all neighbors selected on the previous step.
+                del m[v][n]
 
         return m
 
@@ -65,9 +83,10 @@ class MDS(Task):
 
     def run(self):
         to_dimension = self.data['to_dimension']
-        p = np.array(self.data['m']) ** 2
+        count = len(self.data['m'])
 
-        count = len(p)
+        # Converts dictionary to matrix.
+        p = np.array([[cost for cost in links.values()] for links in self.data['m'].values()])  ** 2
 
         j = np.identity(count) - (1 / count) * np.ones((count, count))
         b = (-1 / 2) * np.dot(np.dot(j, p), j)
@@ -87,25 +106,36 @@ class MDS(Task):
 
 
 class Isomap(Task):
-    def __init__(self, data_set, color, k=4, to_dimension=3, method='dijkstra'):
-        assert method == 'dijkstra' or method == 'floyd-warshall'
+    def __init__(self,
+                 data_set, color,
+                 nearest_method='k', k=4, e=20,
+                 to_dimension=3,
+                 shortest_path_method='dijkstra'):
+
+        assert shortest_path_method == 'dijkstra' or shortest_path_method == 'floyd-warshall'
+        assert nearest_method == 'k' or nearest_method == 'e'
 
         super().__init__(
             k=k,
+            e=e,
             to_dimension=to_dimension,
             data_set=data_set,
             color=color,
-            method=method,
+            nearest_method=nearest_method,
+            shortest_path_method=shortest_path_method,
             copying=True
         )
 
     def run(self):
         data_set = self.data['data_set']
-        k = self.data['k']
         to_dimension = self.data['to_dimension']
-        method = self.data['method']
+        shortest_path_method = self.data['shortest_path_method']
+        nearest_method = self.data['nearest_method']
+        k = self.data['k']
+        e = self.data['e']
 
         m = EuclideanDistancesFromDataSet(data_set).run()
-        m = KNearestNeighbors(m, k).run()
-        m = method == 'dijkstra' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
+        m = nearest_method == 'k' and KNearestNeighbors(m, k).run() or ENearestNeighbors(m, e).run()
+        m = shortest_path_method == 'dijkstra' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
+
         return MDS(m, to_dimension=to_dimension).run()

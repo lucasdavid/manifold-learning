@@ -10,6 +10,7 @@ class ISOMAPTest(TestCase):
     def test_swiss_roll(self):
         samples = 1000
         neighbors = 10
+        epsilon = 5
         to_dimension = 2
 
         data, c = datasets.make_swiss_roll(n_samples=samples, random_state=0)
@@ -18,7 +19,7 @@ class ISOMAPTest(TestCase):
 
         t0 = time()
         my_result = algorithms \
-            .Isomap(data, color=c, k=neighbors, to_dimension=to_dimension) \
+            .Isomap(data, color=c, nearest_method='e', e=epsilon, to_dimension=to_dimension) \
             .run()
         t1 = time()
 

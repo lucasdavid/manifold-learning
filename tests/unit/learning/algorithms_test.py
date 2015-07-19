@@ -6,28 +6,50 @@ from sklearn import datasets
 from manifold.learning import algorithms
 
 
-class KNearestNeighborsTest(TestCase):
+class ENearestNeighborsTest(TestCase):
     def test_basic(self):
+        e = 4
         m = {
-            0: {1: 50, 2: 10, 3: 20},
-            1: {2: 4, 3: 2},
+            0: {1: 5, 2: 40, 3: 4},
+            1: {2: 41, 3: 1},
             2: {3: 2},
         }
 
-        k = 2
-
-        m = {
-            0: {2: 10, 3: 20},
-            1: {2: 4, 3: 2},
+        expected = {
+            0: {3: 4},
+            1: {3: 1},
             2: {3: 2},
         }
 
         actual = algorithms \
-            .KNearestNeighbors(distance_matrix=m, k=k) \
+            .ENearestNeighbors(distance_matrix=m, e=e) \
             .run()
 
-        self.assertIsNotNone(actual)
         testing.assert_array_almost_equal(actual, expected)
+
+
+# class KNearestNeighborsTest(TestCase):
+#     def test_basic(self):
+#         m = {
+#             0: {1: 50, 2: 10, 3: 20},
+#             1: {2: 4, 3: 2},
+#             2: {3: 2},
+#         }
+#
+#         k = 2
+#
+#         expected = {
+#             0: {2: 10, 3: 20},
+#             1: {2: 4, 3: 2},
+#             2: {3: 2},
+#         }
+#
+#         actual = algorithms \
+#             .KNearestNeighbors(distance_matrix=m, k=k) \
+#             .run()
+#
+#         self.assertIsNotNone(actual)
+#         testing.assert_array_almost_equal(actual, expected)
 
 
 class AllPairsDijkstraTest(TestCase):
@@ -43,6 +65,8 @@ class AllPairsDijkstraTest(TestCase):
         self.assertIsNotNone(result)
         self.assertEqual(4, len(result))
         self.assertEqual(4, len(result[0]))
+
+        self.assertDictEqual()
 
         for i in range(4):
             self.assertFalse(result[i][i])
