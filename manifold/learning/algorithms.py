@@ -1,4 +1,5 @@
 import numpy as np
+import networkx as nx
 
 from ..infrastructure.base import Task, EuclideanDistancesFromDataSet
 
@@ -17,18 +18,35 @@ class KNearestNeighbors(Task):
         m, k = self.data['m'], self.data['k']
         nodes = len(m)
 
-        x = np.zeros((nodes, nodes))
-
         for node in range(nodes):
-            # Gets K closest neighbors, but removes node first.
-            neighbors = np.array(np.argsort(m[node]))
+            links_to_neighbors = [m[neighbor][node] for neighbor in range(node)] \
+                + [0] \
+                + [m[neighbor][node] for neighbor in range(node + 1, nodes)]
+
+            # Order neighbors by their link cost (min -> max).
+            neighbors = np.argsort(links_to_neighbors)
+            # Select neighbors that are not the current node and are not between the first K less costly links.
             neighbors = neighbors[neighbors != node][:k]
 
             for neighbor in neighbors:
-                # Fill distance matrix with these neighbors distances.
-                x[node][neighbor] = m[node][neighbor]
+                if node in m:
+                    if neighbor in m[node]:
+                        del m[node][neighbor]
+                elif neighbor in m:
+                    if node in m[neighbor]:
+                        del m[neighbor][node]
 
-        return x
+        return m
+
+
+class AllPairsDijkstra(Task):
+    def __init__(self, distance_upper_tri_matrix):
+        super().__init__(m=distance_upper_tri_matrix)
+
+    def run(self):
+        m = self.data['m']
+        return nx.all_pairs_dijkstra_path_length(
+            nx.Graph(m))
 
 
 class FloydWarshall(Task):
@@ -37,23 +55,8 @@ class FloydWarshall(Task):
 
     def run(self):
         m = self.data['m']
-        count = len(m)
-
-        max = np.max(m)
-
-        V = []
-        for i in range(count):
-            V.append([m[i][j] or np.inf for j in range(count)])
-            V[i][i] = 0
-
-        V = np.array(V)
-
-        for k in range(count):
-            for i in range(count):
-                for j in range(count):
-                    V[i][j] = min(V[i][j], V[i][k] + V[k][j])
-
-        return V
+        return nx.floyd_warshall(
+            nx.Graph(m))
 
 
 class MDS(Task):
@@ -84,21 +87,25 @@ class MDS(Task):
 
 
 class Isomap(Task):
-    def __init__(self, data_set, color, k=4, to_dimension=3):
+    def __init__(self, data_set, color, k=4, to_dimension=3, method='dijkstra'):
+        assert method == 'dijkstra' or method == 'floyd-warshall'
+
         super().__init__(
             k=k,
             to_dimension=to_dimension,
             data_set=data_set,
             color=color,
-            copying=False
+            method=method,
+            copying=True
         )
 
     def run(self):
         data_set = self.data['data_set']
         k = self.data['k']
         to_dimension = self.data['to_dimension']
+        method = self.data['method']
 
         m = EuclideanDistancesFromDataSet(data_set).run()
         m = KNearestNeighbors(m, k).run()
-        m = FloydWarshall(m).run()
+        m = method == 'dijkstra' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
         return MDS(m, to_dimension=to_dimension).run()

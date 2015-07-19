@@ -8,21 +8,19 @@ from manifold.learning import algorithms
 
 class KNearestNeighborsTest(TestCase):
     def test_basic(self):
-        m = [
-            [ 0, 10, 2,  3],
-            [10,  0, 2, 15],
-            [ 2,  2, 0,  3],
-            [ 3, 15, 3,  0],
-        ]
+        m = {
+            0: {1: 50, 2: 10, 3: 20},
+            1: {2: 4, 3: 2},
+            2: {3: 2},
+        }
 
         k = 2
 
-        expected = [
-            [ 0, 0, 2, 3],
-            [10, 0, 2, 0],
-            [ 2, 2, 0, 0],
-            [ 3, 0, 3, 0],
-        ]
+        m = {
+            0: {2: 10, 3: 20},
+            1: {2: 4, 3: 2},
+            2: {3: 2},
+        }
 
         actual = algorithms \
             .KNearestNeighbors(distance_matrix=m, k=k) \
@@ -32,15 +30,33 @@ class KNearestNeighborsTest(TestCase):
         testing.assert_array_almost_equal(actual, expected)
 
 
+class AllPairsDijkstraTest(TestCase):
+    def test_basic(self):
+        m = {
+            0: {1: 50, 2: 10, 3: 20},
+            1: {2: 4, 3: 2},
+            2: {3: 2},
+        }
+
+        result = algorithms.AllPairsDijkstra(m).run()
+
+        self.assertIsNotNone(result)
+        self.assertEqual(4, len(result))
+        self.assertEqual(4, len(result[0]))
+
+        for i in range(4):
+            self.assertFalse(result[i][i])
+
+
 class FloydWarshallTest(TestCase):
     def test_digraph(self):
         # https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
-        distance = [
+        distance = np.array([
             [0, 0, -2, 0],
             [4, 0, 3, 0],
             [0, 0, 0, 2],
             [0, -1, 0, 0],
-        ]
+        ])
 
         expected = [
             [0, -1, -2, 0],

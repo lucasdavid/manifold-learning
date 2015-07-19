@@ -3,13 +3,14 @@ import math
 import matplotlib.pyplot as plt
 
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.ticker import NullFormatter
 
 
 class DisplayItem(object):
-    def __init__(self, data, color, is_3d):
+    def __init__(self, title, data, color):
+        self.title = title
         self.data = copy.deepcopy(data)
         self.color = copy.deepcopy(color)
-        self.is_3d = is_3d
 
 
 class Displayer(object):
@@ -17,8 +18,8 @@ class Displayer(object):
         self.items = []
         self.parameters = ', '.join(['%s: %s' % (k, str(v)) for k, v in kwargs.items()])
 
-    def load(self, data, color, is_3d=False):
-        self.items.append(DisplayItem(data, color, is_3d))
+    def load(self, title, data, color):
+        self.items.append(DisplayItem(title, data, color))
 
         return self
 
@@ -31,7 +32,7 @@ class Displayer(object):
         rows_count = math.ceil(count / items_in_row)
 
         for i, item in enumerate(self.items):
-            is_3d = len(item.data.shape) == 3
+            is_3d = item.data.shape[1] > 2
 
             args = [item.data[:, 0], item.data[:, 1]]
             if is_3d:
@@ -40,6 +41,7 @@ class Displayer(object):
             kwargs = {}
             if is_3d:
                 kwargs['projection'] = '3d'
+                Axes3D
 
             ax = fig.add_subplot(
                 rows_count * 100 +
@@ -47,8 +49,15 @@ class Displayer(object):
                 1 + i, **kwargs)
 
             ax.scatter(*args, c=item.color, cmap=plt.cm.Spectral)
+            if item.title:
+                plt.title(item.title)
+
             if is_3d:
                 ax.view_init(4, -72)
+            else:
+                ax.xaxis.set_major_formatter(NullFormatter())
+                ax.yaxis.set_major_formatter(NullFormatter())
+                plt.axis('tight')
 
         plt.show()
 

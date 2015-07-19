@@ -13,16 +13,12 @@ class EuclideanDistancesFromDataSetTest(TestCase):
             [1, 1, 1],
         ]
 
-        _14 = 1.414214
-        _17 = 1.732051
-
-        expected = [
-            [  0,   1, _14, _17],
-            [  1,   0,   1, _14],
-            [_14,   1,   0,   1],
-            [_17, _14,   1,   0],
-        ]
+        expected = {
+            0: {1: 1, 2: 1.4142135623730951, 3: 1.7320508075688772},
+            1: {2: 1, 3: 1.4142135623730951},
+            2: {3: 1},
+        }
 
         actual = EuclideanDistancesFromDataSet(data_set).run()
 
-        testing.assert_array_almost_equal(actual, expected)
+        self.assertDictEqual(expected, actual)
