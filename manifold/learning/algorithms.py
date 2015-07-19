@@ -1,16 +1,22 @@
+import abc
 import numpy as np
 import networkx as nx
 
 from ..infrastructure.base import Task, EuclideanDistancesFromDataSet
 
 
-class ENearestNeighbors(Task):
-    def __init__(self, distance_matrix, e):
-        super().__init__(m=distance_matrix, e=e)
+class INearestNeighbors(Task, metaclass=abc.ABCMeta):
+    def __init__(self, distance_matrix, alpha):
+        assert distance_matrix is not None
+        assert alpha > 0
 
+        super().__init__(m=distance_matrix, a=alpha)
+
+
+class ENearestNeighbors(INearestNeighbors):
     def run(self):
         m = self.data['m']
-        e = self.data['e']
+        e = self.data['a']
 
         for v in range(len(m)):
             links = m[v]
@@ -22,59 +28,77 @@ class ENearestNeighbors(Task):
         return m
 
 
-class KNearestNeighbors(Task):
-    def __init__(self, distance_matrix, k=4):
-        """Executes the K-Nearest Neighbors algorithm over a given distance matrix.
+class KNearestNeighbors(INearestNeighbors):
+    """Executes the K-Nearest Neighbors algorithm over a given distance matrix.
 
-        :param distance_matrix: the iterable structure that contains the euclidean distances
+    Parameters:
+        @distance_matrix: the iterable structure that contains the euclidean distances
         between the vertices.
-        :param k: the number of neighbors to be considered. Default is 4.
-        """
-        super().__init__(m=distance_matrix, k=k)
+        @a: the @k number of neighbors to be considered.
+
+    Returns:
+        The updated @distance_matrix.
+    """
 
     def run(self):
-        m, k = self.data['m'], self.data['k']
+        m, k = self.data['m'], self.data['a']
         nodes = len(m) + 1
 
-        for v in range(nodes):
-            links_established_count = len([_ for previous in range(v) if v in m[previous]])
+        result = dict()
 
-            if links_established_count >= k:
-                # Nothing to do if this node already has K neighbors.
+        unsaturated_nodes = {i: 0 for i in range(nodes)}
+
+        for v in range(nodes):
+            if v not in unsaturated_nodes:
+                # Nothing to do if the current node was already saturated.
                 continue
 
-            candidate_links = [m[neighbor][v] for neighbor in range(v + 1, nodes)]
+            links_count = unsaturated_nodes[v]
+            candidate_neighbors = list(unsaturated_nodes.keys() - {v})
+            candidate_links = [m[min(v, n)][max(v, n)] for n in candidate_neighbors]
 
             # Order neighbors by their link cost (min -> max).
-            neighbors = np.argsort(candidate_links) + v + 1
-            # Select neighbors that are not between the first K -links_established_count less costly links.
-            neighbors = neighbors[k - links_established_count:]
+            neighbors_ind = np.argsort(candidate_links)
 
-            for n in neighbors:
-                # Remove all neighbors selected on the previous step.
-                del m[v][n]
+            for i in neighbors_ind[:k - links_count]:
+                neighbor = candidate_neighbors[i]
 
-        return m
+                _min, _max = min(v, neighbor), max(v, neighbor)
+
+                if _min not in result:
+                    result[_min] = dict()
+                result[_min][_max] = m[_min][_max]
+
+                unsaturated_nodes[neighbor] += 1
+
+                if unsaturated_nodes[neighbor] == k:
+                    del unsaturated_nodes[neighbor]
+
+            unsaturated_nodes[v] += k - links_count
+            if unsaturated_nodes[v] == k:
+                del unsaturated_nodes[v]
+
+        return result
 
 
-class AllPairsDijkstra(Task):
-    def __init__(self, distance_upper_tri_matrix):
-        super().__init__(m=distance_upper_tri_matrix)
+class IShortestPathFinder(Task, metaclass=abc.ABCMeta):
+    def __init__(self, distance_upper_matrix):
+        g = nx.Graph()
 
+        for v, links in distance_upper_matrix.items():
+            g.add_weighted_edges_from([(v, n, link) for n, link in links.items()])
+
+        super().__init__(g=g)
+
+
+class AllPairsDijkstra(IShortestPathFinder):
     def run(self):
-        m = self.data['m']
-        return nx.all_pairs_dijkstra_path_length(
-            nx.Graph(m))
+        return nx.all_pairs_dijkstra_path_length(self.data['g'])
 
 
-class FloydWarshall(Task):
-    def __init__(self, distance_matrix):
-        super().__init__(m=distance_matrix)
-
+class FloydWarshall(IShortestPathFinder):
     def run(self):
-        m = self.data['m']
-        return nx.floyd_warshall(
-            nx.Graph(m))
+        return nx.floyd_warshall(self.data['g'])
 
 
 class MDS(Task):
@@ -86,7 +110,7 @@ class MDS(Task):
         count = len(self.data['m'])
 
         # Converts dictionary to matrix.
-        p = np.array([[cost for cost in links.values()] for links in self.data['m'].values()])  ** 2
+        p = np.array([[cost for cost in links.values()] for links in self.data['m'].values()]) ** 2
 
         j = np.identity(count) - (1 / count) * np.ones((count, count))
         b = (-1 / 2) * np.dot(np.dot(j, p), j)
@@ -111,7 +135,6 @@ class Isomap(Task):
                  nearest_method='k', k=4, e=20,
                  to_dimension=3,
                  shortest_path_method='dijkstra'):
-
         assert shortest_path_method == 'dijkstra' or shortest_path_method == 'floyd-warshall'
         assert nearest_method == 'k' or nearest_method == 'e'
 

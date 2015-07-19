@@ -2,6 +2,7 @@ numpy
 scipy
 matplotlib
 sklearn
+networkx
 fake-factory
 nose
 nose-parameterized

@@ -2,7 +2,6 @@ import numpy as np
 from unittest import TestCase
 from numpy import testing
 
-from sklearn import datasets
 from manifold.learning import algorithms
 
 
@@ -22,34 +21,32 @@ class ENearestNeighborsTest(TestCase):
         }
 
         actual = algorithms \
-            .ENearestNeighbors(distance_matrix=m, e=e) \
+            .ENearestNeighbors(distance_matrix=m, alpha=e) \
             .run()
 
-        testing.assert_array_almost_equal(actual, expected)
+        self.assertDictEqual(expected, actual)
 
 
-# class KNearestNeighborsTest(TestCase):
-#     def test_basic(self):
-#         m = {
-#             0: {1: 50, 2: 10, 3: 20},
-#             1: {2: 4, 3: 2},
-#             2: {3: 2},
-#         }
-#
-#         k = 2
-#
-#         expected = {
-#             0: {2: 10, 3: 20},
-#             1: {2: 4, 3: 2},
-#             2: {3: 2},
-#         }
-#
-#         actual = algorithms \
-#             .KNearestNeighbors(distance_matrix=m, k=k) \
-#             .run()
-#
-#         self.assertIsNotNone(actual)
-#         testing.assert_array_almost_equal(actual, expected)
+class KNearestNeighborsTest(TestCase):
+    def test_basic(self):
+        m = {
+            0: {1: 50, 2: 10, 3: 20},
+            1: {2: 4, 3: 2},
+            2: {3: 2},
+        }
+
+        k = 2
+
+        expected = {
+            0: {2: 10, 3: 20},
+            1: {2: 4, 3: 2},
+        }
+
+        actual = algorithms \
+            .KNearestNeighbors(distance_matrix=m, alpha=k) \
+            .run()
+
+        self.assertDictEqual(expected, actual)
 
 
 class AllPairsDijkstraTest(TestCase):
@@ -60,49 +57,48 @@ class AllPairsDijkstraTest(TestCase):
             2: {3: 2},
         }
 
-        result = algorithms.AllPairsDijkstra(m).run()
+        expected = {
+            0: {0:  0, 1: 14, 2: 10, 3: 12},
+            1: {0: 14, 1:  0, 2:  4, 3:  2},
+            2: {0: 10, 1:  4, 2:  0, 3:  2},
+            3: {0: 12, 1:  2, 2:  2, 3:  0},
+        }
 
-        self.assertIsNotNone(result)
-        self.assertEqual(4, len(result))
-        self.assertEqual(4, len(result[0]))
+        actual = algorithms.AllPairsDijkstra(m).run()
 
-        self.assertDictEqual()
-
-        for i in range(4):
-            self.assertFalse(result[i][i])
+        self.assertDictEqual(expected, actual)
 
 
 class FloydWarshallTest(TestCase):
     def test_digraph(self):
         # https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
-        distance = np.array([
-            [0, 0, -2, 0],
-            [4, 0, 3, 0],
-            [0, 0, 0, 2],
-            [0, -1, 0, 0],
-        ])
+        distance = {
+            0: {1: 50, 2: 10, 3: 20},
+            1: {2: 4, 3: 2},
+            2: {3: 2},
+        }
 
-        expected = [
-            [0, -1, -2, 0],
-            [4, 0, 2, 4],
-            [5, 1, 0, 2],
-            [3, -1, 1, 0],
-        ]
+        expected = {
+            0: {0:  0, 1: 14, 2: 10, 3: 12},
+            1: {0: 14, 1:  0, 2:  4, 3:  2},
+            2: {0: 10, 1:  4, 2:  0, 3:  2},
+            3: {0: 12, 1:  2, 2:  2, 3:  0},
+        }
 
-        f = algorithms.FloydWarshall(distance_matrix=distance)
+        f = algorithms.FloydWarshall(distance)
         actual = f.run()
 
-        testing.assert_array_almost_equal(actual, expected)
+        self.assertDictEqual(expected, actual)
 
 
 class MDSTest(TestCase):
     def test_wickelmaier(self):
-        proximity_matrix = [
-            [0, 93, 82, 133],
-            [93, 0, 52, 60],
-            [82, 52, 0, 111],
-            [133, 60, 111, 0],
-        ]
+        proximity_matrix = {
+            0: {0:   0, 1: 93, 2:  82, 3: 133},
+            1: {0:  93, 1:  0, 2:  52, 3:  60},
+            2: {0:  82, 1: 52, 2:   0, 3: 111},
+            3: {0: 133, 1: 60, 2: 111, 3:   0},
+        }
 
         expected = [
             [-62.831, 32.97448],
