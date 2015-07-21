@@ -46,37 +46,19 @@ class KNearestNeighbors(INearestNeighbors):
 
         result = dict()
 
-        unsaturated_nodes = {i: 0 for i in range(nodes)}
-
         for v in range(nodes):
-            if v not in unsaturated_nodes:
-                # Nothing to do if the current node was already saturated.
-                continue
-
-            links_count = unsaturated_nodes[v]
-            candidate_neighbors = list(unsaturated_nodes.keys() - {v})
-            candidate_links = [m[min(v, n)][max(v, n)] for n in candidate_neighbors]
+            candidate_links = [m[n][v] for n in range(0, v)] + [0] + [m[v][n] for n in range(v + 1, nodes)]
 
             # Order neighbors by their link cost (min -> max).
-            neighbors_ind = np.argsort(candidate_links)
+            # Finally, remove :v from :indexes and select the first K neighbors.
+            closest_neighbors = np.argsort(candidate_links)
+            closest_neighbors = closest_neighbors[closest_neighbors != v][:k]
 
-            for i in neighbors_ind[:k - links_count]:
-                neighbor = candidate_neighbors[i]
+            result[v] = dict()
 
+            for neighbor in closest_neighbors:
                 _min, _max = min(v, neighbor), max(v, neighbor)
-
-                if _min not in result:
-                    result[_min] = dict()
                 result[_min][_max] = m[_min][_max]
-
-                unsaturated_nodes[neighbor] += 1
-
-                if unsaturated_nodes[neighbor] == k:
-                    del unsaturated_nodes[neighbor]
-
-            unsaturated_nodes[v] += k - links_count
-            if unsaturated_nodes[v] == k:
-                del unsaturated_nodes[v]
 
         return result
 
@@ -111,7 +93,8 @@ class MDS(Task):
 
         # Converts dictionary to matrix.
         # Power it by two and multiply by -1/2.
-        p = (-1 / 2) * np.array([[cost for cost in links.values()] for links in self.data['m'].values()]) ** 2
+        p = np.array([[cost for cost in links.values()] for links in self.data['m'].values()]) ** 2
+        p *= -0.5
 
         # Find J = I - (1/n) * 11'
         j = np.identity(count) - (1 / count) * np.ones((count, count))
@@ -137,19 +120,29 @@ class MDS(Task):
 
 class Isomap(Task):
     def __init__(self,
-                 data_set, color,
-                 nearest_method='k', k=4, e=20,
+                 data_set,
+                 nearest_method='auto', k=None, e=None,
                  to_dimension=3,
-                 shortest_path_method='dijkstra'):
-        assert shortest_path_method == 'dijkstra' or shortest_path_method == 'floyd-warshall'
-        assert nearest_method == 'k' or nearest_method == 'e'
+                 shortest_path_method='d'):
+
+        # Shortest-path-method must be d: dijkstra or fw: floyd-warshall.
+        assert shortest_path_method == 'd' or shortest_path_method == 'fw'
+
+        assert nearest_method == 'auto' or nearest_method == 'k' or nearest_method == 'e'
+        assert k is not None or e is not None
+
+        if nearest_method == 'auto':
+            # Detects Nearest-Neighbor method to use based on which parameters were passed.
+            nearest_method = 'k' if k is not None else 'e'
+        else:
+            # A nearest-neighbors method was chosen. Check if its parameters was passed correctly.
+            assert nearest_method == 'k' and k is not None or nearest_method == 'e' and e is not None
 
         super().__init__(
             k=k,
             e=e,
             to_dimension=to_dimension,
             data_set=data_set,
-            color=color,
             nearest_method=nearest_method,
             shortest_path_method=shortest_path_method,
             copying=True
@@ -165,6 +158,6 @@ class Isomap(Task):
 
         m = EuclideanDistancesFromDataSet(data_set).run()
         m = nearest_method == 'k' and KNearestNeighbors(m, k).run() or ENearestNeighbors(m, e).run()
-        m = shortest_path_method == 'dijkstra' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
+        m = shortest_path_method == 'fw' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
 
         return MDS(m, to_dimension=to_dimension).run()
