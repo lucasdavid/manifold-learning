@@ -18,7 +18,7 @@ class Displayer(object):
         self.items = []
         self.parameters = ', '.join(['%s: %s' % (k, str(v)) for k, v in kwargs.items()])
 
-    def load(self, title, data, color):
+    def load(self, title, data, color=None):
         self.items.append(DisplayItem(title, data, color))
 
         return self
@@ -28,7 +28,7 @@ class Displayer(object):
         plt.suptitle(self.parameters)
 
         count = len(self.items)
-        items_in_row = count // 2
+        items_in_row = math.ceil(math.sqrt(count))
         rows_count = math.ceil(count / items_in_row)
 
         for i, item in enumerate(self.items):
@@ -48,7 +48,11 @@ class Displayer(object):
                 items_in_row * 10 +
                 1 + i, **kwargs)
 
-            ax.scatter(*args, c=item.color, cmap=plt.cm.Spectral)
+            kwargs = {}
+            if item.color is not None:
+                kwargs['c'] = item.color
+
+            ax.scatter(*args, cmap=plt.cm.Spectral, **kwargs)
             if item.title:
                 plt.title(item.title)
 
