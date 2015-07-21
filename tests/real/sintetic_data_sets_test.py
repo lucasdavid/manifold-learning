@@ -6,7 +6,7 @@ from manifold.learning import algorithms
 from manifold.infrastructure import Displayer
 
 
-class ISOMAPTest(TestCase):
+class IsomapTest(TestCase):
     def test_swiss_roll(self):
         samples = 1000
         neighbors = 10
@@ -23,29 +23,51 @@ class ISOMAPTest(TestCase):
 
         displayer \
             .load(
-                title="SKLearn's Isomap with %i neighbors, taking %.1fs." % (neighbors, elapsed),
+                title="SKLearn's Isomap (%i neighbors, taking %.1fs)" % (neighbors, elapsed),
                 data=result,
                 color=c)
 
         start = time()
         result = algorithms \
-            .Isomap(data, color=c, nearest_method='e', e=epsilon, to_dimension=to_dimension) \
+            .Isomap(data, nearest_method='e', e=epsilon, to_dimension=to_dimension) \
             .run()
         elapsed = time() - start
 
         displayer.load(
-            title="My E-Isomap with epsilon %i, taking %.1fs." % (epsilon, elapsed),
+            title="E-Isomap (epsilon=%i, dijkstra, %.1fs)" % (epsilon, elapsed),
             data=result,
             color=c)
 
         start = time()
         result = algorithms \
-            .Isomap(data, color=c, k=neighbors, to_dimension=to_dimension) \
+            .Isomap(data, nearest_method='e', shortest_path_method='fw', e=epsilon, to_dimension=to_dimension) \
             .run()
         elapsed = time() - start
 
         displayer.load(
-            title="My K-Isomap with %i neighbors, taking %.1fs." % (neighbors, elapsed),
+            title="E-Isomap (epsilon=%i, floyd-warshall, %.1fs)" % (epsilon, elapsed),
+            data=result,
+            color=c)
+
+        start = time()
+        result = algorithms \
+            .Isomap(data, k=neighbors, to_dimension=to_dimension) \
+            .run()
+        elapsed = time() - start
+
+        displayer.load(
+            title="K-Isomap (%i neighbors, dijkstra, %.1fs)" % (neighbors, elapsed),
+            data=result,
+            color=c)
+
+        start = time()
+        result = algorithms \
+            .Isomap(data, k=neighbors, to_dimension=to_dimension) \
+            .run()
+        elapsed = time() - start
+
+        displayer.load(
+            title="K-Isomap (%i neighbors, floyd-warshall, %.1fs)" % (neighbors, elapsed),
             data=result,
             color=c)
 

@@ -18,5 +18,9 @@ manifold
 
 ## Testing
 ```shell
+# Running all tests...
 nosetests
+
+# Running comparison between sklearn's Isomap implementation:
+nosetests --tests tests.real.sintetic_data_sets_test
 ```
