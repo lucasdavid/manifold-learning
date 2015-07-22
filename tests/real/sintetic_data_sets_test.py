@@ -18,12 +18,22 @@ class IsomapTest(TestCase):
             .load(title="Swiss roll from %i samples." % (samples,), data=data, color=c)
 
         start = time()
-        result = manifold.Isomap(neighbors, to_dimension).fit_transform(data)
+        result = manifold.Isomap(neighbors, to_dimension, path_method='D').fit_transform(data)
         elapsed = time() - start
 
         displayer \
             .load(
-                title="SKLearn's Isomap (%i neighbors, taking %.1fs)" % (neighbors, elapsed),
+                title="SKLearn's Isomap (%i neighbors, dijkstra, taking %.1fs)" % (neighbors, elapsed),
+                data=result,
+                color=c)
+
+        start = time()
+        result = manifold.Isomap(neighbors, to_dimension, path_method='FW').fit_transform(data)
+        elapsed = time() - start
+
+        displayer \
+            .load(
+                title="SKLearn's Isomap (%i neighbors, floyd-warshall, taking %.1fs)" % (neighbors, elapsed),
                 data=result,
                 color=c)
 
