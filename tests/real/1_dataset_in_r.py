@@ -20,13 +20,13 @@ class GlassDataSetTest(TestCase):
         # Additionally, its last column represents the target feature.
         glass.split_target()
 
-        data, color = glass.retrieve()
+        data, c = glass.retrieve()
 
         d = Displayer(title=data_set)
 
         # Scatter all dimensions (3-by-3), using as many graphs as necessary.
         for begin in range(0, glass.features, 3):
             end = min(glass.features, begin + 3)
-            d.load('Dimensions: d e [%i, %i]' % (begin + 1, end), data[:, begin:end], color=color)
+            d.load('Dimensions: d e [%i, %i]' % (begin + 1, end), data[:, begin:end], color=c)
 
         d.render()
