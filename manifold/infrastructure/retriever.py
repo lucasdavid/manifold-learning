@@ -50,12 +50,28 @@ class Retriever(object):
         if not self.loaded:
             try:
                 with open(self._file) as f:
-                    self._data = np.array([[float(w) for w in row.split(self.delimiter)]
-                                           for row in f.readlines()])
+                    data = []
 
-            except (IOError, ValueError) as e:
+                    for line in f.readlines():
+                        row = []
+
+                        for word in line.split(self.delimiter):
+                            try:
+                                word = float(word)
+                            except ValueError:
+                                # Tries to parse data.
+                                # Will possible fail on nominal values.
+                                pass
+
+                            row.append(word)
+
+                        data.append(np.array(row))
+
+                    self._data = np.array(data)
+
+            except IOError as error:
                 # File doesn't exist; user doesn't have necessary permissions or data parsing failed.
-                raise errors.RetrieverError(e)
+                raise errors.RetrieverError(error)
 
         return self
 
@@ -79,7 +95,7 @@ class Retriever(object):
         :param target_column: the column that contains the target feature. When None, uses the value passed in the
         construction of the object. If None, considers the last column (-1).
         """
-        if not self._target:
+        if self._target is None:
             # If :_target, target has already been striped from data.
             self.load()
 
