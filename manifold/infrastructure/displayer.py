@@ -1,5 +1,6 @@
 import copy
 import math
+import numpy as np
 import matplotlib.pyplot as plt
 
 from mpl_toolkits.mplot3d import Axes3D
@@ -32,14 +33,16 @@ class Displayer(object):
         rows_count = math.ceil(count / items_in_row)
 
         for i, item in enumerate(self.items):
-            is_3d = item.data.shape[1] > 2
+            samples, dimension = item.data.shape
 
-            args = [item.data[:, 0], item.data[:, 1]]
-            if is_3d:
-                args.append(item.data[:, 2])
+            # Consider, at most, the 3 first components.
+            components = [item.data[:, i] for i in range(min(dimension, 3))]
+
+            if dimension == 1:
+                components.append(np.zeros((samples, 1)))
 
             kwargs = {}
-            if is_3d:
+            if dimension > 2:
                 kwargs['projection'] = '3d'
                 Axes3D
 
@@ -52,16 +55,17 @@ class Displayer(object):
             if item.color is not None:
                 kwargs['c'] = item.color
 
-            ax.scatter(*args, cmap=plt.cm.Spectral, **kwargs)
+            ax.scatter(*components, cmap=plt.cm.Spectral, **kwargs)
             if item.title:
                 plt.title(item.title)
 
-            if is_3d:
+            ax.xaxis.set_major_formatter(NullFormatter())
+            ax.yaxis.set_major_formatter(NullFormatter())
+            plt.axis('tight')
+
+            if dimension > 2:
+                ax.zaxis.set_major_formatter(NullFormatter())
                 ax.view_init(4, -72)
-            else:
-                ax.xaxis.set_major_formatter(NullFormatter())
-                ax.yaxis.set_major_formatter(NullFormatter())
-                plt.axis('tight')
 
         plt.show()
 
