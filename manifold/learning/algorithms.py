@@ -85,15 +85,21 @@ class FloydWarshall(IShortestPathFinder):
 
 class MDS(Task):
     def __init__(self, m, to_dimension=3):
+        """Constructs a Multidimensional Scaling task.
+
+        :param m: :numpy array that represents the shortest-path distances between the graph's nodes.
+        :param to_dimension: :int number of eigenvalues kept during the dimensionality reduction step.
+        """
         super().__init__(m=m, to_dimension=to_dimension)
 
     def run(self):
         to_dimension = self.data['to_dimension']
-        count = len(self.data['m'])
+        m = self.data['m']
+        count = len(m)
 
         # Converts dictionary to matrix.
         # Power it by two and multiply by -1/2.
-        p = np.array([[cost for cost in links.values()] for links in self.data['m'].values()]) ** 2
+        p = m ** 2
         p *= -0.5
 
         # Find J = I - (1/n) * 11'
@@ -155,9 +161,18 @@ class Isomap(Task):
         nearest_method = self.data['nearest_method']
         k = self.data['k']
         e = self.data['e']
+        instances_count = len(data_set)
 
         m = EuclideanDistancesFromDataSet(data_set).run()
         m = nearest_method == 'k' and KNearestNeighbors(m, k).run() or ENearestNeighbors(m, e).run()
         m = shortest_path_method == 'fw' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
 
-        return MDS(m, to_dimension=to_dimension).run()
+        distance_matrix = np.zeros((instances_count, instances_count))
+
+        for node, links in m.items():
+            for neighbor, distance in links.items():
+                distance_matrix[node, neighbor] = distance
+
+        d = distance_matrix
+
+        return MDS(d, to_dimension=to_dimension).run()

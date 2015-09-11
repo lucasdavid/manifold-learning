@@ -95,12 +95,12 @@ class FloydWarshallTest(TestCase):
 
 class MDSTest(TestCase):
     def test_wickelmaier(self):
-        proximity_matrix = {
-            0: {0:   0, 1: 93, 2:  82, 3: 133},
-            1: {0:  93, 1:  0, 2:  52, 3:  60},
-            2: {0:  82, 1: 52, 2:   0, 3: 111},
-            3: {0: 133, 1: 60, 2: 111, 3:   0},
-        }
+        proximity_matrix = np.array([
+            [0, 93, 82, 133],
+            [93, 0, 52, 60],
+            [82, 52, 0, 111],
+            [133, 60, 111, 0]
+        ])
 
         expected = [
             [-62.8, 32.9],
