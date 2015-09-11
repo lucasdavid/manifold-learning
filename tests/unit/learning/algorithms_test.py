@@ -40,6 +40,8 @@ class KNearestNeighborsTest(TestCase):
         expected = {
             0: {2: 10, 3: 20},
             1: {2: 4, 3: 2},
+            2: {3: 2},
+            3: {}
         }
 
         actual = algorithms \
@@ -101,14 +103,14 @@ class MDSTest(TestCase):
         }
 
         expected = [
-            [-62.831, 32.97448],
-            [18.403, -12.02697],
-            [-24.960, -39.71091],
-            [69.388, 18.76340],
+            [-62.8, 32.9],
+            [18.4, -12.0],
+            [-24.9, -39.7],
+            [69.3, 18.7],
         ]
 
         i = algorithms.MDS(proximity_matrix, to_dimension=2)
 
         actual = i.run()
 
-        testing.assert_array_almost_equal(actual, expected, decimal=3)
+        testing.assert_array_almost_equal(actual, expected, decimal=1)

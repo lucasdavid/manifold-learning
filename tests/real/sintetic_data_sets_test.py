@@ -72,7 +72,7 @@ class IsomapTest(TestCase):
 
         start = time()
         result = algorithms \
-            .Isomap(data, k=neighbors, to_dimension=to_dimension) \
+            .Isomap(data, k=neighbors, to_dimension=to_dimension, shortest_path_method='fw') \
             .run()
         elapsed = time() - start
 

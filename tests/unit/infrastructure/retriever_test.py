@@ -1,6 +1,8 @@
-import numpy as np
-
 from unittest import TestCase
+
+import numpy as np
+from numpy import testing
+from nose_parameterized import parameterized
 
 from manifold.infrastructure import errors, Retriever
 
@@ -28,25 +30,14 @@ class RetrieverTest(TestCase):
         with self.assertRaises(errors.RetrieverError):
             r.load()
 
-    def test_split_target(self):
-        fake_file = 'nonexistentfile.data'
+    @parameterized.expand([
+        ([[1, 2, 3], [4, 5, 6]], -1, [[1, 2], [4, 5]], [3, 6]),
+        ([[1, 2, 3], [4, 5, 6]], 0, [[2, 3], [5, 6]], [1, 4])
+    ])
+    def test_split_target(self, data, target_column, expected_data, expected_target):
+        r = Retriever('nonexistentfile.data')
+        r._data = np.array(data)
+        actual_data, actual_target = r.split_target(target_column).retrieve()
 
-        r = Retriever(fake_file)
-
-        r._data = np.array([[1, 2, 3], [4, 5, 6]])
-        data, target = r.split_target().retrieve()
-
-        self.assertTrue((data == np.array([[1, 2], [4, 5]])).all())
-        self.assertTrue((target == np.array([3, 6])).all())
-
-        r._data = np.array([[1], [4]])
-        data, target = r.split_target().retrieve()
-
-        self.assertTrue((data == np.array([])).all())
-        self.assertTrue((target == np.array([1, 4])).all())
-
-        r._data = np.array([[1, 2, 3], [4, 5, 6]])
-        data, target = r.split_target(0).retrieve()
-
-        self.assertTrue((data == np.array([[2, 3], [5, 6]])).all())
-        self.assertTrue((target == np.array([1, 4])).all())
+        testing.assert_array_equal(actual_data, np.array(expected_data))
+        testing.assert_array_equal(expected_target, np.array(expected_target))

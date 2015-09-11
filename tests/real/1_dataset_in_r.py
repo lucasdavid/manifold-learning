@@ -2,14 +2,14 @@ import os
 
 from unittest import TestCase
 from manifold.infrastructure import Retriever, Displayer
+from manifold.learning import algorithms
 
 
 class GlassDataSetTest(TestCase):
     def test_display_dimensions(self):
-        data_sets_dir = '../datasets'
+        data_dir = 'datasets/'
         data_set = 'glass/glass.data'
-
-        file = os.path.join(data_sets_dir, data_set)
+        file = os.path.join(data_dir, data_set)
 
         print('Displaying data set {%s} in the Rn' % file)
 
@@ -21,6 +21,7 @@ class GlassDataSetTest(TestCase):
         glass.split_target()
 
         data, c = glass.retrieve()
+        reduced_data = algorithms.Isomap(data, e=20).run()
 
         d = Displayer(title=data_set)
 
@@ -29,4 +30,6 @@ class GlassDataSetTest(TestCase):
             end = min(glass.features, begin + 3)
             d.load('Dimensions: d e [%i, %i]' % (begin + 1, end), data[:, begin:end], color=c)
 
-        d.render()
+        d \
+            .load('Reduced glass data-set', reduced_data, c) \
+            .render()
