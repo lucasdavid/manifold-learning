@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn import datasets
 from sklearn.decomposition import PCA
+
 from manifold.infrastructure import Displayer
 
 TITLE = '2. Manifold Plot'
