@@ -1,18 +1,23 @@
 from setuptools import setup, find_packages
 
-try:
-    with open('requirements.txt') as f:
-        requirements = f.readlines()
-except IOError:
-    requirements = []
-
 setup(
     name='manifold',
-    version='0.5.2',
+    version='0.5.3',
     packages=find_packages(include=('manifold', 'manifold.*')),
     long_description=open('README.md').read(),
     include_package_data=True,
-    install_requires=requirements,
+    install_requires=(
+        'numpy',
+        'scipy',
+        'matplotlib',
+        'sklearn',
+        'networkx',
+        'fake-factory',
+        'nose',
+        'nose-parameterized',
+        'coverage',
+        'radon',
+    ),
     license='MIT',
     test_suite='tests.unit',
     classifiers=[
