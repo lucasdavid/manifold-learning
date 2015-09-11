@@ -9,7 +9,7 @@ except IOError:
 setup(
     name='manifold',
     version='0.5.2',
-    packages=find_packages(exclude=['tests.*', 'tests']),
+    packages=find_packages(include=('manifold', 'manifold.*')),
     long_description=open('README.md').read(),
     include_package_data=True,
     install_requires=requirements,

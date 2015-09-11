@@ -44,7 +44,6 @@ class Displayer(object):
             kwargs = {}
             if dimension > 2:
                 kwargs['projection'] = '3d'
-                Axes3D
 
             ax = fig.add_subplot(
                 rows_count * 100 +
@@ -55,7 +54,7 @@ class Displayer(object):
             if item.color is not None:
                 kwargs['c'] = item.color
 
-            ax.scatter(*components, cmap=plt.cm.Spectral, **kwargs)
+            ax.scatter(*components, **kwargs)
             if item.title:
                 plt.title(item.title)
 
