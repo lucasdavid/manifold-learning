@@ -105,7 +105,7 @@ class MDS(Task):
         # Find J = I - (1/n) * 11'
         j = np.identity(count) - (1 / count) * np.ones((count, count))
 
-        # Find the eigenvalues and eigenvectors of J*P*J.
+        # Find the eigenvalues (w) and eigenvectors (v) of J*P*J.
         w, v = np.linalg.eig(np.dot(np.dot(j, p), j))
 
         del p, j
@@ -113,6 +113,9 @@ class MDS(Task):
         # Find set of permutations necessary to order w and v in such way that
         # w[i] <= w[i + 1], for each i in {0, len(w) -1}.
         permutations = w.argsort()[::-1]
+
+        # Nullify all negative eigenvalues.
+        w = w.clip(min=0)
 
         # Sort arrays and select only the first to_dimension values,
         # as only they are necessary to instantiate a space S such that dim(S) is :to_dimension.
@@ -167,12 +170,11 @@ class Isomap(Task):
         m = nearest_method == 'k' and KNearestNeighbors(m, k).run() or ENearestNeighbors(m, e).run()
         m = shortest_path_method == 'fw' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
 
+        # Create distance matrix from neighbor map.
         distance_matrix = np.zeros((instances_count, instances_count))
 
         for node, links in m.items():
             for neighbor, distance in links.items():
                 distance_matrix[node, neighbor] = distance
 
-        d = distance_matrix
-
-        return MDS(d, to_dimension=to_dimension).run()
+        return MDS(distance_matrix, to_dimension=to_dimension).run()

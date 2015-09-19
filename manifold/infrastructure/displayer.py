@@ -25,6 +25,9 @@ class Displayer(object):
         return self
 
     def render(self):
+        # Assert that there is at least one graph to show.
+        assert self.items
+
         fig = plt.figure(figsize=(16, 9))
         plt.suptitle(self.parameters)
 
