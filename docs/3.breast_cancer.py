@@ -30,7 +30,7 @@ def main():
     start = time.time()
     reduced_data = algorithms.Isomap(data, k=4).run()
     elapsed = time.time() - start
-    d.load('Isomap (%ss)' % (elapsed / 1000), reduced_data, diagnosis)
+    d.load('Isomap (%2.fs)' % (elapsed / 1000), reduced_data, diagnosis)
 
     learn(reduced_data, diagnosis, d)
 
