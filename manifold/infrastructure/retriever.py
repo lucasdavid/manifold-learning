@@ -26,7 +26,7 @@ class Retriever(object):
         self.delimiter = delimiter
 
         self._file = file
-        self._data = self._target = None
+        self._data = self._target = self._features_map = None
 
     @property
     def loaded(self):
@@ -35,12 +35,18 @@ class Retriever(object):
         return self._data is not None
 
     @property
-    def features(self):
+    def features_map(self):
+        self.load()
+
+        return self._features_map
+
+    @property
+    def features_count(self):
         """Retrieves the number of features that the loaded data set has.
         """
         self.load()
 
-        return len(self._data[0])
+        return len(self._data.shape[0])
 
     def load(self):
         """Loads data set from file.
@@ -48,30 +54,37 @@ class Retriever(object):
         :return: :raise errors.RetrieverError: if any errors were raised when manipulating the file.
         """
         if not self.loaded:
+            self._features_map = {}
+            self._data = []
+
             try:
                 with open(self._file) as f:
-                    data = []
-
                     for line in f.readlines():
                         row = []
 
-                        for word in line.split(self.delimiter):
+                        for i, word in enumerate(line.split(self.delimiter)):
                             try:
                                 word = float(word)
                             except ValueError:
-                                # Tries to parse data.
-                                # Will possible fail on nominal values.
-                                pass
+                                # Failed to parse float, as this column represents a nominal feature.
+                                if i not in self._features_map:
+                                    self._features_map[i] = {}
+
+                                if word not in self._features_map[i]:
+                                    self._features_map[i][word] = len(self._features_map[i])
+
+                                # Replace word by its enumeration.
+                                word = self._features_map[i][word]
 
                             row.append(word)
 
-                        data.append(np.array(row))
-
-                    self._data = np.array(data)
+                        self._data.append(row)
 
             except IOError as error:
                 # File doesn't exist; user doesn't have necessary permissions or data parsing failed.
                 raise errors.RetrieverError(error)
+
+            self._data = np.array(self._data)
 
         return self
 

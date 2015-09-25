@@ -1,6 +1,5 @@
 import abc
 import copy
-import numpy as np
 
 from scipy.spatial.distance import pdist
 
@@ -35,7 +34,7 @@ class EuclideanDistancesFromDataSet(Task):
 
     def run(self):
         data_set = self.data['data_set']
-        samples = len(data_set)
+        samples = data_set.shape[0]
 
         # Find the distance between each pair of points.
         d = pdist(data_set)

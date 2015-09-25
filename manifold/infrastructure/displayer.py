@@ -1,4 +1,3 @@
-import copy
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,20 +6,14 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.ticker import NullFormatter
 
 
-class DisplayItem(object):
-    def __init__(self, title, data, color):
-        self.title = title
-        self.data = copy.deepcopy(data)
-        self.color = copy.deepcopy(color)
-
-
 class Displayer(object):
     def __init__(self, **kwargs):
         self.items = []
         self.parameters = ', '.join(['%s: %s' % (k, str(v)) for k, v in kwargs.items()])
 
-    def load(self, title, data, color=None):
-        self.items.append(DisplayItem(title, data, color))
+    def load(self, data, color=None, title=None):
+        # Always copy the data, and, of course, only the first three dimensions.
+        self.items.append((data[:, :3], color, title))
 
         return self
 
@@ -36,10 +29,11 @@ class Displayer(object):
         rows_count = math.ceil(count / items_in_row)
 
         for i, item in enumerate(self.items):
-            samples, dimension = item.data.shape
+            data, color, title = item
+            samples, dimension = data.shape
 
-            # Consider, at most, the 3 first components.
-            components = [item.data[:, i] for i in range(min(dimension, 3))]
+            # Grab data set components. It necessarily has 3 dimensions, as it was cut during load().
+            components = [data[:, i] for i in range(dimension)]
 
             if dimension == 1:
                 components.append(np.zeros((samples, 1)))
@@ -54,12 +48,12 @@ class Displayer(object):
                 1 + i, **kwargs)
 
             kwargs = {}
-            if item.color is not None:
-                kwargs['c'] = item.color
+            if color is not None:
+                kwargs['c'] = color
 
-            ax.scatter(*components, **kwargs)
-            if item.title:
-                plt.title(item.title)
+            ax.scatter(*components, cmap=plt.cm.jet, **kwargs)
+            if title:
+                plt.title(title)
 
             ax.xaxis.set_major_formatter(NullFormatter())
             ax.yaxis.set_major_formatter(NullFormatter())
