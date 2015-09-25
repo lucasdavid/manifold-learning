@@ -15,13 +15,13 @@ class DisplayingILPDExample(Example):
         # Finally, retrieves feature vectors and the glass_type (i.e. target feature).
         data, glass_type = r.split_target().retrieve()
 
-        # Instantiates a Displayer, which will generate a image.
-        d = Displayer(t=self.title)
-
         for i in range(0, data.shape[1], 3):
-            d.load(data[:, i:i + 3], glass_type, title='Glass data-set - features [%i, %i]' % (i, i + 3))
+            self.displayer.load(
+                data[:, i:i + 3],
+                glass_type,
+                title='Glass data-set - features [%i, %i]' % (i, i + 3))
 
-        d.render()
+        self.displayer.render()
 
 
 if __name__ == '__main__':
