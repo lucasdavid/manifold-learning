@@ -10,7 +10,7 @@ class INearestNeighbors(Task, metaclass=abc.ABCMeta):
         assert distance_matrix is not None
         assert alpha > 0
 
-        super().__init__(m=distance_matrix, a=alpha)
+        super().__init__(m=distance_matrix, a=alpha, copying=False)
 
 
 class ENearestNeighbors(INearestNeighbors):
@@ -70,7 +70,7 @@ class IShortestPathFinder(Task, metaclass=abc.ABCMeta):
         for v, links in distance_upper_matrix.items():
             g.add_weighted_edges_from([(v, n, link) for n, link in links.items()])
 
-        super().__init__(g=g)
+        super().__init__(g=g, copying=False)
 
 
 class AllPairsDijkstra(IShortestPathFinder):
@@ -88,9 +88,13 @@ class MDS(Task):
         """Constructs a Multidimensional Scaling task.
 
         :param m: :numpy array that represents the shortest-path distances between the graph's nodes.
-        :param to_dimension: :int number of eigenvalues kept during the dimensionality reduction step.
+        :param to_dimension: :int number of eigenvalues kept during the dimensionality reduction step, or the string
+        'auto', which will reduce all eigenvalues that are 0.
         """
-        super().__init__(m=m, to_dimension=to_dimension)
+        assert m is not None
+        assert isinstance(to_dimension, int) and to_dimension > 0
+
+        super().__init__(m=m, to_dimension=to_dimension, copying=False)
 
     def run(self):
         to_dimension = self.data['to_dimension']
@@ -111,7 +115,7 @@ class MDS(Task):
         del p, j
 
         # Find set of permutations necessary to order w and v in such way that
-        # w[i] <= w[i + 1], for each i in {0, len(w) -1}.
+        # w[i] <= w[i + 1], for each i in [0, len(w)).
         permutations = w.argsort()[::-1]
 
         # Nullify all negative eigenvalues.
@@ -124,7 +128,7 @@ class MDS(Task):
 
         # Return v * w ^ (1/2), the list of components (x, y, ...),
         # len = :to_dimension, corresponding to each sample in the data set.
-        return np.dot(v, np.sqrt(np.diag(w)))
+        return np.real(np.dot(v, np.sqrt(np.diag(w))))
 
 
 class Isomap(Task):
@@ -132,7 +136,8 @@ class Isomap(Task):
                  data_set,
                  nearest_method='auto', k=None, e=None,
                  to_dimension=3,
-                 shortest_path_method='d'):
+                 shortest_path_method='d',
+                 copying=False):
 
         # Shortest-path-method must be d: dijkstra or fw: floyd-warshall.
         assert shortest_path_method == 'd' or shortest_path_method == 'fw'
@@ -154,21 +159,19 @@ class Isomap(Task):
             data_set=data_set,
             nearest_method=nearest_method,
             shortest_path_method=shortest_path_method,
-            copying=True
+            copying=copying
         )
 
     def run(self):
         data_set = self.data['data_set']
-        to_dimension = self.data['to_dimension']
-        shortest_path_method = self.data['shortest_path_method']
-        nearest_method = self.data['nearest_method']
         k = self.data['k']
         e = self.data['e']
-        instances_count = len(data_set)
+
+        instances_count = data_set.shape[0]
 
         m = EuclideanDistancesFromDataSet(data_set).run()
-        m = nearest_method == 'k' and KNearestNeighbors(m, k).run() or ENearestNeighbors(m, e).run()
-        m = shortest_path_method == 'fw' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
+        m = self.data['nearest_method'] == 'k' and KNearestNeighbors(m, k).run() or ENearestNeighbors(m, e).run()
+        m = self.data['shortest_path_method'] == 'fw' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
 
         # Create distance matrix from neighbor map.
         distance_matrix = np.zeros((instances_count, instances_count))
@@ -177,4 +180,5 @@ class Isomap(Task):
             for neighbor, distance in links.items():
                 distance_matrix[node, neighbor] = distance
 
-        return MDS(distance_matrix, to_dimension=to_dimension).run()
+        self.data['mds'] = MDS(distance_matrix, to_dimension=self.data['to_dimension'])
+        return self.data['mds'].run()
