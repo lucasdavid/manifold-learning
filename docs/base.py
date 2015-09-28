@@ -60,28 +60,33 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
 
         y_predicted = grid.predict(X_test)
 
-        self.displayer.confusion_matrix(y_test, y_predicted)
+        self.displayer.confusion_matrix_for(y_test, y_predicted)
 
 
 class ReductionExample(Example, metaclass=abc.ABCMeta):
     data = reduced_data = target = None
 
-    reduction_method = 'isomap'
-    reduction_method_params = {
+    method = 'isomap'
+    params = {
         'k': 4,
-        'to_dimension': 3
+        'n_components': 3
     }
 
     def reduce(self):
-        print('Dimensionality reduction process has started... ', end=' ')
+        to_dimension = self.params['to_dimension'] if 'to_dimension' in self.params else \
+            self.params['n_components'] if 'n_components' in self.params else \
+            3
+
+        print('Dimensionality reduction process has started')
+        print('\tR^%i -to-> R^%i' % (self.data.shape[1], to_dimension))
         start = time.time()
 
-        if self.reduction_method == 'pca':
-            self.reduced_data = decomposition.PCA(**self.reduction_method_params).fit_transform(self.data)
+        if self.method == 'pca':
+            self.reduced_data = decomposition.PCA(**self.params).fit_transform(self.data)
         else:
-            self.reduced_data = Isomap(self.data, **self.reduction_method_params).run()
+            self.reduced_data = Isomap(self.data, **self.params).run()
 
         elapsed = time.time() - start
         print('Done (%f).' % elapsed)
 
-        self.displayer.load(self.reduced_data, self.target, title='Data set reduced by %s' % self.reduction_method)
+        self.displayer.load(self.reduced_data, self.target, title='Data set reduced with %s' % self.method)

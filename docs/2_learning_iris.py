@@ -13,6 +13,8 @@ class LearningIrisExample(LearningExample):
         self.data, self.target = iris.data, iris.target
         self.displayer.load(self.data, self.target, title='Glass data-set').render()
 
+        # Executes GridSearch with a fraction of the data set. Then predicts
+        # the rest of the samples and constructs the confusion matrix.
         self.learn()
 
     def dispose(self):
