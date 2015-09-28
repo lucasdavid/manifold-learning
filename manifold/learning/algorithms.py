@@ -84,20 +84,20 @@ class FloydWarshall(IShortestPathFinder):
 
 
 class MDS(Task):
-    def __init__(self, m, to_dimension=3):
+    def __init__(self, m, n_components=3):
         """Constructs a Multidimensional Scaling task.
 
         :param m: :numpy array that represents the shortest-path distances between the graph's nodes.
-        :param to_dimension: :int number of eigenvalues kept during the dimensionality reduction step, or the string
+        :param n_components: :int number of eigenvalues kept during the dimensionality reduction step, or the string
         'auto', which will reduce all eigenvalues that are 0.
         """
         assert m is not None
-        assert isinstance(to_dimension, int) and to_dimension > 0
+        assert isinstance(n_components, int) and n_components > 0
 
-        super().__init__(m=m, to_dimension=to_dimension, copying=False)
+        super().__init__(m=m, n_components=n_components, copying=False)
 
     def run(self):
-        to_dimension = self.data['to_dimension']
+        n_components = self.data['n_components']
         m = self.data['m']
         count = len(m)
 
@@ -121,21 +121,21 @@ class MDS(Task):
         # Nullify all negative eigenvalues.
         w = w.clip(min=0)
 
-        # Sort arrays and select only the first to_dimension values,
-        # as only they are necessary to instantiate a space S such that dim(S) is :to_dimension.
-        w = w[permutations][:to_dimension]
-        v = v[:, permutations][:, :to_dimension]
+        # Sort arrays and select only the first n_components values,
+        # as only they are necessary to instantiate a space S such that dim(S) is :n_components.
+        w = w[permutations][:n_components]
+        v = v[:, permutations][:, :n_components]
 
         # Return v * w ^ (1/2), the list of components (x, y, ...),
-        # len = :to_dimension, corresponding to each sample in the data set.
+        # len = :n_components, corresponding to each sample in the data set.
         return np.real(np.dot(v, np.sqrt(np.diag(w))))
 
 
 class Isomap(Task):
     def __init__(self,
                  data_set,
-                 nearest_method='auto', k=None, e=None,
-                 to_dimension=3,
+                 nearest_method='auto', k=10, e=None,
+                 n_components=3,
                  shortest_path_method='d',
                  copying=False):
 
@@ -155,7 +155,7 @@ class Isomap(Task):
         super().__init__(
             k=k,
             e=e,
-            to_dimension=to_dimension,
+            n_components=n_components,
             data_set=data_set,
             nearest_method=nearest_method,
             shortest_path_method=shortest_path_method,
@@ -180,5 +180,5 @@ class Isomap(Task):
             for neighbor, distance in links.items():
                 distance_matrix[node, neighbor] = distance
 
-        self.data['mds'] = MDS(distance_matrix, to_dimension=self.data['to_dimension'])
+        self.data['mds'] = MDS(distance_matrix, n_components=self.data['n_components'])
         return self.data['mds'].run()

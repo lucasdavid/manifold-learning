@@ -1,9 +1,8 @@
 import math
+
 import numpy as np
 import matplotlib.pyplot as plt
-
 from mpl_toolkits.mplot3d import Axes3D
-from matplotlib.ticker import NullFormatter
 from sklearn.metrics import confusion_matrix
 
 
@@ -18,7 +17,7 @@ class Displayer(object):
 
         return self
 
-    def confusion_matrix(self, target_test, target_predicted, title='Confusion matrix'):
+    def confusion_matrix_for(self, target_test, target_predicted, title='Confusion matrix'):
         cm = confusion_matrix(target_test, target_predicted)
         np.set_printoptions(precision=2)
 
@@ -66,17 +65,14 @@ class Displayer(object):
             if color is not None:
                 kwargs['c'] = color
 
-            ax.scatter(*components, cmap=plt.cm.jet, **kwargs)
+            ax.scatter(*components, cmap=plt.cm.rainbow, **kwargs)
             if title:
                 plt.title(title)
 
-            ax.xaxis.set_major_formatter(NullFormatter())
-            ax.yaxis.set_major_formatter(NullFormatter())
             plt.axis('tight')
 
             if dimension > 2:
-                ax.zaxis.set_major_formatter(NullFormatter())
-                ax.view_init(4, -72)
+                ax.view_init(20, -40)
 
         plt.show()
 
