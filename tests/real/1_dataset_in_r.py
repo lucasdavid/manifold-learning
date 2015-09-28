@@ -26,9 +26,9 @@ class GlassDataSetTest(TestCase):
         d = Displayer(title=data_set)
 
         # Scatter all dimensions (3-by-3), using as many graphs as necessary.
-        for begin in range(0, glass.features, 3):
-            end = min(glass.features, begin + 3)
-            d.load('Dimensions: d e [%i, %i]' % (begin + 1, end), data[:, begin:end], color=c)
+        for begin in range(0, glass.features_count, 3):
+            end = min(glass.features_count, begin + 3)
+            d.load(data[:, begin:end], color=c, title='Dimensions: d e [%i, %i]' % (begin + 1, end))
 
         d \
             .load('Reduced glass data-set', reduced_data, c) \

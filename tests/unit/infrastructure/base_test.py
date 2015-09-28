@@ -1,17 +1,18 @@
 from unittest import TestCase
-from numpy import testing
+
+import numpy as np
 
 from manifold.infrastructure.base import EuclideanDistancesFromDataSet
 
 
 class EuclideanDistancesFromDataSetTest(TestCase):
     def test_basic(self):
-        data_set = [
+        data_set = np.array([
             [0, 0, 0],
             [1, 0, 0],
             [1, 1, 0],
             [1, 1, 1],
-        ]
+        ])
 
         expected = {
             0: {1: 1, 2: 1.4142135623730951, 3: 1.7320508075688772},

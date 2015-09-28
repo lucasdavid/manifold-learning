@@ -39,7 +39,7 @@ class IsomapTest(TestCase):
 
         start = time()
         result = algorithms \
-            .Isomap(data, nearest_method='e', e=epsilon, to_dimension=to_dimension) \
+            .Isomap(data, nearest_method='e', e=epsilon, n_components=to_dimension) \
             .run()
         elapsed = time() - start
 
@@ -50,7 +50,7 @@ class IsomapTest(TestCase):
 
         start = time()
         result = algorithms \
-            .Isomap(data, nearest_method='e', shortest_path_method='fw', e=epsilon, to_dimension=to_dimension) \
+            .Isomap(data, nearest_method='e', shortest_path_method='fw', e=epsilon, n_components=to_dimension) \
             .run()
         elapsed = time() - start
 
@@ -61,7 +61,7 @@ class IsomapTest(TestCase):
 
         start = time()
         result = algorithms \
-            .Isomap(data, k=neighbors, to_dimension=to_dimension) \
+            .Isomap(data, k=neighbors, n_components=to_dimension) \
             .run()
         elapsed = time() - start
 
@@ -72,7 +72,7 @@ class IsomapTest(TestCase):
 
         start = time()
         result = algorithms \
-            .Isomap(data, k=neighbors, to_dimension=to_dimension, shortest_path_method='fw') \
+            .Isomap(data, k=neighbors, n_components=to_dimension, shortest_path_method='fw') \
             .run()
         elapsed = time() - start
 

@@ -19,10 +19,10 @@ class DisplayerTest(TestCase):
         d = Displayer(points=points, neighbors=neighbors)
 
         d \
-            .load('Graphic I', data, color) \
-            .load('Graphic II', data, color) \
-            .load('Graphic III', data, color) \
-            .load('Graphic IV', data, color) \
+            .load(data, color, title='Graphic I') \
+            .load(data, color, title='Graphic II') \
+            .load(data, color, title='Graphic III') \
+            .load(data, color, title='Graphic IV') \
             .render()
 
     def test_similar_graphics(self):
@@ -52,6 +52,6 @@ class DisplayerTest(TestCase):
 
         # Actual printing...
         Displayer(title="Actual image", points=points, neighbors=neighbors) \
-            .load('Graphic I', data, color) \
-            .load('SKLearn\'s Isomap', result, color) \
+            .load(data, color, title='Graphic I') \
+            .load(result, color, title='SKLearn\'s Isomap') \
             .render()

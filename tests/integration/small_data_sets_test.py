@@ -35,7 +35,7 @@ class SmallDataSetsTest(TestCase):
                color=c)
 
         start = time()
-        result = algorithms.Isomap(data, nearest_method='e', e=epsilon, to_dimension=to_dimension) \
+        result = algorithms.Isomap(data, nearest_method='e', e=epsilon, n_components=to_dimension) \
             .run()
         elapsed = time() - start
 
@@ -44,7 +44,7 @@ class SmallDataSetsTest(TestCase):
                color=c)
 
         start = time()
-        result = algorithms.Isomap(data, k=neighbors, to_dimension=to_dimension) \
+        result = algorithms.Isomap(data, k=neighbors, n_components=to_dimension) \
             .run()
         elapsed = time() - start
 
@@ -72,7 +72,7 @@ class SmallDataSetsTest(TestCase):
                data=result)
 
         start = time()
-        result = algorithms.Isomap(data, nearest_method='e', e=epsilon, to_dimension=to_dimension) \
+        result = algorithms.Isomap(data, nearest_method='e', e=epsilon, n_components=to_dimension) \
             .run()
         elapsed = time() - start
 
@@ -80,7 +80,7 @@ class SmallDataSetsTest(TestCase):
                data=result)
 
         start = time()
-        result = algorithms.Isomap(data, k=neighbors, to_dimension=to_dimension) \
+        result = algorithms.Isomap(data, k=neighbors, n_components=to_dimension) \
             .run()
         elapsed = time() - start
 

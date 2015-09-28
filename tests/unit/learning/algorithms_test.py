@@ -109,7 +109,7 @@ class MDSTest(TestCase):
             [69.3, 18.7],
         ]
 
-        i = algorithms.MDS(proximity_matrix, to_dimension=2)
+        i = algorithms.MDS(proximity_matrix, n_components=2)
 
         actual = i.run()
 
