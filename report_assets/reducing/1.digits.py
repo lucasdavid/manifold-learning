@@ -1,10 +1,10 @@
 from sklearn import datasets
 
-from docs.base import ReductionExample
+from report_assets.base import ReductionExample
 
 
-class ReducingLinearDataSets(ReductionExample):
-    title = '3. Reducing Linear Data Sets'
+class ReducingDigitsExample(ReductionExample):
+    title = '1. Reducing Digits'
 
     def run(self):
         digits = datasets.load_digits(n_class=5)
@@ -18,7 +18,7 @@ class ReducingLinearDataSets(ReductionExample):
 
         # Reduce with PCA
         self.method = 'pca'
-        self.params['n_components'] = 3
+        self.params = {'n_components': 3}
         self.reduce()
 
         # Reduce with Isomap
@@ -30,4 +30,4 @@ class ReducingLinearDataSets(ReductionExample):
 
 
 if __name__ == '__main__':
-    ReducingLinearDataSets().start()
+    ReducingDigitsExample().start()

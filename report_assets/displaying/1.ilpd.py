@@ -1,6 +1,6 @@
 from manifold.infrastructure import Retriever, Displayer
 
-from docs.base import Example
+from report_assets.base import Example
 
 
 class DisplayingILPDExample(Example):

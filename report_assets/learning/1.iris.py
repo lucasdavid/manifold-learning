@@ -1,6 +1,6 @@
 from sklearn import datasets, svm
 
-from docs.base import LearningExample
+from report_assets.base import LearningExample
 
 
 class LearningIrisExample(LearningExample):

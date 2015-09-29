@@ -1,9 +1,9 @@
 from manifold.infrastructure import Retriever
 
-from docs.base import LearningExample
+from report_assets.base import LearningExample
 
 
-class LearningBreastCancer(LearningExample):
+class LearningBreastCancerExample(LearningExample):
     title = '3. Learning Breast-cancer'
 
     def run(self):
@@ -25,4 +25,4 @@ class LearningBreastCancer(LearningExample):
 
 
 if __name__ == '__main__':
-    LearningBreastCancer().start()
+    LearningBreastCancerExample().start()
