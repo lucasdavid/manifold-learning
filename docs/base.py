@@ -2,11 +2,7 @@ import abc
 import time
 import multiprocessing
 
-import numpy as np
-
-import matplotlib.pyplot as plt
-from sklearn import grid_search, cross_validation, decomposition
-from sklearn.metrics import confusion_matrix
+from sklearn import grid_search, cross_validation, decomposition, svm
 
 from manifold.infrastructure import Displayer
 from manifold.learning.algorithms import Isomap
@@ -36,7 +32,13 @@ class Example(metaclass=abc.ABCMeta):
 
 
 class LearningExample(Example, metaclass=abc.ABCMeta):
-    learner = data = target = None
+    learner = svm.SVC
+    data = target = None
+
+    learning_parameters = [
+            {'C': (1, 10, 100, 1000), 'kernel': ('linear',)},
+            {'C': (1, 10, 100, 1000), 'gamma': (.001, .01, .1, 1, 10), 'kernel': ('linear', 'rbf', 'sigmoid')}
+        ]
 
     def learn(self):
         start = time.time()
@@ -44,13 +46,7 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
 
         X_train, X_test, y_train, y_test = cross_validation.train_test_split(self.data, self.target, test_size=.2)
 
-        parameters = {
-            'C': (1, 10, 100, 1000),
-            'gamma': (.001, .01, .1, 1, 10),
-            'kernel': ('linear', 'rbf', 'sigmoid'),
-        }
-
-        grid = grid_search.GridSearchCV(self.learner(), parameters, n_jobs=multiprocessing.cpu_count())
+        grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=multiprocessing.cpu_count())
         grid.fit(X_train, y_train)
 
         print('\tAccuracy: %.2f%%\n'
@@ -75,7 +71,7 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
     def reduce(self):
         to_dimension = self.params['to_dimension'] if 'to_dimension' in self.params else \
             self.params['n_components'] if 'n_components' in self.params else \
-            3
+                3
 
         print('Dimensionality reduction process has started')
         print('\tR^%i -to-> R^%i' % (self.data.shape[1], to_dimension))

@@ -5,10 +5,6 @@ from docs.base import ReductionExample
 
 class ReducingLinearDataSets(ReductionExample):
     title = '3. Reducing Linear Data Sets'
-    method = 'pca'
-    params = {
-        'n_components': 3
-    }
 
     def run(self):
         digits = datasets.load_digits(n_class=5)
@@ -20,8 +16,12 @@ class ReducingLinearDataSets(ReductionExample):
             .load(self.data[:, 6:9], self.target, title='Digits f[6, 9)') \
             .load(self.data[:, 9:12], self.target, title='Digits f[9, 12)')
 
+        # Reduce with PCA
+        self.method = 'pca'
+        self.params['n_components'] = 3
         self.reduce()
 
+        # Reduce with Isomap
         self.method = 'isomap'
         self.params['k'] = 15
         self.reduce()
