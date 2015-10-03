@@ -2,7 +2,7 @@ import abc
 import time
 import multiprocessing
 
-from sklearn import grid_search, cross_validation, decomposition, svm
+from sklearn import grid_search, cross_validation, decomposition, svm, manifold
 
 from manifold.infrastructure import Displayer
 from manifold.learning.algorithms import Isomap
@@ -15,20 +15,20 @@ class Example(metaclass=abc.ABCMeta):
 
     @property
     def displayer(self):
-        self._displayer = self._displayer or Displayer(t=self.title)
+        self._displayer = self._displayer or Displayer()
         return self._displayer
 
-    def run(self):
+    def _run(self):
         raise NotImplementedError
 
-    def dispose(self):
+    def _dispose(self):
         pass
 
     def start(self):
         print(self.title)
 
-        self.run()
-        self.dispose()
+        self._run()
+        self._dispose()
 
 
 class LearningExample(Example, metaclass=abc.ABCMeta):
@@ -36,9 +36,9 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
     data = target = None
 
     learning_parameters = [
-            {'C': (1, 10, 100, 1000), 'kernel': ('linear',)},
-            {'C': (1, 10, 100, 1000), 'gamma': (.001, .01, .1, 1, 10), 'kernel': ('linear', 'rbf', 'sigmoid')}
-        ]
+        {'C': (1, 10, 100, 1000), 'kernel': ('linear',)},
+        {'C': (1, 10, 100, 1000), 'gamma': (.001, .01, .1, 1, 10), 'kernel': ('rbf', 'sigmoid')}
+    ]
 
     def learn(self):
         start = time.time()
@@ -74,15 +74,20 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
                 3
 
         print('Dimensionality reduction process has started')
+        print('\tMethod: %s' % self.method)
         print('\tR^%i -to-> R^%i' % (self.data.shape[1], to_dimension))
+
         start = time.time()
 
         if self.method == 'pca':
             self.reduced_data = decomposition.PCA(**self.params).fit_transform(self.data)
+        elif self.method == 'skisomap':
+            self.reduced_data = manifold.Isomap(**self.params).fit_transform(self.data)
         else:
             self.reduced_data = Isomap(self.data, **self.params).run()
 
         elapsed = time.time() - start
+        print('\tNew data set\'s size: %i' % self.reduced_data.nbytes)
         print('Done (%f).' % elapsed)
 
-        self.displayer.load(self.reduced_data, self.target, title='Data set reduced with %s' % self.method)
+        self.displayer.load(self.reduced_data, self.target)
