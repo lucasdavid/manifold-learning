@@ -6,7 +6,7 @@ from report_assets.base import LearningExample
 class LearningBreastCancerExample(LearningExample):
     title = '3. Learning Breast-cancer'
 
-    def run(self):
+    def _run(self):
         r = Retriever('../datasets/breast-cancer/wdbc.data', delimiter=',')
 
         # Remove ids, as they are not correlated in any way with the target feature.

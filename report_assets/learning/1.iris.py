@@ -7,7 +7,7 @@ class LearningIrisExample(LearningExample):
     title = '2. Learning the Iris data set'
     learner = svm.SVC
 
-    def run(self):
+    def _run(self):
         iris = datasets.load_iris()
 
         self.data, self.target = iris.data, iris.target
