@@ -15,8 +15,6 @@ class KExample(ReductionExample, LearningExample):
         self.data = preprocessing.scale(self.data)
         self.target = self.data.sum(axis=1).astype(int)
 
-        self.displayer.load(self.data, self.target)
-
         print('Covariance of K')
         print(np.cov(self.data, rowvar=0))
         print('Data size: %i' % self.data.nbytes)
@@ -29,6 +27,7 @@ class KExample(ReductionExample, LearningExample):
         self.params = {'n_components': 2}
         self.reduce()
 
+        self.data = self.reduced_data
         self.learn()
 
         # Reduce K to only one component.
@@ -37,6 +36,7 @@ class KExample(ReductionExample, LearningExample):
         self.reduce()
 
         # Learn reduced K.
+        self.data = self.reduced_data
         self.learn()
 
         self.displayer.render()

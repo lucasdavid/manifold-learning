@@ -50,7 +50,7 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
         grid.fit(X_train, y_train)
 
         print('\tAccuracy: %.2f%%\n'
-              '\tTime elapsed: %.0fs\n'
+              '\tTime elapsed: %f\n'
               '\tBest parameters: %s'
               % (grid.best_score_, time.time() - start, grid.best_params_))
 
