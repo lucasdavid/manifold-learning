@@ -65,7 +65,7 @@ class Displayer(object):
             if color is not None:
                 kwargs['c'] = color
 
-            ax.scatter(*components, cmap=plt.cm.rainbow, **kwargs)
+            ax.scatter(*components, s=50.0, cmap=plt.cm.rainbow, **kwargs)
             if title:
                 plt.title(title)
 
