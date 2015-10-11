@@ -1,4 +1,4 @@
-from sklearn import datasets
+from sklearn import datasets, svm
 
 from report_assets.base import ReductionExample, LearningExample
 
@@ -15,8 +15,11 @@ class SwissRollPCAExample(ReductionExample, LearningExample):
 
         print('Data set size: %iKB' % (self.data.nbytes / 1024))
 
-
-
+        self.learner = svm.SVR
+        self.learning_parameters = [
+            {'C': (1, 10, 100), 'kernel': ('linear',)},
+            {'C': (1, 10, 100), 'gamma': (.01, .1), 'kernel': ('rbf',)}
+        ]
         self.learn()
 
         self.method = 'pca'
