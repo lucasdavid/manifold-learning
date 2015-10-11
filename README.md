@@ -11,7 +11,7 @@ python setup.py install
 
 ## Usage
 For full-working examples, take a look at the
-[docs](https://github.com/lucasdavid/Manifold-Learning/tree/master/docs) folder.
+[report assets folder](https://github.com/lucasdavid/Manifold-Learning/tree/master/report_assets) folder.
 
 ## Testing
 ```shell
