@@ -2,7 +2,7 @@ import abc
 import time
 import multiprocessing
 
-from sklearn import grid_search, cross_validation, decomposition, svm, manifold
+from sklearn import grid_search, decomposition, svm, manifold
 
 from manifold.infrastructure import Displayer
 from manifold.learning.algorithms import Isomap
@@ -44,19 +44,14 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
         start = time.time()
         print('GridSearch started at %s...' % start)
 
-        X_train, X_test, y_train, y_test = cross_validation.train_test_split(self.data, self.target, test_size=.2)
+        grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=multiprocessing.cpu_count(),
+                                        verbose=-1)
+        grid.fit(self.data, self.target)
 
-        grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=multiprocessing.cpu_count())
-        grid.fit(X_train, y_train)
-
-        print('\tAccuracy: %.2f%%\n'
-              '\tTime elapsed: %f\n'
+        print('\tAccuracy: %.2f\n'
+              '\tTime elapsed: %.2fs\n'
               '\tBest parameters: %s'
               % (grid.best_score_, time.time() - start, grid.best_params_))
-
-        y_predicted = grid.predict(X_test)
-
-        self.displayer.confusion_matrix_for(y_test, y_predicted)
 
 
 class ReductionExample(Example, metaclass=abc.ABCMeta):
@@ -87,7 +82,7 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
             self.reduced_data = Isomap(self.data, **self.params).run()
 
         elapsed = time.time() - start
-        print('\tNew data set\'s size: %i' % self.reduced_data.nbytes)
-        print('Done (%f).' % elapsed)
+        print('\tNew data set\'s size: %iKB' % (self.reduced_data.nbytes / 1024))
+        print('Done (%.2fs).' % elapsed)
 
         self.displayer.load(self.reduced_data, self.target)
