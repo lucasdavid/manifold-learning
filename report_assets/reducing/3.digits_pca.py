@@ -12,11 +12,11 @@ class ReducingDigitsExample(ReductionExample):
         self.data, self.target = digits.data, digits.target
 
         # Reduce with PCA
-        self.method = 'pca'
-        self.params = {'n_components': 3}
+        self.reduction_method = 'pca'
+        self.reduction_params = {'n_components': 3}
         self.reduce()
 
-        self.params = {'n_components': 2}
+        self.reduction_params = {'n_components': 2}
         self.reduce()
 
         self.displayer.render()

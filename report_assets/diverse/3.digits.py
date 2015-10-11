@@ -18,7 +18,7 @@ class DigitsExample(ReductionExample, LearningExample):
 
         for d in reduce_to_dimensions:
             self.data = digits.data
-            self.params = {'n_components': d, 'k': 10}
+            self.reduction_params = {'n_components': d, 'k': 10}
             self.reduce()
 
             self.data = self.reduced_data

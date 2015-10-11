@@ -19,11 +19,11 @@ class ReducingKExample(ReductionExample):
         print(np.cov(self.data, rowvar=0))
         print('Data size: %i' % self.data.nbytes)
 
-        self.method = 'pca'
-        self.params = {'n_components': 2}
+        self.reduction_method = 'pca'
+        self.reduction_params = {'n_components': 2}
         self.reduce()
 
-        self.params = {'n_components': 1}
+        self.reduction_params = {'n_components': 1}
         self.reduce()
 
         self.displayer.render()

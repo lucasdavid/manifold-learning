@@ -16,10 +16,10 @@ class ReducingSwissRollExample(ReductionExample):
         self.data, self.target = swiss_roll, swiss_roll_colors
         self.displayer.load(swiss_roll, swiss_roll_colors, title='Swiss-roll')
 
-        self.method = 'pca'
+        self.reduction_method = 'pca'
 
         for dimension in (3, 2, 1):
-            self.params = {'n_components': dimension}
+            self.reduction_params = {'n_components': dimension}
             self.reduce()
 
         self.displayer.render()

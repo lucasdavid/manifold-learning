@@ -57,29 +57,29 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
 class ReductionExample(Example, metaclass=abc.ABCMeta):
     data = reduced_data = target = None
 
-    method = 'isomap'
-    params = {
+    reduction_method = 'isomap'
+    reduction_params = {
         'k': 4,
         'n_components': 3
     }
 
     def reduce(self):
-        to_dimension = self.params['to_dimension'] if 'to_dimension' in self.params else \
-            self.params['n_components'] if 'n_components' in self.params else \
+        to_dimension = self.reduction_params['to_dimension'] if 'to_dimension' in self.reduction_params else \
+            self.reduction_params['n_components'] if 'n_components' in self.reduction_params else \
                 3
 
         print('Dimensionality reduction process has started')
-        print('\tMethod: %s' % self.method)
+        print('\tMethod: %s' % self.reduction_method)
         print('\tR^%i -to-> R^%i' % (self.data.shape[1], to_dimension))
 
         start = time.time()
 
-        if self.method == 'pca':
-            self.reduced_data = decomposition.PCA(**self.params).fit_transform(self.data)
-        elif self.method == 'skisomap':
-            self.reduced_data = manifold.Isomap(**self.params).fit_transform(self.data)
+        if self.reduction_method == 'pca':
+            self.reduced_data = decomposition.PCA(**self.reduction_params).fit_transform(self.data)
+        elif self.reduction_method == 'skisomap':
+            self.reduced_data = manifold.Isomap(**self.reduction_params).fit_transform(self.data)
         else:
-            self.reduced_data = Isomap(self.data, **self.params).run()
+            self.reduced_data = Isomap(self.data, **self.reduction_params).run()
 
         elapsed = time.time() - start
         print('\tNew data set\'s size: %iKB' % (self.reduced_data.nbytes / 1024))

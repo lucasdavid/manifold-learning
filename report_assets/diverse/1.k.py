@@ -23,16 +23,16 @@ class KExample(ReductionExample, LearningExample):
         self.learn()
 
         # Reduce K to only one component.
-        self.method = 'pca'
-        self.params = {'n_components': 2}
+        self.reduction_method = 'pca'
+        self.reduction_params = {'n_components': 2}
         self.reduce()
 
         self.data = self.reduced_data
         self.learn()
 
         # Reduce K to only one component.
-        self.method = 'pca'
-        self.params = {'n_components': 1}
+        self.reduction_method = 'pca'
+        self.reduction_params = {'n_components': 1}
         self.reduce()
 
         # Learn reduced K.

@@ -12,8 +12,8 @@ class ReducingIrisExample(ReductionExample):
         self.data, self.target = iris.data, iris.target
 
         # Reduce with PCA
-        self.method = 'pca'
-        self.params = {'n_components': 2}
+        self.reduction_method = 'pca'
+        self.reduction_params = {'n_components': 2}
         self.reduce()
 
         self.displayer.render()

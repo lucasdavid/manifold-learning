@@ -22,11 +22,11 @@ class SwissRollPCAExample(ReductionExample, LearningExample):
         ]
         self.learn()
 
-        self.method = 'pca'
+        self.reduction_method = 'pca'
 
         for d in reduce_to_dimensions:
             self.data = swiss_roll
-            self.params = {'n_components': d}
+            self.reduction_params = {'n_components': d}
             self.reduce()
 
             self.data = self.reduced_data
