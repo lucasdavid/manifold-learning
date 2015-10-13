@@ -1,17 +1,16 @@
 import numpy as np
-from sklearn import preprocessing
+from sklearn import preprocessing, datasets
 
 from report_assets.base import Example
 
 
-class DisplayingKExample(Example):
-    title = '2. Displaying K data set'
+class DisplayingSwissRollExample(Example):
+    title = '3. Displaying The Swiss-roll data set'
 
     def _run(self):
-        np.random.seed(0)
-        mean, cov, n = [0, 0], [[1, 1], [1.4, 1.5]], 1000
+        n = 10000
 
-        data = np.random.multivariate_normal(mean, cov, n)
+        data, target = datasets.make_swiss_roll(n_samples=n, random_state=0)
         data = preprocessing.scale(data)
         target = data.sum(axis=1)
 
@@ -22,4 +21,4 @@ class DisplayingKExample(Example):
 
 
 if __name__ == '__main__':
-    DisplayingKExample().start()
+    DisplayingSwissRollExample().start()
