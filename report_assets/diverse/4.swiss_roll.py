@@ -7,13 +7,14 @@ class SwissRollPCAExample(ReductionExample, LearningExample):
     title = '3. Swiss-roll PCA example'
 
     def _run(self):
+        samples = 1000
         reduce_to_dimensions = [3, 2, 1]
 
-        swiss_roll, swiss_roll_colors = datasets.make_swiss_roll(n_samples=1000, random_state=0)
+        swiss_roll, swiss_roll_colors = datasets.make_swiss_roll(n_samples=samples, random_state=0)
         self.data, self.target = swiss_roll, swiss_roll_colors
         self.displayer.load(swiss_roll, swiss_roll_colors, title='Swiss-roll')
 
-        print('Data set size: %iKB' % (self.data.nbytes / 1024))
+        print('Data set size: %.2fKB' % (self.data.nbytes / 1024))
 
         self.learner = svm.SVR
         self.learning_parameters = [

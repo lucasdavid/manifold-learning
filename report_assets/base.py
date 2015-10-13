@@ -82,7 +82,7 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
             self.reduced_data = Isomap(self.data, **self.reduction_params).run()
 
         elapsed = time.time() - start
-        print('\tNew data set\'s size: %iKB' % (self.reduced_data.nbytes / 1024))
+        print('\tNew data set\'s size: %.2fKB' % (self.reduced_data.nbytes / 1024))
         print('Done (%.2fs).' % elapsed)
 
         self.displayer.load(self.reduced_data, self.target)
