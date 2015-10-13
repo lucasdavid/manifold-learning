@@ -1,4 +1,5 @@
-from ..errors import ManifoldError
+class ManifoldError(RuntimeError):
+    pass
 
 
 class RetrieverError(ManifoldError):
