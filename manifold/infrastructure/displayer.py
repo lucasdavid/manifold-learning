@@ -10,7 +10,7 @@ class Displayer(object):
     def __init__(self, **kwargs):
         self.items = []
         self.parameters = ', '.join(['%s: %s' % (k, str(v)) for k, v in kwargs.items()])
-        self.` = (20, -40)
+        self.aspect = (20, -40)
 
     def load(self, data, color=None, title=None):
         # Always copy the data, and, of course, only the first three dimensions.
