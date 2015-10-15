@@ -4,7 +4,7 @@ from report_assets.base import ReductionExample
 
 
 class ReducingDigitsExample(ReductionExample):
-    title = '1. Reducing Digits'
+    title = '3. Reducing Digits'
 
     def _run(self):
         digits = datasets.load_digits()

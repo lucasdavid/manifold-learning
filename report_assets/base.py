@@ -68,9 +68,9 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
             self.reduction_params['n_components'] if 'n_components' in self.reduction_params else \
                 3
 
-        print('Dimensionality reduction process has started')
+        print('Dimensionality reduction process has started.')
         print('\tMethod: %s' % self.reduction_method)
-        print('\tR^%i -to-> R^%i' % (self.data.shape[1], to_dimension))
+        print('\tR^%i-->R^%i' % (self.data.shape[1], to_dimension))
 
         start = time.time()
 

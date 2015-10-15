@@ -7,7 +7,7 @@ from report_assets.base import ReductionExample
 
 
 class ReducingSwissRollExample(ReductionExample):
-    title = '2. Reducing Swiss-roll with a PCA'
+    title = '4. Reducing The Swiss-roll with a PCA'
 
     def _run(self):
         samples = 10000
