@@ -4,7 +4,7 @@ from report_assets.base import ReductionExample
 
 
 class ReducingDigitsExample(ReductionExample):
-    title = '3. Reducing Digits'
+    title = '3. Reducing Digits with Isomap'
     plotting = True
 
     def _run(self):
@@ -13,11 +13,11 @@ class ReducingDigitsExample(ReductionExample):
         self.data, self.target = digits.data, digits.target
 
         # Reduce with PCA
-        self.reduction_method = 'pca'
-        self.reduction_params = {'n_components': 3}
+        self.reduction_method = 'isomap'
+        self.reduction_params = {'n_components': 3, 'k': 7}
         self.reduce()
 
-        self.reduction_params = {'n_components': 2}
+        self.reduction_params = {'n_components': 2, 'k': 7}
         self.reduce()
 
         if self.plotting:

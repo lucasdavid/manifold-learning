@@ -6,6 +6,7 @@ from report_assets.base import ReductionExample
 
 class ReducingSwissRollIsomapExample(ReductionExample):
     title = '5. Reducing The Swiss-roll with Isomap'
+    plotting = True
 
     def _run(self):
         n = 1000
@@ -22,7 +23,8 @@ class ReducingSwissRollIsomapExample(ReductionExample):
             self.reduction_params = {'n_components': d, 'k': 7}
             self.reduce()
 
-        self.displayer.render()
+        if self.plotting:
+            self.displayer.render()
 
 
 if __name__ == '__main__':

@@ -5,9 +5,10 @@ from report_assets.base import LearningExample
 
 class LearningBreastCancerExample(LearningExample):
     title = '3. Learning Breast-cancer'
-
+    plotting = True
+    
     def _run(self):
-        r = Retriever('../datasets/breast-cancer/wdbc.data', delimiter=',')
+        r = Retriever('../../datasets/breast-cancer/wdbc.data', delimiter=',')
 
         # Remove ids, as they are not correlated in any way with the target feature.
         r.split_column(0)
@@ -21,7 +22,9 @@ class LearningBreastCancerExample(LearningExample):
         self.displayer.load(self.data, self.target, 'Breast-cancer')
 
         self.learn()
-        self.displayer.render()
+
+        if self.plotting:
+            self.displayer.render()
 
 
 if __name__ == '__main__':
