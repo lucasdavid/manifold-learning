@@ -12,6 +12,7 @@ class Example(metaclass=abc.ABCMeta):
     title = None
 
     _displayer = None
+    plotting = False
 
     @property
     def displayer(self):
@@ -33,7 +34,7 @@ class Example(metaclass=abc.ABCMeta):
 
 class LearningExample(Example, metaclass=abc.ABCMeta):
     learner = svm.SVC
-    data = target = None
+    data = target = labels = None
 
     learning_parameters = [
         {'C': (1, 10, 100, 1000), 'kernel': ('linear',)},
@@ -44,8 +45,7 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
         start = time.time()
         print('GridSearch started at %s...' % start)
 
-        grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=multiprocessing.cpu_count(),
-                                        verbose=-1)
+        grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters, verbose=-1, n_jobs=multiprocessing.cpu_count())
         grid.fit(self.data, self.target)
 
         print('\tAccuracy: %.2f\n'
@@ -85,4 +85,5 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
         print('\tNew data set\'s size: %.2fKB' % (self.reduced_data.nbytes / 1024))
         print('Done (%.2fs).' % elapsed)
 
-        self.displayer.load(self.reduced_data, self.target)
+        if self.plotting:
+            self.displayer.load(self.reduced_data, self.target)
