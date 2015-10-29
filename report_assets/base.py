@@ -64,6 +64,8 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
     }
 
     def reduce(self):
+        assert self.reduction_method in ('isomap', 'pca', 'skisomap'), 'Unknown reduction method.'
+
         to_dimension = self.reduction_params['to_dimension'] if 'to_dimension' in self.reduction_params else \
             self.reduction_params['n_components'] if 'n_components' in self.reduction_params else \
                 3
