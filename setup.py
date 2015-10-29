@@ -27,5 +27,5 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.4',
         'Topic :: Manifold Learning',
-    ]
+    ], requires=['networkx', 'numpy']
 )
