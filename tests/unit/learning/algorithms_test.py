@@ -100,7 +100,7 @@ class MDSTest(TestCase):
             [93, 0, 52, 60],
             [82, 52, 0, 111],
             [133, 60, 111, 0]
-        ])
+        ]).astype(float)
 
         expected = [
             [-62.8, 32.9],
