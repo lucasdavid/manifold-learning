@@ -14,16 +14,18 @@ class Retriever(object):
         data, target = r.split_target(target_column=-1).retrieve()
     """
 
-    def __init__(self, file, target_column=-1, delimiter=None):
+    def __init__(self, file, target_column=-1, delimiter=None, max_samples=None):
         """Initiates a Retriever pointing out to a data-set file.
 
         :param file: the file which contains the data-set.
         :param target_column: the column which contains the target feature, if any.
+        :param max_samples: maximum number of samples to extract.
         :param delimiter: the character used to separate the samples' features.
                           If none specified, /s and/or /t are considered.
         """
         self.target_column = target_column
         self.delimiter = delimiter
+        self.max_samples = max_samples
 
         self._file = file
         self._data = self._target = self._features_map = None
@@ -59,7 +61,7 @@ class Retriever(object):
 
             try:
                 with open(self._file) as f:
-                    for line in f.readlines():
+                    for line in f.readlines()[:self.max_samples]:
                         row = []
 
                         for i, word in enumerate(line.split(self.delimiter)):
