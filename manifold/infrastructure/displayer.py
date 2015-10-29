@@ -8,9 +8,9 @@ from sklearn.metrics import confusion_matrix
 
 class Displayer(object):
     def __init__(self, **kwargs):
-        self.items = []
+        self.aspect = kwargs.pop('aspect', (20, -40))
         self.parameters = ', '.join(['%s: %s' % (k, str(v)) for k, v in kwargs.items()])
-        self.aspect = (20, -40)
+        self.items = []
 
     def load(self, data, color=None, title=None):
         # Always copy the data, and, of course, only the first three dimensions.
@@ -39,20 +39,22 @@ class Displayer(object):
             if dimension == 1:
                 components.append(np.zeros((samples, 1)))
 
-            kwargs = {}
-            if dimension > 2:
-                kwargs['projection'] = '3d'
+            if color is None:
+                color = np.zeros(samples)
+
+            kwargs = {'projection': '3d'} if dimension > 2 else {}
 
             ax = fig.add_subplot(
                 rows_count * 100 +
                 items_in_row * 10 +
                 1 + i, **kwargs)
 
-            kwargs = {}
-            if color is not None:
-                kwargs['c'] = color
+            ax.scatter(*components, **{
+                'c': color,
+                's': 50,
+                'cmap': plt.cm.rainbow
+            })
 
-            ax.scatter(*components, s=50.0, cmap=plt.cm.rainbow, **kwargs)
             if title:
                 plt.title(title)
 
