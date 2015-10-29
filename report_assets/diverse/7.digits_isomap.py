@@ -16,10 +16,12 @@ class DigitsIsomapExample(ReductionExample, LearningExample):
 
         self.learn()
 
-        self.reduction_method = 'skisomap'
+        self.reduction_method = 'isomap'
 
         for d in (10, 3, 2, 1):
-            self.reduction_params = {'n_components': d, 'n_neighbors': 7}
+            del self.reduced_data
+
+            self.reduction_params = {'n_components': d, 'k': 7}
             self.reduce()
 
             self.data = self.reduced_data
