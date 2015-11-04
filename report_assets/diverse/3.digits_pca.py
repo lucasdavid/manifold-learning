@@ -4,11 +4,9 @@ from report_assets.base import ReductionExample, LearningExample
 
 
 class DigitsExample(ReductionExample, LearningExample):
-    title = '3. Digits example'
+    title = '3. Digits PCA Example'
 
     def _run(self):
-        reduce_to_dimensions = [10, 3, 2, 1]
-
         digits = datasets.load_digits()
 
         self.data, self.target = digits.data, digits.target
@@ -16,9 +14,11 @@ class DigitsExample(ReductionExample, LearningExample):
 
         self.learn()
 
-        for d in reduce_to_dimensions:
+        self.reduction_method = 'pca'
+
+        for dimensions in (10, 3, 2, 1):
             self.data = digits.data
-            self.reduction_params = {'n_components': d, 'k': 10}
+            self.reduction_params = {'n_components': dimensions}
             self.reduce()
 
             self.data = self.reduced_data

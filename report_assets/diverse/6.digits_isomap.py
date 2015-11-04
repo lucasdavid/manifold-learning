@@ -1,11 +1,13 @@
 from sklearn import datasets
-
 from report_assets.base import ReductionExample, LearningExample
 
 
 class DigitsIsomapExample(ReductionExample, LearningExample):
-    title = '7. Digits Reduced with Isomap and Learned Example'
+    title = '6. Digits Reduced with Isomap and Learned Example'
     plotting = True
+
+    reduction_method = 'isomap'
+    reduction_params = {'n_neighbors': 7}
 
     def _run(self):
         digits = datasets.load_digits()
@@ -16,17 +18,14 @@ class DigitsIsomapExample(ReductionExample, LearningExample):
 
         self.learn()
 
-        self.reduction_method = 'isomap'
-
-        for d in (10, 3, 2, 1):
-            del self.reduced_data
-
-            self.reduction_params = {'n_components': d, 'k': 7}
+        for dimensions in (10, 3, 2, 1):
+            self.reduction_params['n_components'] = dimensions
             self.reduce()
 
             self.data = self.reduced_data
             self.learn()
             self.data = digits.data
+            del self.reduced_data
 
         if self.plotting:
             self.displayer.render()

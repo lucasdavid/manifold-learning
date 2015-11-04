@@ -4,7 +4,7 @@ from report_assets.base import ReductionExample, LearningExample
 
 
 class SwissRollIsomapExample(ReductionExample, LearningExample):
-    title = '6. Swiss-roll Isomap example'
+    title = '5. Swiss-roll Isomap example'
     plotting = True
 
     samples = 1000
@@ -12,7 +12,7 @@ class SwissRollIsomapExample(ReductionExample, LearningExample):
     learner = svm.SVR
     learning_parameters = [
         {'C': (1, 10, 100), 'kernel': ('linear',)},
-        # {'C': (1, 10, 100), 'gamma': (.01, .1), 'kernel': ('rbf',)}
+        {'C': (1, 10, 100), 'gamma': (.01, .1), 'kernel': ('rbf',)}
     ]
 
     def _run(self):
@@ -23,7 +23,9 @@ class SwissRollIsomapExample(ReductionExample, LearningExample):
 
         self.reduction_method = 'skisomap'
 
-        for d in (1,):
+        self.learn()
+
+        for d in (2, 1):
             self.data = swiss_roll
             self.reduction_params = {'n_components': d, 'n_neighbors': 7}
             self.reduce()

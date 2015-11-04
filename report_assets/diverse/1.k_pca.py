@@ -5,7 +5,7 @@ from report_assets.base import ReductionExample, LearningExample
 
 
 class KExample(ReductionExample, LearningExample):
-    title = '1. K Data set'
+    title = '1. K PCA Example'
 
     def _run(self):
         np.random.seed(0)
@@ -22,22 +22,18 @@ class KExample(ReductionExample, LearningExample):
         # Learn, through GridSearch, the data set K.
         self.learn()
 
-        # Reduce K to only one component.
+        # Reduce dimensions of K.
         self.reduction_method = 'pca'
-        self.reduction_params = {'n_components': 2}
-        self.reduce()
 
-        self.data = self.reduced_data
-        self.learn()
+        for dimension in (2, 1):
+            self.reduction_params = {'n_components': dimension}
+            self.reduce()
 
-        # Reduce K to only one component.
-        self.reduction_method = 'pca'
-        self.reduction_params = {'n_components': 1}
-        self.reduce()
+            original_data = self.data
+            self.data = self.reduced_data
+            self.learn()
 
-        # Learn reduced K.
-        self.data = self.reduced_data
-        self.learn()
+            self.data = original_data
 
         self.displayer.render()
 

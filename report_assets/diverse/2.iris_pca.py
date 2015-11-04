@@ -4,7 +4,7 @@ from report_assets.base import ReductionExample, LearningExample
 
 
 class IrisExample(ReductionExample, LearningExample):
-    title = '2. Iris flower example'
+    title = '2. Iris flower PCA Example'
 
     def _run(self):
         iris = datasets.load_iris()
