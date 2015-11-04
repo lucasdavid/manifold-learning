@@ -5,7 +5,10 @@ from report_assets.base import ReductionExample
 
 
 class ReducingKExample(ReductionExample):
-    title = '1. Reducing K Data set'
+    title = '1. Reducing K With PCA Example'
+    plotting = True
+
+    reduction_method = 'pca'
 
     def _run(self):
         np.random.seed(0)
@@ -17,16 +20,17 @@ class ReducingKExample(ReductionExample):
 
         print('Covariance of K:')
         print(np.cov(self.data, rowvar=0))
-        print('Data size: %i' % self.data.nbytes)
+        print('Data size: %.1f KB\n' % (self.data.nbytes / 1024))
 
-        self.reduction_method = 'pca'
-        self.reduction_params = {'n_components': 2}
-        self.reduce()
+        for dimension in (2, 1):
+            self.reduction_params = {'n_components': dimension}
+            self.reduce()
 
-        self.reduction_params = {'n_components': 1}
-        self.reduce()
+            print('Covariance of reduced K:')
+            print(np.cov(self.reducer.components_, rowvar=0))
 
-        self.displayer.render()
+        if self.plotting:
+            self.displayer.render()
 
 
 if __name__ == '__main__':

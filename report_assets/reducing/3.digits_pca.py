@@ -12,13 +12,12 @@ class ReducingDigitsExample(ReductionExample):
 
         self.data, self.target = digits.data, digits.target
 
-        # Reduce with PCA
+        # Reduce Digits with PCA
         self.reduction_method = 'pca'
-        self.reduction_params = {'n_components': 3}
-        self.reduce()
 
-        self.reduction_params = {'n_components': 2}
-        self.reduce()
+        for dimension in (3, 2):
+            self.reduction_params = {'n_components': dimension}
+            self.reduce()
 
         if self.plotting:
             self.displayer.render()
