@@ -49,7 +49,7 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
         grid.fit(self.data, self.target)
 
         print('\tAccuracy: %.2f\n'
-              '\tTime elapsed: %.2fs\n'
+              '\tTime elapsed: %.2f s\n'
               '\tBest parameters: %s'
               % (grid.best_score_, time.time() - start, grid.best_params_))
 
@@ -87,9 +87,8 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
             self.reducer = Isomap(self.data, **self.reduction_params)
             self.reduced_data = self.reducer.run()
 
-        elapsed = time.time() - start
-        print('\tNew data set\'s size: %.2fKB' % (self.reduced_data.nbytes / 1024))
-        print('Done (%.2fs).' % elapsed)
+        print('\tNew data set\'s size: %.2f KB' % (self.reduced_data.nbytes / 1024))
+        print('Done (%.2f s).' % (time.time() - start))
 
         if self.plotting:
             self.displayer.load(self.reduced_data, self.target)
