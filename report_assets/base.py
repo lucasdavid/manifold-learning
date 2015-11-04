@@ -57,6 +57,7 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
 class ReductionExample(Example, metaclass=abc.ABCMeta):
     data = reduced_data = target = None
 
+    reducer = None
     reduction_method = 'isomap'
     reduction_params = {
         'k': 4,
@@ -77,11 +78,14 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
         start = time.time()
 
         if self.reduction_method == 'pca':
-            self.reduced_data = decomposition.PCA(**self.reduction_params).fit_transform(self.data)
+            self.reducer = decomposition.PCA(**self.reduction_params)
+            self.reduced_data = self.reducer.fit_transform(self.data)
         elif self.reduction_method == 'skisomap':
-            self.reduced_data = manifold.Isomap(**self.reduction_params).fit_transform(self.data)
+            self.reducer = manifold.Isomap(**self.reduction_params)
+            self.reduced_data = self.reducer.fit_transform(self.data)
         else:
-            self.reduced_data = Isomap(self.data, **self.reduction_params).run()
+            self.reducer = Isomap(self.data, **self.reduction_params)
+            self.reduced_data = self.reducer.run()
 
         elapsed = time.time() - start
         print('\tNew data set\'s size: %.2fKB' % (self.reduced_data.nbytes / 1024))
