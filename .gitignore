@@ -102,3 +102,12 @@ $RECYCLE.BIN/
 
 .idea/
 coverage/
+
+# Report files
+report/*.toc
+report/*.out
+report/*.pdf
+report/*.aux
+report/*.synctex.gz
+
+
