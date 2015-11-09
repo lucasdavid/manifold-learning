@@ -1,6 +1,6 @@
 from sklearn import datasets
 
-from report_assets.base import ReductionExample
+from experiments.base import ReductionExample
 
 
 class NoisySwissRollIsomapExample(ReductionExample):
@@ -23,17 +23,16 @@ class NoisySwissRollIsomapExample(ReductionExample):
             self.displayer.load(swiss_roll, swiss_roll_colors, title='Swiss-roll (noise: %.2f)' % noise)
             print('Data set size: %.2fKB' % (self.data.nbytes / 1024))
 
-            self.reduction_method = 'skisomap'
+            self.reduction_method = 'isomap'
 
             for n in self.neighbors:
                 self.data = swiss_roll
-                self.reduction_params = {'n_components': 2, 'n_neighbors': n}
+                self.reduction_params = {'n_components': 2, 'k': n}
                 self.reduce()
 
             noise += self.noise_increment
 
             if self.plotting:
-                # self.displayer.save(name='7-%.2f.png' % noise).dispose()
                 self.displayer.aspect = (10, 70)
                 self.displayer.render().dispose()
 

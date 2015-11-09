@@ -1,9 +1,6 @@
-import numpy as np
 from sklearn import datasets
-from sklearn.decomposition import PCA
-from manifold.infrastructure import Displayer
 
-from report_assets.base import ReductionExample
+from experiments.base import ReductionExample
 
 
 class ReducingSwissRollExample(ReductionExample):

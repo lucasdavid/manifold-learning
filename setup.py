@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='manifold',
-    version='0.5.3',
+    version='1.0.0',
     packages=find_packages(include=('manifold', 'manifold.*')),
     long_description=open('README.md').read(),
     include_package_data=True,

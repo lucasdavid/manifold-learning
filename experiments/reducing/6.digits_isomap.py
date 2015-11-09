@@ -1,6 +1,6 @@
 from sklearn import datasets
 
-from report_assets.base import ReductionExample
+from experiments.base import ReductionExample
 
 
 class DigitsIsomapExample(ReductionExample):

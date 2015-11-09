@@ -1,6 +1,5 @@
-from manifold.infrastructure import Retriever, Displayer
-
-from report_assets.base import Example
+from experiments.base import Example
+from manifold.infrastructure import Retriever
 
 
 class DisplayingILPDExample(Example):

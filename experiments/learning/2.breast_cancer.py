@@ -1,6 +1,5 @@
+from experiments.base import LearningExample
 from manifold.infrastructure import Retriever
-
-from report_assets.base import LearningExample
 
 
 class LearningBreastCancerExample(LearningExample):

@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn import preprocessing, datasets
 
-from report_assets.base import Example
+from experiments.base import Example
 
 
 class DisplayingSwissRollExample(Example):

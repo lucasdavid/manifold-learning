@@ -2,7 +2,7 @@ import networkx as nx
 import pylab as plt
 from sklearn import datasets
 
-from report_assets.base import ReductionExample
+from experiments.base import ReductionExample
 from manifold.learning import algorithms
 
 

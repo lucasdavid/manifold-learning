@@ -1,6 +1,6 @@
 from sklearn import datasets, svm
 
-from report_assets.base import ReductionExample, LearningExample
+from experiments.base import ReductionExample, LearningExample
 
 
 class SwissRollIsomapExample(ReductionExample, LearningExample):

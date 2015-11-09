@@ -1,6 +1,6 @@
 from sklearn import datasets
 
-from report_assets.base import ReductionExample, LearningExample
+from experiments.base import ReductionExample, LearningExample
 
 
 class IrisExample(ReductionExample, LearningExample):

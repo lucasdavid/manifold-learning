@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn import preprocessing
 
-from report_assets.base import ReductionExample, LearningExample
+from experiments.base import ReductionExample, LearningExample
 
 
 class KExample(ReductionExample, LearningExample):
