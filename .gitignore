@@ -110,4 +110,5 @@ report/*.pdf
 report/*.aux
 report/*.synctex.gz
 
+*.gummi
 
