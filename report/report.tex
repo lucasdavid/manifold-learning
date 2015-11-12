@@ -61,7 +61,6 @@ Dr. Alexandre M. \textsc{Levada}
 \end{flushright}
 \end{minipage}\\[4cm]
 
-
 \vfill
 
 {\large \today}\\[3cm]
@@ -73,7 +72,6 @@ Dr. Alexandre M. \textsc{Levada}
 \newpage
 
 \section{Introduction}
-
 
 \newpage
 
@@ -730,25 +728,15 @@ As presented in the previous sections, data sets with many features may present 
 
 \subsection{Linear Dimensionality Reduction}
 
-Consider the data set $K$, as illustrated by figure \ref{fig:datasetr}. $K$ has its samples expressed by two similarly scaled dimensions. It is clear, however, that the samples follow a very particular distribution (figure \ref{fig:datasetrpc}).
+Consider the data set $K$. $K$ has its samples expressed by two similarly scaled dimensions. It is clear, however, that the samples follow a very particular distribution:
 
 \begin{figure}[H]
-	\centering
-	\begin{minipage}{.5\textwidth}
-            \centering
-			\captionsetup{justification=centering}
+    \centering
+	\captionsetup{justification=centering}
 
-			\includegraphics[width=\linewidth]{datasetr}
-			\captionof{figure}{The data set K contained in the $\mathbb{R}^2$.}
-			\label{fig:datasetr}
-	\end{minipage}%
-	\begin{minipage}{.5\textwidth}
-		\centering
-		\captionsetup{justification=centering}
-		\includegraphics[width=\linewidth]{datasetrpc}
-		\captionof{figure}{The principal components of $K$.}
-		\label{fig:datasetrpc}
-	\end{minipage}
+	\includegraphics[width=.8\linewidth]{datasetr}
+	\caption{The data set $K \in \mathbb{R}^2$.}
+	\label{fig:datasetr}
 \end{figure}
 
 Additionally, something interesting can be observed when analyzing the covariance matrix of $K$: as it is not a diagonal matrix, the variance of $x$ from its mean somehow correlates with the variance of $y$ \cite{pcajon2003}.
@@ -769,6 +757,14 @@ Additionally, something interesting can be observed when analyzing the covarianc
 As in $K$, some data sets follow certain distributions that are majorly contained in a few orthogonal components, where a component is the result of a linear combination of the original features.
 
 Principal Component Analysis (PCA) is a statistical technique that attempts to transform a $n$-dimensional data set $X$ into a $m$-dimensional data set $Y$, where, hopefully, $k \ll n$. Furthermore, the dimensions of $Y$ will necessarily be orthogonal components aligned with the direction in which the variance of samples in $X$ is maximum, commonly referred to as \textbf{principal components} \cite{pca1989}. In figure \ref{fig:datasetrpc}, the orange and purple vectors are the principal components of the data set $K$.
+
+\begin{figure}[H]
+	\centering
+	\captionsetup{justification=centering}
+	\includegraphics[width=.8\linewidth]{datasetrpc}
+	\caption{The principal components of $K$.}
+	\label{fig:datasetrpc}
+\end{figure}
 
 \paragraph{Study of the PCA Algorithm}
 
@@ -1179,27 +1175,51 @@ Notice that we managed to reduce the data set to only 3 dimensions while maintai
 
 The experiments in the previous section made it quite clear that Isomap outperforms PCA on the selected data sets. Unfortunately, this trend cannot be projected for a generic case considering our experiments were strictly controlled. In real-world data sets, the application of Isomap may lead to poor low-dimensional embeddings \cite{herik2009}. Bellow are listed some the issues that have great influence over Isomap's results:
 \begin{description}
-	\item[Manifold Assumption] Perhaps the most serious problem. It refers to the initial assumption that the data lies on a manifold. Whether this assumption holds or not, it is quite hard to very when dealing with real-world data.
+	\item[Manifold Assumption] It refers to the initial assumption that the data lies on a low-dimensional manifold. Although wildly exploited by many authors, it is difficult to assert whether such assumption holds or not in real-world data sets. \cite{lin2008riemannian} Furthermore, even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations would be produced.
 	
-	\item[Smoothness] Even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations would be produced.
+	\item[Convexity] "Isomap relies on the data being geodesically convex." \cite{donoho2002does} This issue becomes clear when dealing with data sets with ``holes" in it that are too big, resulting in great disconnected areas that require paths with great curvature to get around. Lerman demonstrated how reducing non-convex data sets can easily yeild distorted results, when these have big enough ``holes" on them: \cite{lerman2005}
+		\begin{figure}[H]
+		    \centering
+			\begin{subfigure}[H]{.3\linewidth}
+				\includegraphics[width=\linewidth]{img/convexity/original.png}
+				\captionsetup{justification=centering}		
+				\caption{The non-convex Swiss-roll.}
+			\end{subfigure}
+			~
+			\begin{subfigure}[H]{.3\linewidth}
+				\includegraphics[width=\linewidth]{img/convexity/expected.png}
+				\captionsetup{justification=centering}		
+				\caption{The expected reduction.}
+			\end{subfigure}
+			~
+			\begin{subfigure}[H]{.3\linewidth}
+				\includegraphics[width=\linewidth]{img/convexity/actual.png}
+				\captionsetup{justification=centering}		
+				\caption{The actual reduction.}
+			\end{subfigure}
+		\end{figure}
 	
-	\item[Curse of dimensionality] Firstly, this is a issue shared by all local learners (SVM included) \cite{herik2009}. In data sets with a huge number of dimensions and relatively low number of samples, such samples might be too sparsely positioned, becoming insufficient to represent the manifold.
-	
-	\item[Outliers] Noise in data is expressed by samples that somehow diverge from their neighborhood. As these samples become farthest from its original neighborhood, the chances of being linked to samples from other neighborhood increase, possibly decreasing the quality of the solution. A possible solution is to remove these samples during the pre-processing stage \cite{herik2009}.
+	\item[Noise] Noise in data is expressed by samples that somehow diverge from their neighborhood (outliers). As these samples become farthest from its original neighborhood, the chances of being linked to samples from other neighborhood increase, possibly decreasing the quality of the solution. A possible solution is to remove these samples during the pre-processing stage \cite{herik2009}.
 	
 	The image bellow illustrates an attempt to use Isomap to reduce the $S_{n=.4}$, which is the $S$ manifold subjected to a noise factor of $.4$:
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=.6\linewidth]{img/noise/s/5_0_20.png}
+		\includegraphics[width=.6\linewidth]{img/noise/s/5_0_20-original.png}
 		\captionsetup{justification=centering}		
-		\caption{The data set $S_{n=.4}$ and its reduction to two dimensions, respectively.}
+		\caption{The data set $S_{n=.4}$.}
 	\end{figure}
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=.6\linewidth]{img/noise/s/5_graph-0_20}
+	    \includegraphics[width=.8\linewidth]{img/noise/s/5_0_20-graph}
 		\captionsetup{justification=centering}		
 		\caption{The neighborhood graph extracted from $S_{n=.4}$.}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+	    \includegraphics[width=.6\linewidth]{img/noise/s/5_0_20-reduced}
+		\captionsetup{justification=centering}		
+		\caption{$S_{n=.4}$ reduced.}
 	\end{figure}
 \end{description}
 
