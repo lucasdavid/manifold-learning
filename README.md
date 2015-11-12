@@ -1,23 +1,5 @@
 # Manifold Learning
-## Introduction
-Initial programming sketches on Manifold Learning for undergrad C.S. major conclusion report.
-
-## Installing
-This project requires [numpy](www.numpy.org) and [scipy](www.scipy.org)!
-
-```shell
-python setup.py install
-```
+Implementations and experiments for my Computer Science final report: "A Study of The Isomap Algorithm and Its Applications in Machine Learning."
 
 ## Usage
-For full-working examples, take a look at the
-[report assets folder](https://github.com/lucasdavid/Manifold-Learning/tree/master/report_assets) folder.
-
-## Testing
-```shell
-# Running all tests...
-nosetests
-
-# Comparing ours with scikit-learn's Isomap implementation.
-nosetests --tests tests.real.sintetic_data_sets_test
-```
+For full-working examples, take a look at the [experiments folder](experiments) folder.
