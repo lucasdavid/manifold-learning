@@ -111,4 +111,5 @@ report/*.aux
 report/*.synctex.gz
 
 *.gummi
+*.tex.swp
 
