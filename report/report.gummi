@@ -1,0 +1,4 @@
+version=0.6.0
+typesetter=pdflatex
+steps=texpdf
+root=/media/ldavid/hdd/repositories/manifold-learning/report/references.bib
