@@ -73,6 +73,14 @@ Dr. Alexandre M. \textsc{Levada}
 
 \section{Introduction}
 
+Throughout the years, machine learning and pattern recognition techniques have grown popular between both academical and the corporative sector. Their vast application fields and promising results indubitably contributed to our current scenario where not only computer scientists or mathematicians, but engineers, psychologists and many other groups have taken interest on how to adapt and apply these studies to their own problems.
+
+Machine learning can help us to understand, analyze and process large amount of data and even take decisions based on it. The size of data, however, is not necessarily the predominant factor which dictates how machine learning models perform. We are, of course, interested in the information that lies within the data and how to efficiently extract it.
+
+In the last 80 years, there were many different machine learning algorithms developed. Between those, many could successfully generalize low dimensional data \cite{wang2012geometric}. In the other hand, problems of our world are often too complex and may be represented by high dimensional data. For example, images, sounds or text documents can be expressed as vectors of the $\mathbb{R}^n$, where each element corresponds to a pixel, wave signal or character, respectively. When analyzing these problems, we observed that many of the algorithms would often become unstable. \textbf{Dimensionality reduction} (or DR) then quickly became a key concept for minimizing the data size while maintaining its meaning.
+
+Finally, dimensionality reduction has evolved into an extensive area. Nowadays, DR is not only applied to data reduction, specifically, but often employed in order to improve visualization or as preprocessing step for noise reduction.
+
 \newpage
 
 \section{Relevant Background}
@@ -80,7 +88,7 @@ Dr. Alexandre M. \textsc{Levada}
 
 In the context of Computer Science, very often our goal is to develop machines that can assist or automate the process of solving real-world problems. Firstly, however, we must find ways to express these problems numerically.
 
-Although the recurrent usage of the term in scientific work, there is not a clear definition established. It is possible, however, to observe the regular presence of four related features: grouping, content, relatedness e purpose \cite{ren2010}. 
+Although the recurrent usage of the term in scientific work, there is not a clear definition established. It is possible, however, to observe the regular presence of four related features: grouping, content, relatedness e purpose \cite{ren2010}.
 For the scope of this work, the term data set is invariably associated with the idea of a collection of samples. Each sample is a sequence of features, where the {\em i-th} feature of all instances belong to a same set of symbols $f_i$.
 
 Succinctly, consider $S$ a sequence of samples and
@@ -129,7 +137,7 @@ Consider the data set bellow:
 		3 & 62 & Male & 7.3 & 4.1 & 490 & 60 & 68 & 7 & 3.3 & 0.89 & 1\\
 		… & … & … & … & … & … & … & … & … & … & … & … \\
 	\end{tabular}
-	
+
 	\caption{The first three samples of the Indian Liver Patient Dataset (ILPD)}
 \end{table}
 
@@ -138,7 +146,7 @@ Composed by 583 samples and 11 features, the data set ILPD has a nominal feature
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	
+
 	\includegraphics[scale=.3]{displaying_ILPD}
 	\caption{The data set ILPD mapped onto $\mathbb{R}^n$, where each of its features is an axis, except for $S \coloneqq \{1, 2\}$, which was represented by the vertex's color.}
 	\label{fig:disp_ilpd}
@@ -158,7 +166,7 @@ Differently from Iris flower or even the Glass data set, modern problems are, in
 		… & … & … & … & … \\
 		8200 & 0.02680808496910305 & -0.0320375843317954 & … & 0.1772161342899135 \\
 	\end{tabular}
-	
+
 	\caption{A data set with 8200 samples and 100 features.}
 \end{table}
 
@@ -280,7 +288,7 @@ $\lambda$ is the \textbf{eigenvalue} associated to the eigenvector $v$.
 
 \subsubsection{Spectral Decomposition of a Matrix \cite{cox2001}}
 
-If $[M]_{n\times n}$ is a symmetric matrix of rank $n$ and admits $n$ pairs of eigenvalues $\lambda$ and eigenvectors $[V]_{n\times n} = [v_0, v_1, v_2, ..., v_{n-1}]$, such that $V^TV = 1$, then 
+If $[M]_{n\times n}$ is a symmetric matrix of rank $n$ and admits $n$ pairs of eigenvalues $\lambda$ and eigenvectors $[V]_{n\times n} = [v_0, v_1, v_2, ..., v_{n-1}]$, such that $V^TV = 1$, then
 $$MV = V \lambda$$
 
 $\lambda = diag(\sigma_0, \sigma_1, ..., \sigma_{n-1})$ is the diagonal matrix, where $\sigma_i$ is the eigenvalue associated to the eigenvector $v_i$. Furthermore, $V$'s columns are linear independent, hence $V$ is invertible.
@@ -331,11 +339,11 @@ A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a man
 
 \begin{example}
 	A n-dimensional sphere is a manifold. Earth, in special, is a 3-dimensional sphere and its stereographic projection is its mapping to the $\mathbb{R}^2$ \cite{stereo_proj}.
-	
+
 	\begin{figure}[H]
 		\centering
 		\captionsetup{justification=centering}
-		
+
 		\includegraphics[scale=.8]{stereo_earth}
 		\caption{Stereographic projection applied to Earth.}
 		\label{fig:stereographic_earth}
@@ -361,7 +369,7 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph} \cite{berge1973
 
 	\item[Degree] If $G=(X, U)$ is a graph and $x\in X$, the degree $d(x)$ of $x$ is defined \cite{may1972} as
 	$d(x) = 2n_s  + n_n$, where $n_s$ is the number of arcs self-incident at $x$ (i.e., $\{(x, x)\}$) and $n_n$ is the number of arcs incident at $x$.
-	
+
 	\item[Adjacency Matrix] If $G=(X, U), X=\{x_1, x_2, \dots, x_n \}$, define the adjacency matrix $A=[a_{ij}]_{n\times n}$ associated with graph $G$, where $a_{ij} = m_G^+(x_i, x_j)$.
 \end{description}
 
@@ -369,9 +377,9 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph} \cite{berge1973
 
 \begin{description}
 	\item[Undirected graph] ``All graphs are directed, but sometimes the direction need not be specified \cite{berge1973}".
-	
+
 	Let $G=(X, U)$ be a graph and $u_k \in U \mid u_k=(a, b)$. The element $e_i=[a, b]$ can be defined as the \textbf{edge} that links $a$ to $b$ without specifying direction. Finally, define the \textbf{undirected graph} $H$ as $(X, E)$, where $E=\{e_i\}$ is the set of edges created from $U$.
-	
+
 	Figure \ref{fig:graph} shows the graph \textbf{Les Miserables}, where each node is a character and each arc links two characters that have shared stage at some point during the play.
 
 	\begin{figure}[H]
@@ -380,19 +388,19 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph} \cite{berge1973
 		\caption{The \textbf{Les Miserables} graph.}
 		\label{fig:graph}
 	\end{figure}
-	
+
 	\item[Complete graph] A graph $G=(X, U)$ is said to be complete if
 	$$\forall (x, y)\in X, x\ne y, m_G(x, y) \ge 1$$
-	
+
 	\begin{remark}
 		Let $G=(X, U), G_1=(X, E)$ and $n=|X|$. $G$ is called the complete graph $K_n$ if
 		$$\forall (x, y)\in X, \exists e \in E \mid e=[x, y]$$
 	\end{remark}
-	
+
 	\item[Weighted graph] Let $G=(X, U)$ be a graph and $w\colon U \to \mathbb{R} \mid w(u) = w_u$ be the weighted associated with arc $u$. $G$ is said to be a weighted graph.
-	
+
 	\item[Euclidean graph] If $G=(X, U)$ and $W=\{w_u, \forall u\in U\}\subset \mathbb{R}$, $G$ is said to be an euclidean graph if $w_u$ corresponds to the euclidean distance between the vertices connected by $u$ in a specified embedding.
-	
+
 	\item[Tree] Let $G$ be the graph $(V, E)$ such that $G$ is connected and admits no cycles. $G$ is  said to be a \textbf{tree} \cite{berge1973}.
 
 	\begin{figure}[H]
@@ -408,7 +416,7 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph} \cite{berge1973
 
 \paragraph{Nearest-Neighbor Search}
 
-Let $G = (X, U)$ be a weighted graph, where $ \forall u \in U, \exists w_u \in \mathbb{R}$, i.e., the weight or \textbf{length} of the arc $u$, and $n\colon U \to \{0, 1\}$ a definition of \textbf{nearness} in $G$. The nearest-neighbor search is a optimization problem that consists of finding a subgraph $H = (X, F \subseteq U) \mid f \in F \iff n(f) = 1$. 
+Let $G = (X, U)$ be a weighted graph, where $ \forall u \in U, \exists w_u \in \mathbb{R}$, i.e., the weight or \textbf{length} of the arc $u$, and $n\colon U \to \{0, 1\}$ a definition of \textbf{nearness} in $G$. The nearest-neighbor search is a optimization problem that consists of finding a subgraph $H = (X, F \subseteq U) \mid f \in F \iff n(f) = 1$.
 
 \subparagraph{A Generic Algorithm for NN Search}
 \begin{enumerate}
@@ -424,7 +432,7 @@ Let's consider two (between many)  specifications of this algorithm:
 
 \begin{description}
 	\item[K-Nearest Neighbor Search (K-NN)] Fixed $k \in \mathbb{N}$ and $U_x \subseteq U$, where $U_x$ is the set of all arcs with $x$ as initial endpoint, define:
-	
+
 	\begin{align*}
 	n(u_x) &\coloneqq \begin{cases}
 		1, \text{if }  w_{u_x} \le w_p, \forall p \in U_x - F_x \text{ and } |F_x| \le k \\
@@ -483,7 +491,7 @@ The shortest-path between a vertex $x_0 \in X$ and all other vertices can be exp
 
 \begin{example}
 	Let G be the weighted graph as defined in figure \ref{fig:spa-graph}. The shortest-path between $A$ and all other vertices is described by the tree $S$ illustrated in figure \ref{fig:spa-tree}.
-	
+
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}{.4\linewidth}
@@ -512,9 +520,9 @@ Based on how the learning phase of a problem is, most of the ML algorithms may b
 
 \begin{description}
 	\item[Supervised] A direct feedback is presented during the learning phase \cite{pat1996}. For the instances where the ME problem relies on a data set, the learning task uses the labeled training samples (i.e., samples that present the \textbf{target feature}) to synthesize the model that attempts to generalize the relationship between the feature vectors and the target variable \cite{awa2015}.
-	
+
 	\item[Unsupervised] Infer hidden structures from the data set without direct feedback, such as known labels for the samples \cite{awa2015}.
-	
+
 	\item[Semi-supervised] Most commonly, it is given by the extension of either supervised or unsupervised learning to include the other paradigm, resulting in a combination of both \cite{zhu2009}.
 
 	\item[Reinforcement] Through iterative exploration, the learner is positively or negatively reinforced for its actions. The learner's goal is, ultimately, maximize the cumulative reward gained \cite{awa2015}.
@@ -529,7 +537,7 @@ Intuitively, the SVM algorithm attempts to find a hyperplane that separates the 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	
+
 	\includegraphics[scale=.5]{svm_margin}
 	\caption{A SVM classifier projecting a hyperplane that perfectly separates two classes of samples \cite{sksvm}.}
 	\label{fig:svmmargin}
@@ -587,7 +595,7 @@ By the Lagrange multipliers method \cite{mitsvm}:
 
 Applying (\ref{svmlag2}) and (\ref{svmlag3}) on (\ref{svmlag1}), our problem of minimizing (\ref{svmminw}) constrained by (\ref{svmconst}) becomes maximizing $L$, subject to (\ref{svmlag3}):
 \begin{gather*}
-L = \frac{1}{2}\sum\alpha_i y_i x_i \cdot \sum\alpha_j y_j x_j 
+L = \frac{1}{2}\sum\alpha_i y_i x_i \cdot \sum\alpha_j y_j x_j
 - \sum \alpha_i y_i x_i \cdot \sum \alpha_j y_j x_j
 - \sum \alpha_i y_i b + \sum \alpha_i \\
 = \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j (x_i \cdot x_j)
@@ -624,7 +632,7 @@ The figure bellow illustrates a non-linearly separable data set defined in the $
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	
+
 	\includegraphics[scale=.4]{svm_kernel}
 	\caption{Projection of samples from the $\mathbb{R}$ to the $\mathbb{R}^2$, allowing SVM to find a hyperplane that perfectly separates both classes \cite{svmkernels}.}
 	\label{fig:svmkernel}
@@ -640,16 +648,16 @@ There are many different approaches for multi-class classification \cite{rif2008
 
 \begin{description}
 	\item[One-vs-All (OVA)] $n$ binary classifiers are built, where $n$ is also the number of classes in the data set. For the classifier $c^j, j \in [1, n]$, all samples of the $j$th class are taken as positive examples, at the same time that all the other samples are considered negative.
-	
+
 	If
 	$$c^j(x) = \sum_{i=1}^{m} y_i \alpha_i^j x \cdot x_i + b$$
-	
+
 	Then positive values for $c^j(x)$ indicate that the sample $x$ belongs to the $j$th class. Additionally, greater $c^j(x)$ values imply on further distance from the hyperplane (i.e., $c^j(x)$ can also be interpreted as a \textbf{confidence value}) and the sample $x$ should be assigned to the class which held greatest confidence \cite{ovacj}. Shortly, classification is given by
 	$$ f(x) = \argmax_j{c^j(x)} $$
 	\item[All-vs-All (AVA)] Also known as all-pairs or one-vs-one, a classifier $c_{ij}$ is built for each pair of classes $(i, j)$, resulting in a total of $n(n-1)$ classifiers. $c_{ij}$ responds with positive values for samples of the $i$th class and negative values for samples of the $j$th class. Classification can be done by simply counting the class most frequently associated with $x$:
 	$$ f(x) = \argmax_i{\sum_{j=1}^{n} c_{ij}(x)} $$
 	Or equivalently, but only using $\frac{n(n-1)}{2}$ classifiers,
-	$$ f(x) = \argmax_i{\sum_{j=1}^{n} \frac{j-i}{|j-i|} c_{\min(i, j) \max(i, j)}(x)} $$	
+	$$ f(x) = \argmax_i{\sum_{j=1}^{n} \frac{j-i}{|j-i|} c_{\min(i, j) \max(i, j)}(x)} $$
 \end{description}
 
 \subsubsection{Evaluating learners}
@@ -670,9 +678,9 @@ When testing classification models, one way to visualize the wrong predictions m
 		a & 12 &   3 &   2 &   0 \\
 		b &   7 & 12 &   2 &   4 \\
 		c &   0 &   4 & 54 &   8 \\
-		d &   6 &   0 &   1 & 23 \\\hline	
+		d &   6 &   0 &   1 & 23 \\\hline
 	\end{tabular}
-	
+
 	\caption{Example of confusion matrix for a data-set with four different classes.}
 \end{table}
 
@@ -699,7 +707,7 @@ The figure bellow illustrates a data set which express the relationship between 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	
+
 	\includegraphics[scale=.6]{rohrer2015}
 	\caption{graphic representation of a data set generalization by a linear (orange) and a non-linear model (green)}
 	\label{fig:rohrer2015}
@@ -716,7 +724,7 @@ Through GridSearch, it was found that the SVM algorithm with $C=100$, $gamma=.01
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	
+
 	\includegraphics[scale=.5]{svm_cm_iris}
 	\caption{Confusion matrix of a SVM with $C=100$, $gamma=.01$ and $rbf$ kernel when predicting samples from the Iris flower data set.}
 	\label{fig:cmsvmiris}
@@ -785,7 +793,7 @@ Needless to say, $\Sigma$ is the diagonal matrix of singular values, not to be m
 From \ref{eq:pca-cov} and \ref{eq:pca-svd}:
 \begin{align*}
 	\Sigma_X &= \frac{1}{n} X^TX \\
-	&= \frac{1}{n} (U\Sigma V^T)^TU\Sigma V^T \\	
+	&= \frac{1}{n} (U\Sigma V^T)^TU\Sigma V^T \\
 	&= \frac{1}{n} V\Sigma^2 V^T
 \end{align*}
 
@@ -800,11 +808,11 @@ Let $D$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 
 \begin{enumerate}
 	\item Find $X=HD$, where $H$ is the centering matrix.
-	
+
 	\item Calculate the covariance matrix $\Sigma_X$.
-	
+
 	\item Use singular value decomposition to find the eigenvalues $\lambda = \{\lambda_i\}$ and eigenvectors $V = \{v_i\}$ of $\Sigma_X$.
-	
+
 	\item Sort the eigenvalues by their absolute value in descending order and select the first $m$ ones and their respective eigenvectors.
 \end{enumerate}
 
@@ -822,7 +830,7 @@ If $\delta = [\delta_{rs}]_{n\times n}$ is the dissimilarity matrix, where $\del
 \begin{split}
   \delta_{rs}  &= \sqrt{\sum_i (x_{ri}-x_{si})^2} \\
   &\iff \\
-  \delta_{rs}^2 &= \sum_i (x_{ri}-x_{si}^2) \\  
+  \delta_{rs}^2 &= \sum_i (x_{ri}-x_{si}^2) \\
   &= (x_r-x_s)\cdot (x_r-x_s) \\
   &= x_r\cdot x_r + x_s\cdot x_s -2x_r\cdot x_s
 \end{split}
@@ -839,7 +847,7 @@ Now, \ref{eq:basemds} $\implies$
 \begin{align}
 \label{eq:xsderivation}
 \begin{split}
-\frac{1}{n} \sum_r \delta_{rs}^2 
+\frac{1}{n} \sum_r \delta_{rs}^2
 &= \frac{1}{n} \sum_r (x_r\cdot x_r + x_s\cdot x_s -2x_r\cdot x_s) \\
 &= \frac{1}{n} \sum_r x_r\cdot x_r + \sum_r x_s\cdot x_s -2 \sum_r x_r\cdot x_s \\
 &= \frac{1}{n} \sum_r x_r\cdot x_r + nx_s\cdot x_s -2 \sum_r 0\cdot x_s \\
@@ -904,11 +912,11 @@ Let $X$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 \begin{enumerate}
 	\item Calculate the dissimilarity matrix $[\delta]_{rs}$, where $\delta_{rs} = \sqrt{\sum_i (x_{ri} - x_{si})^2}$
 	\item Calculate the matrix $B=H-\frac{1}{2}\delta_{rs}^2H$.
-	
+
 	\item Use singular value decomposition to find the matrices $\Sigma$ and $U$.
-	
+
 	\item Select the $m$ greatest eigenvalues in $\Sigma$. From these, create the matrices $\Sigma'=[\sigma'_{m\times m}]$ and $U'=[u'_{n\times m}]$ (where each column $i$ contains the eigenvector associated with $\sigma'_i$).
-	
+
 	\item Construct $Y=U'\Sigma'$
 \end{enumerate}
 
@@ -918,7 +926,7 @@ Consider that all tests bellow were done in following order:
 \begin{enumerate}
 	\item The data set was retrieved.
 	\item Grid Search was executed, where the parameters grid was given by
-	
+
 	\begin{table}[H]
 		\centering
 		\begin{tabular}{ |*{5}{c} c| }
@@ -927,13 +935,13 @@ Consider that all tests bellow were done in following order:
 			\textbf{C} & 1 & 10 & 100 & 1000 & \\
 			\textbf{gamma} & .001 & .01 & .1 & 1 & 10 \\\hline
 		\end{tabular}
-		
+
 		\caption{Parameters Grid. Note: the $gamma$ parameter is not used in the linear kernel, hence the search space does not contain multiple combinations of these two parameters.}
 	\end{table}
-	
+
 	\item Reduction was performed.
 	\item Grid Search was re-executed and the results compared.
-	
+
 \end{enumerate}
 
 \paragraph{$K$ data set}
@@ -943,7 +951,7 @@ The figure bellow illustrates the results of PCA algorithm application over the 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	
+
 	\includegraphics[width=.9\linewidth]{datasetrpca}
 	\caption{The PCA algorithm reducing $K$ to 2 and 1 dimension, respectively.}
 	\label{fig:datasetrpca}
@@ -959,7 +967,7 @@ The figure bellow illustrates the results of PCA algorithm application over the 
 		\textbf{Reduction time} & $-$ & 0.995ms & 1.118ms \\\hline
 		\textbf{Data size} & 1600 bytes & 1600 bytes & 8000 bytes \\\hline
 	\end{tabular}
-	
+
 	\caption{Description of predictions and reduction performance for $k$.}
 \end{table}
 
@@ -970,7 +978,7 @@ The Iris flower being reduced from 4 to 2 features. Although the data set became
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	
+
 	\includegraphics[width=\linewidth]{dsirispca}
 	\caption{The PCA algorithm reducing the Iris flower to 2 and 1 dimension, respectively.}
 	\label{fig:dsirispca}
@@ -987,7 +995,7 @@ The Iris flower being reduced from 4 to 2 features. Although the data set became
 		\textbf{Reduction time} & $-$ & 0.995ms & 1.118ms \\\hline
 		\textbf{Data size} & 4800 bytes & 2400 bytes & 1200 bytes \\\hline
 	\end{tabular}
-	
+
 	\caption{Description of predictions and reduction performance for Iris flower.}
 \end{table}
 
@@ -1013,7 +1021,7 @@ Digits data set is composed by 1.797 samples, 64 features and 10 classes. Each s
 		\textbf{Reduction time}       & $-$          & 0.02s       & 0.01s & 0.01s & 0.01s \\\hline
 		\textbf{Data size}           & 920064 B & 143760 B & 43128 B & 28752 B & 14376 B \\\hline
 	\end{tabular}
-	
+
 	\caption{Description of predictions and reduction performance for Digits.}
 \end{table}
 
@@ -1026,7 +1034,7 @@ Although PCA has presented promising results in the previous section, hence its 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	
+
 	\includegraphics[width=\linewidth]{swiss_pca}
 	\caption{The \textbf{Swiss-roll manifold} and its reductions to 3, 2 and 1 dimensions, respectively, using the PCA algorithm.}
 	\label{fig:swiss_pca}
@@ -1046,7 +1054,7 @@ The table bellow describes a regression attempt over the data sets illustrated i
 		\textbf{Reduction time}    & $-$     & 0.00ms & 0.00ms \\\hline
 		\textbf{Data size} & 23.44 KB & 15.62 KB  & 7.81 KB \\\hline
 	\end{tabular}
-	
+
 	\caption{Regression accuracy and reduction performance for the Swiss-roll data set.}
 \end{table}
 
@@ -1101,7 +1109,7 @@ Finally, $M$ is a euclidean graph which roughly lies on a hyperplane. Furthermor
 		\includegraphics[width=.63\linewidth]{mani_s_5}
 		\caption{$S$ reduced to one dimension.}
 		\label{fig:mani_s_reduced_2}
-	\end{subfigure}	
+	\end{subfigure}
 \end{figure}
 
 \paragraph{Formalization of the Isomap Algorithm \cite{ten2000}}
@@ -1110,9 +1118,9 @@ Let $X$ be the original data set and $p \in \mathbb{R}$ the number of dimensions
 
 \begin{enumerate}
 	\item Construct the weighted graph $G$ from the distances pairwise $\delta_{xy}, \forall (x, y) \in S \times S, x \ne y$ and find the graph $H$ by applying the \textbf{nearest-neighbor algorithm} on the graph $G$.
-	
+
 	\item Compute the shortest path graph $M$ between all pairs of nodes from graph $H$. This might be done by the \textbf{all-pairs dijkstra's} or by the \textbf{Floyd-Warshall} algorithm.
-	
+
 	\item Use $M$ to construct the $p$-dimensional embedding using the \textbf{MDS} algorithm.
 \end{enumerate}
 
@@ -1137,7 +1145,7 @@ Let $X$ be the original data set and $p \in \mathbb{R}$ the number of dimensions
 		\textbf{Reduction time}  & $-$         & 0.51 s       & 0.48 s     \\\hline
 		\textbf{Data size}          & 23.44 KB & 15.62 KB  & 7.81 KB   \\\hline
 	\end{tabular}
-	
+
 	\caption{Description of predictions and reduction performance for Swiss Roll.}
 \end{table}
 
@@ -1163,7 +1171,7 @@ We will analyze Digits once again, only this time it will be reduced with the Is
 		\textbf{Reduction time}  & $-$           & 5.43s        & 2.72s       & 2.71s & 2.04s 			\\\hline
 		\textbf{Data size}          & 898.50 KB & 140.39 KB & 42.12 KB  & 28.08 KB & 14.04 KB \\\hline
 	\end{tabular}
-	
+
 	\caption{Description of predictions and reduction performance for Digits.}
 \end{table}
 
@@ -1176,49 +1184,49 @@ Notice that we managed to reduce the data set to only 3 dimensions while maintai
 The experiments in the previous section made it quite clear that Isomap outperforms PCA on the selected data sets. Unfortunately, this trend cannot be projected for a generic case considering our experiments were strictly controlled. In real-world data sets, the application of Isomap may lead to poor low-dimensional embeddings \cite{herik2009}. Bellow are listed some the issues that have great influence over Isomap's results:
 \begin{description}
 	\item[Manifold Assumption] It refers to the initial assumption that the data lies on a low-dimensional manifold. Although wildly exploited by many authors, it is difficult to assert whether such assumption holds or not in real-world data sets. \cite{lin2008riemannian} Furthermore, even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations would be produced.
-	
+
 	\item[Convexity] "Isomap relies on the data being geodesically convex." \cite{donoho2002does} This issue becomes clear when dealing with data sets with ``holes" in it that are too big, resulting in great disconnected areas that require paths with great curvature to get around. Lerman demonstrated how reducing non-convex data sets can easily yeild distorted results, when these have big enough ``holes" on them: \cite{lerman2005}
 		\begin{figure}[H]
 		    \centering
 			\begin{subfigure}[H]{.3\linewidth}
 				\includegraphics[width=\linewidth]{img/convexity/original.png}
-				\captionsetup{justification=centering}		
+				\captionsetup{justification=centering}
 				\caption{The non-convex Swiss-roll.}
 			\end{subfigure}
 			~
 			\begin{subfigure}[H]{.3\linewidth}
 				\includegraphics[width=\linewidth]{img/convexity/expected.png}
-				\captionsetup{justification=centering}		
+				\captionsetup{justification=centering}
 				\caption{The expected reduction.}
 			\end{subfigure}
 			~
 			\begin{subfigure}[H]{.3\linewidth}
 				\includegraphics[width=\linewidth]{img/convexity/actual.png}
-				\captionsetup{justification=centering}		
+				\captionsetup{justification=centering}
 				\caption{The actual reduction.}
 			\end{subfigure}
 		\end{figure}
-	
+
 	\item[Noise] Noise in data is expressed by samples that somehow diverge from their neighborhood (outliers). As these samples become farthest from its original neighborhood, the chances of being linked to samples from other neighborhood increase, possibly decreasing the quality of the solution. A possible solution is to remove these samples during the pre-processing stage \cite{herik2009}.
-	
+
 	The image bellow illustrates an attempt to use Isomap to reduce the $S_{n=.4}$, which is the $S$ manifold subjected to a noise factor of $.4$:
-	
+
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=.6\linewidth]{img/noise/s/5_0_20-original.png}
-		\captionsetup{justification=centering}		
+		\captionsetup{justification=centering}
 		\caption{The data set $S_{n=.4}$.}
 	\end{figure}
 	\begin{figure}[H]
 		\centering
 	    \includegraphics[width=.8\linewidth]{img/noise/s/5_0_20-graph}
-		\captionsetup{justification=centering}		
+		\captionsetup{justification=centering}
 		\caption{The neighborhood graph extracted from $S_{n=.4}$.}
 	\end{figure}
 	\begin{figure}[H]
 		\centering
 	    \includegraphics[width=.6\linewidth]{img/noise/s/5_0_20-reduced}
-		\captionsetup{justification=centering}		
+		\captionsetup{justification=centering}
 		\caption{$S_{n=.4}$ reduced.}
 	\end{figure}
 \end{description}
