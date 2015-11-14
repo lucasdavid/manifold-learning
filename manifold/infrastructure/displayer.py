@@ -61,7 +61,7 @@ class Displayer(object):
             if color is None:
                 color = np.zeros(samples)
 
-            kwargs = {'projection': '3d'} if dimension > 2 else {}
+            kwargs = {'projection': '3d', 'alpha': .2} if dimension > 2 else {}
 
             ax = figure.add_subplot(
                 rows * 100 +
