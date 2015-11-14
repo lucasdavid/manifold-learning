@@ -34,7 +34,7 @@ class Example(metaclass=abc.ABCMeta):
 
 class LearningExample(Example, metaclass=abc.ABCMeta):
     learner = svm.SVC
-    data = target = labels = None
+    data = target = labels = grid = None
 
     learning_parameters = [
         {'C': (1, 10, 100, 1000), 'kernel': ('linear',)},
@@ -45,13 +45,13 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
         start = time.time()
         print('GridSearch started at %s...' % start)
 
-        grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters, verbose=-1, n_jobs=multiprocessing.cpu_count())
-        grid.fit(self.data, self.target)
+        self.grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters, verbose=-1, n_jobs=multiprocessing.cpu_count())
+        self.grid.fit(self.data, self.target)
 
         print('\tAccuracy: %.2f\n'
               '\tTime elapsed: %.2f s\n'
               '\tBest parameters: %s'
-              % (grid.best_score_, time.time() - start, grid.best_params_))
+              % (self.grid.best_score_, time.time() - start, self.grid.best_params_))
 
 
 class ReductionExample(Example, metaclass=abc.ABCMeta):
