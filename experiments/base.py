@@ -1,9 +1,7 @@
 import abc
 import time
 import multiprocessing
-
 from sklearn import grid_search, decomposition, svm, manifold
-
 from manifold.infrastructure import Displayer
 from manifold.learning.algorithms import Isomap
 
@@ -26,7 +24,7 @@ class Example(metaclass=abc.ABCMeta):
         pass
 
     def start(self):
-        print(self.title)
+        print('%s\n' % self.title)
 
         self._run()
         self._dispose()
@@ -45,17 +43,18 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
         start = time.time()
         print('GridSearch started at %s...' % start)
 
-        self.grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters, verbose=-1, n_jobs=multiprocessing.cpu_count())
+        self.grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters,
+                                             n_jobs=multiprocessing.cpu_count())
         self.grid.fit(self.data, self.target)
 
         print('\tAccuracy: %.2f\n'
               '\tTime elapsed: %.2f s\n'
-              '\tBest parameters: %s'
+              '\tBest parameters: %s\n'
               % (self.grid.best_score_, time.time() - start, self.grid.best_params_))
 
 
 class ReductionExample(Example, metaclass=abc.ABCMeta):
-    data = reduced_data = target = None
+    data = original_data = target = None
 
     reducer = None
     reduction_method = 'isomap'
@@ -71,24 +70,28 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
             self.reduction_params['n_components'] if 'n_components' in self.reduction_params else \
                 3
 
+        data = self.original_data
+
         print('Dimensionality reduction process has started.')
         print('\tMethod: %s' % self.reduction_method)
-        print('\tR^%i-->R^%i' % (self.data.shape[1], to_dimension))
+        print('\tR^%i-->R^%i' % (data.shape[1], to_dimension))
 
         start = time.time()
 
         if self.reduction_method == 'pca':
             self.reducer = decomposition.PCA(**self.reduction_params)
-            self.reduced_data = self.reducer.fit_transform(self.data)
+            self.data = self.reducer.fit_transform(data)
+
         elif self.reduction_method == 'skisomap':
             self.reducer = manifold.Isomap(**self.reduction_params)
-            self.reduced_data = self.reducer.fit_transform(self.data)
+            self.data = self.reducer.fit_transform(data)
+
         else:
             self.reducer = Isomap(self.data, **self.reduction_params)
-            self.reduced_data = self.reducer.run()
+            self.data = self.reducer.run()
 
-        print('\tNew data set\'s size: %.2f KB' % (self.reduced_data.nbytes / 1024))
+        print('\tNew data set\'s size: %.2f KB' % (self.data.nbytes / 1024))
         print('Done (%.2f s).' % (time.time() - start))
 
         if self.plotting:
-            self.displayer.load(self.reduced_data, self.target)
+            self.displayer.load(self.data, self.target)
