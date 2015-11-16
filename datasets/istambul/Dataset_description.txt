@@ -1,0 +1,18 @@
+Data Set Information:
+
+Data is collected from imkb.gov.tr and finance.yahoo.com. Data is organized with regard to working days in Istanbul Stock Exchange.
+
+Attribute Information:
+
+Stock exchange returns. Istanbul stock exchange national 100 index, Standard & poorâ€™s 500 return index, Stock market return index of Germany, Stock market return index of UK, Stock market return index of Japan, Stock market return index of Brazil, MSCI European index, MSCI emerging markets index
+
+Relevant Papers:
+
+Paper: Akbilgic, O., Bozdogan, H., Balaban, M.E., (2013) A novel Hybrid RBF Neural Networks model as a forecaster, Statistics and Computing. DOI 10.1007/s11222-013-9375-7
+PhD Thesis: Oguz Akbilgic, (2011) Hibrit Radyal TabanlÄ± Fonksiyon AÄŸlarÄ± ile DeÄŸiÅŸken SeÃ§imi ve Tahminleme: Menkul KÄ±ymet YatÄ±rÄ±m KararlarÄ±na Ä°liÅŸkin Bir Uygulama, Istanbul University
+
+
+Citation Request:
+
+Paper: Akbilgic, O., Bozdogan, H., Balaban, M.E., (2013) A novel Hybrid RBF Neural Networks model as a forecaster, Statistics and Computing. DOI 10.1007/s11222-013-9375-7
+PhD Thesis: Oguz Akbilgic, (2011) Hibrit Radyal TabanlÄ± Fonksiyon AÄŸlarÄ± ile DeÄŸiÅŸken SeÃ§imi ve Tahminleme: Menkul KÄ±ymet YatÄ±rÄ±m KararlarÄ±na Ä°liÅŸkin Bir Uygulama, Istanbul University
