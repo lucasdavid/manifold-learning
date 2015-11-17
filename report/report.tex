@@ -927,27 +927,18 @@ Let $X$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 \end{enumerate}
 
 \subsection{Classification and Regression Over Linearly Reduced Data Sets}
+\label{sec:experiments_linear_ds}
 
-Consider that all tests bellow were done in following order:
+This section reports the performance of classifiers and regressors over determined data sets and their reduced forms. All experiments followed the format bellow:
+
 \begin{enumerate}
-	\item The data set was retrieved.
-	\item Grid Search was executed, where the parameters grid was given by
-
-	\begin{table}[H]
-		\centering
-		\begin{tabular}{ |*{5}{c} c| }
-			\hline
-			\textbf{kernel} & linear & rbf & sigmoid && \\
-			\textbf{C} & 1 & 10 & 100 & 1000 & \\
-			\textbf{gamma} & .001 & .01 & .1 & 1 & 10 \\\hline
-		\end{tabular}
-
-		\caption{Parameters Grid. Note: the $gamma$ parameter is not used in the linear kernel, hence the search space does not contain multiple combinations of these two parameters.}
-	\end{table}
-
-	\item Reduction was performed.
-	\item Grid Search was re-executed and the results compared.
-
+	\item The data set $X_{n \times m}$ was loaded.
+	\item Grid Search was executed over the original data set.
+	\item for $d \in D \subset \mathbb{N} \mid d \in D \implies d < m$:
+	\begin{enumerate}
+		\item The $d$-dimensional embedding $X_d$ of $X$ was calculated.
+		\item Grid Search was executed over $X_d$.
+	\end{enumerate}
 \end{enumerate}
 
 \subsubsection{$K$ data set}
@@ -1149,6 +1140,8 @@ The time complexity of the Isomap algorithm (when using Dijkstra's) is, therefor
 
 \subsection{Classification and Regression Over Data Sets Reduced with Isomap}
 
+Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, classification and regression experiments made in common data sets, following the same format as before.
+
 \subsubsection{The Swiss Roll Data Set}
 
 \begin{figure}[H]
@@ -1240,53 +1233,63 @@ The experiments in the previous section made it quite clear that Isomap outperfo
 \begin{description}
 	\item[Manifold Assumption] It refers to the initial assumption that the data lies on a low-dimensional manifold. Although wildly exploited by many authors, it is difficult to assert whether such assumption holds or not in real-world data sets. \cite{lin2008riemannian} Furthermore, even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations would be produced.
 
+	\newpage
 	\item[Convexity] "Isomap relies on the data being geodesically convex." \cite{donoho2002does} This issue becomes clear when dealing with data sets with ``holes" in it that are too big, resulting in great disconnected areas that require paths with great curvature to get around. Lerman demonstrated how reducing non-convex data sets can easily yeild distorted results, when these have big enough ``holes" on them: \cite{lerman2005}
 		\begin{figure}[H]
 		    \centering
-			\begin{subfigure}[H]{.3\linewidth}
+			\begin{subfigure}[H]{.45\linewidth}
 				\includegraphics[width=\linewidth]{img/convexity/original.png}
 				\captionsetup{justification=centering}
 				\caption{The non-convex Swiss-roll.}
 			\end{subfigure}
 			~
-			\begin{subfigure}[H]{.3\linewidth}
+			\begin{subfigure}[H]{.45\linewidth}
 				\includegraphics[width=\linewidth]{img/convexity/expected.png}
 				\captionsetup{justification=centering}
 				\caption{The expected reduction.}
 			\end{subfigure}
-			~
-			\begin{subfigure}[H]{.3\linewidth}
+			\newline\newline
+
+			\begin{subfigure}[H]{.45\linewidth}
 				\includegraphics[width=\linewidth]{img/convexity/actual.png}
 				\captionsetup{justification=centering}
 				\caption{The actual reduction.}
 			\end{subfigure}
 		\end{figure}
 
+	\newpage
 	\item[Noise] Noise in data is expressed by samples that somehow diverge from their neighborhood (outliers). As these samples become farthest from its original neighborhood, the chances of being linked to samples from other neighborhood increase, possibly decreasing the quality of the solution. A possible solution is to remove these samples during the pre-processing stage \cite{herik2009}.
 
-	The image bellow illustrates an attempt to use Isomap to reduce the $S_{n=.4}$, which is the $S$ manifold subjected to a noise factor of $.4$:
+	The image bellow illustrates an attempt to use Isomap to reduce the $M_{n=.4}$, which is the Swiss-roll data set subjected to a noise factor of $.8$:
 
 	\begin{figure}[H]
 		\centering
-		\begin{subfigure}{.36\linewidth}
+		\begin{subfigure}{.55\linewidth}
 			\centering
-			\includegraphics[width=\linewidth]{img/noise/s/5_0_20-original.png}
+			\includegraphics[width=\linewidth]{img/noise/sr/1}
 			\captionsetup{justification=centering}
-			\caption{The data set $S_{n=.4}$.}
+			\caption{The data set $M_{n=.8}$.}
 		\end{subfigure}~
+		\begin{subfigure}{.45\linewidth}
+			\centering
+			\includegraphics[width=\linewidth]{img/noise/sr/3}
+			\captionsetup{justification=centering}
+			\caption{The neighborhood graph extracted from $M_{n=.8}$.}
+			\label{fig:noise_3}
+		\end{subfigure}
+		\newline\newline\newline
 		\begin{subfigure}{.6\linewidth}
 			\centering
-			\includegraphics[width=\linewidth]{img/noise/s/5_0_20-graph}
+			\includegraphics[width=\linewidth]{img/noise/sr/2}
 			\captionsetup{justification=centering}
-			\caption{The neighborhood graph extracted from $S_{n=.4}$.}					
+			\caption{$M_{n=.8}$ reduced.}
+			\label{fig:noise_2}
 		\end{subfigure}
-	\end{figure}
-	\begin{figure}[H]
-		\centering
-	    \includegraphics[width=.4\linewidth]{img/noise/s/5_0_20-reduced}
 		\captionsetup{justification=centering}
-		\caption{$S_{n=.4}$ reduced.}
+		\caption{The Isomap applied on a noisy data set.}
 	\end{figure}
+	
+	Observe how some outliers were sufficiently far from their original neighborhood in the graph \ref{fig:noise_3}, to the point that Nearest-Neighbor Search maintained the edge between them and samples of completely different colors. MDS then attempted to maintain this dissimilarity, resulting in a deformed reduction (figure \ref{fig:noise_2}).
 \end{description}
 
 \section{Final Considerations}
