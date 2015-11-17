@@ -1,9 +1,11 @@
 import abc
 import time
 import multiprocessing
+
+from scipy.spatial import distance
 from sklearn import grid_search, decomposition, svm, manifold
 from manifold.infrastructure import Displayer
-from manifold.learning.algorithms import Isomap
+from manifold.learning.algorithms import Isomap, MDS
 
 
 class Example(metaclass=abc.ABCMeta):
@@ -64,7 +66,7 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
     }
 
     def reduce(self):
-        assert self.reduction_method in ('isomap', 'pca', 'skisomap'), 'Unknown reduction method.'
+        assert self.reduction_method in ('pca', 'mds', 'isomap', 'skisomap'), 'Unknown reduction method.'
 
         to_dimension = self.reduction_params['to_dimension'] if 'to_dimension' in self.reduction_params else \
             self.reduction_params['n_components'] if 'n_components' in self.reduction_params else \
@@ -74,13 +76,17 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
 
         print('Dimensionality reduction process has started.')
         print('\tMethod: %s' % self.reduction_method)
-        print('\tR^%i-->R^%i' % (data.shape[1], to_dimension))
+        print('\tR^%i --> R^%i' % (data.shape[1], to_dimension))
 
         start = time.time()
 
         if self.reduction_method == 'pca':
             self.reducer = decomposition.PCA(**self.reduction_params)
             self.data = self.reducer.fit_transform(data)
+
+        if self.reduction_method == 'mds':
+            self.reducer = MDS(distance.squareform(distance.pdist(self.data)), **self.reduction_params)
+            self.data = self.reducer.run()
 
         elif self.reduction_method == 'skisomap':
             self.reducer = manifold.Isomap(**self.reduction_params)

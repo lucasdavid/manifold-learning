@@ -29,7 +29,7 @@ class LeukemiaExample(ReductionExample, LearningExample):
         self.load_data()
         self.learn()
 
-        for d in (20, 10, 3):
+        for d in (30, 20, 10):
             self.reduction_params = {'n_components': d, 'k': 5}
 
             self.reduce()
