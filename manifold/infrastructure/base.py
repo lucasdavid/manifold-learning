@@ -46,3 +46,9 @@ class EuclideanDistancesFromDataSet(Task):
             d = d[samples - i - 1:]
 
         return distances
+
+
+class Reducer(Task, metaclass=abc.ABCMeta):
+    def transform(self, data):
+        self.store(data=data)
+        return self.run()

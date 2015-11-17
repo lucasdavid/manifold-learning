@@ -2,7 +2,7 @@ import abc
 import numpy as np
 import networkx as nx
 
-from ..infrastructure.base import Task, EuclideanDistancesFromDataSet
+from ..infrastructure.base import Task, EuclideanDistancesFromDataSet, Reducer
 
 
 class INearestNeighbors(Task, metaclass=abc.ABCMeta):
@@ -83,7 +83,7 @@ class FloydWarshall(IShortestPathFinder):
         return nx.floyd_warshall(self.data['g'])
 
 
-class MDS(Task):
+class MDS(Reducer):
     def __init__(self, m, n_components=3):
         """Constructs a Multidimensional Scaling task.
 
@@ -131,7 +131,7 @@ class MDS(Task):
         return np.real(np.dot(v, np.sqrt(np.diag(w))))
 
 
-class Isomap(Task):
+class Isomap(Reducer):
     def __init__(self,
                  data_set,
                  nearest_method='auto', k=10, e=None,
