@@ -10,11 +10,16 @@ class DisplayingDatasetAsGraphExample(ReductionExample):
     title = '5. Displaying the S-Dataset as a Graph Example'
     plotting = True
 
-    def _run(self):
+    def load_data(self):
         self.data, self.target = datasets.make_s_curve(n_samples=1000)
+        self.original_data = self.data
 
-        self.displayer.load(self.data, self.target)
-        self.displayer.aspect = (20, -30)
+        if self.plotting:
+            self.displayer.load(self.data, self.target)
+            self.displayer.aspect = (20, -30)
+
+    def _run(self):
+        self.load_data()
 
         self.reduction_method = 'skisomap'
         self.reduction_params = {'n_neighbors': 10}
@@ -23,14 +28,13 @@ class DisplayingDatasetAsGraphExample(ReductionExample):
             self.reduction_params['n_components'] = dimension
             self.reduce()
 
-        self.data = self.reduced_data
         self.draw_nearest_neighbor_graph_found()
 
         if self.plotting:
             self.displayer.render()
 
     def draw_nearest_neighbor_graph_found(self):
-        d = algorithms.EuclideanDistancesFromDataSet(self.data).run()
+        d = algorithms.EuclideanDistancesFromDataSet(self.original_data).run()
         e = algorithms.KNearestNeighbors(d, alpha=10).run()
         g = nx.Graph(e)
         del d, e
