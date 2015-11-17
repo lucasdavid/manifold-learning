@@ -1228,9 +1228,11 @@ Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 
 
 \subsection{Applicability and Limitations of Isomap}
 
-\subsubsection{Highly Dense Data Sets}
+\subsubsection{Infeasibility on Highly Dense Data Sets}
 
-Isomap has time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ (see section \ref{sec:isocomplexity}). This unfortunately makes it unsuitable for data sets with a high number of samples. During Shi and Gu experiments, Isomap could not reduce data sets with more than 6000 samples \cite{shi2012fast}.
+In practice, Isomap's time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ (see section \ref{sec:isocomplexity}) makes it unsuitable for data sets with great number of samples. This is illustrated in Shi and Gu's experiments: Isomap could not reduce data sets with more than 6000 samples in reasonable time. \cite{shi2012fast}
+
+In order to visualize this issue, an experiment was made. Consider Spam the data set with 4601 samples and 57 features and the implementations MDS, Isomap, sk-PCA and sk-Isomap (the last two being native algorithms from the \href{http://scikit-learn.org}{scikit-learn} library).
 
 \subsubsection{Necessary Settings for Convergence}
 
