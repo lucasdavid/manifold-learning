@@ -294,21 +294,21 @@ Given a matrix $A \ne 0 \in \mathbb{R}^{2n}$, a vector $v \in \mathbb{R}^n$ is s
 $$\exists \lambda \in \mathbb{R} \mid Av = \lambda v \textnormal{, where}$$
 $\lambda$ is the \textbf{eigenvalue} associated to the eigenvector $v$.
 
-\subsubsection{Spectral Decomposition of a Matrix \cite{cox2001}}
+\subsubsection{Spectral Decomposition of a Matrix}
 
 If $[M]_{n\times n}$ is a symmetric matrix of rank $n$ and admits $n$ pairs of eigenvalues $\lambda$ and eigenvectors $[V]_{n\times n} = [v_0, v_1, v_2, ..., v_{n-1}]$, such that $V^TV = 1$, then
 $$MV = V \lambda$$
 
-$\lambda = diag(\sigma_0, \sigma_1, ..., \sigma_{n-1})$ is the diagonal matrix, where $\sigma_i$ is the eigenvalue associated to the eigenvector $v_i$. Furthermore, $V$'s columns are linear independent, hence $V$ is invertible.
+$\lambda = diag(\sigma_0, \sigma_1, ..., \sigma_{n-1})$ is the diagonal matrix, where $\sigma_i$ is the eigenvalue associated to the eigenvector $v_i$. \cite{cox2001} Furthermore, $V$'s columns are linear independent, hence $V$ is invertible.
 \begin{align*}
 	MV &= V \lambda \\
 	MVV^T &= V \lambda V^T \\
 	M &= V \lambda V^T
 \end{align*}
 
-\subsubsection{Singular Value Decomposition \cite{gan2008}}
+\subsubsection{Singular Value Decomposition}
 \label{sec:svd}
-If $M \in \mathbb{R}^{m \times n}$, then $\exists U \in \mathbb{R}^{m \times m}, V \in \mathbb{R}^{n \times n}$ and $\Sigma =  diag(\sigma_0, \dots, \sigma_{n-1})$ conditioned to $\sigma_i \ge \sigma_{i+1} \ge 0, \forall \sigma \in [0, n)$ s.t.
+If $M \in \mathbb{R}^{m \times n}$, then $\exists U \in \mathbb{R}^{m \times m}, V \in \mathbb{R}^{n \times n}$ and $\Sigma =  diag(\sigma_0, \dots, \sigma_{n-1})$ conditioned to $\sigma_i \ge \sigma_{i+1} \ge 0, \forall \sigma \in [0, n)$ s.t. \cite{gan2008}
 $$M = U\Sigma V^T$$
 
 \begin{theorem}
@@ -646,13 +646,13 @@ The figure bellow illustrates a non-linearly separable data set defined in the $
 	\label{fig:svmkernel}
 \end{figure}
 
-Between many different kernels, two often used are the RBF: $\exp(-\frac{\|x -x'\|^2}{2\sigma^2})$ and the Polynomial: $(u^T v + c)^{d}$ \cite{svmkernels}.
+Between many different kernels, two often used are the RBF: $\exp(-\frac{\|x -x'\|^2}{2\sigma^2})$ and the Polynomial: $(u^T v + c)^{d}$. \cite{svmkernels}
 
 \subsubsection{Multi-class Classification}
 
 Not all problems are binary. In classification, this reflects data sets that have their samples separated into more than two classes. The Iris flower data set is an example of this, when predicting the samples' {\em species}.
 
-There are many different approaches for multi-class classification \cite{rif2008}. For the scope of this work, consider only the following:
+There are many different approaches for multi-class classification. \cite{rif2008} For the scope of this work, consider only the following:
 
 \begin{description}
 	\item[One-vs-All (OVA)] $n$ binary classifiers are built, where $n$ is also the number of classes in the data set. For the classifier $c^j, j \in [1, n]$, all samples of the $j$th class are taken as positive examples, at the same time that all the other samples are considered negative.
@@ -660,7 +660,7 @@ There are many different approaches for multi-class classification \cite{rif2008
 	If
 	$$c^j(x) = \sum_{i=1}^{m} y_i \alpha_i^j x \cdot x_i + b$$
 
-	Then positive values for $c^j(x)$ indicate that the sample $x$ belongs to the $j$th class. Additionally, greater $c^j(x)$ values imply on further distance from the hyperplane (i.e., $c^j(x)$ can also be interpreted as a \textbf{confidence value}) and the sample $x$ should be assigned to the class which held greatest confidence \cite{ovacj}. Shortly, classification is given by
+	Then positive values for $c^j(x)$ indicate that the sample $x$ belongs to the $j$th class. Additionally, greater $c^j(x)$ values imply on further distance from the hyperplane (i.e., $c^j(x)$ can also be interpreted as a \textbf{confidence value}) and the sample $x$ should be assigned to the class which holds greatest confidence. \cite{ovacj} Shortly, classification is given by
 	$$ f(x) = \argmax_j{c^j(x)} $$
 	\item[All-vs-All (AVA)] Also known as all-pairs or one-vs-one, a classifier $c_{ij}$ is built for each pair of classes $(i, j)$, resulting in a total of $n(n-1)$ classifiers. $c_{ij}$ responds with positive values for samples of the $i$th class and negative values for samples of the $j$th class. Classification can be done by simply counting the class most frequently associated with $x$:
 	$$ f(x) = \argmax_i{\sum_{j=1}^{n} c_{ij}(x)} $$
@@ -698,13 +698,13 @@ Naturally, a diagonal matrix represents that all samples of the class $i$ were c
 
 Sometimes (for example, when the data set does not have too many samples), partitioning of the data set into subsets might be benign to the learning process, as the model will be constructed only considering a small, random portion of the samples. This event is known as \textbf{underfitting}.
 
-When $k$-fold cross-validating \cite{crossvalid}, the data set can be partitioned into $k$ folds. For each fold $k_i$, a model is trained with all folds, except for $k_i$. The model is then tested over $k_i$. Finally, the score reported by the cross-validation method is the average accuracy when testing over all folds.
+When $k$-fold cross-validating, \cite{crossvalid} the data set can be partitioned into $k$ folds. For each fold $k_i$, a model is trained with all folds, except for $k_i$. The model is then tested over $k_i$. Finally, the score reported by the cross-validation method is the average accuracy when testing over all folds.
 
 \paragraph{Grid Search}
 
 Machine Learning algorithms may require specific parameters to run. For instance, SVM requires $C$ and which $kernel$ it should use. Additionally, kernels might require their own parameters. As these parameters strongly affect how the generated model will be, one cannot choose them arbitrarily.
 
-Grid Search is a traditional method used to find the parameters that optimize the generalization of learning model over a specific data set \cite{gridsearch}. Given a set of possible parameters, it will exhaustively search for the combination of those that generate the best outcome, which might be evaluated by a validation method such as cross-validation.
+Grid Search is a traditional method used to find the parameters that optimize the generalization of learning model over a specific data set. \cite{gridsearch} Given a set of possible parameters, it will exhaustively search for the combination of those that generate the best outcome, which might be evaluated by a validation method such as cross-validation.
 
 \subsubsection{Examples of learning}
 
@@ -721,7 +721,7 @@ The figure bellow illustrates a data set which express the relationship between 
 	\label{fig:rohrer2015}
 \end{figure}
 
-The orange line and the green arc represent two different models. The orange line, which represents the linear model, clearly does not generalize the data set appropriately, once it induces an error much larger than necessary \cite{roh2015}. The non-linear model, i.e., the green arc, was capable of generalize the data inducing a smaller error.
+The orange line and the green arc represent two different models. The orange line, which represents the linear model, clearly does not generalize the data set appropriately, once it induces an error much larger than necessary. \cite{roh2015} The non-linear model, i.e., the green arc, was capable of generalize the data inducing a smaller error.
 
 \paragraph{Iris Flower}
 
@@ -753,7 +753,7 @@ Consider the data set $K$. $K$ has its samples expressed by two similarly scaled
 	\label{fig:datasetr}
 \end{figure}
 
-Additionally, something interesting can be observed when analyzing the covariance matrix of $K$: as it is not a diagonal matrix, the variance of $x$ from its mean somehow correlates with the variance of $y$ \cite{pcajon2003}.
+Additionally, something interesting can be observed when analyzing the covariance matrix of $K$: as it is not a diagonal matrix, the variance of $x$ from its mean somehow correlates with the variance of $y$. \cite{pcajon2003}
 
 \begin{table}[H]
 	\centering
@@ -770,7 +770,7 @@ Additionally, something interesting can be observed when analyzing the covarianc
 
 As in $K$, some data sets follow certain distributions that are majorly contained in a few orthogonal components, where a component is the result of a linear combination of the original features.
 
-Principal Component Analysis (PCA) is a statistical technique that attempts to transform a $n$-dimensional data set $X$ into a $m$-dimensional data set $Y$, where, hopefully, $k \ll n$. Furthermore, the dimensions of $Y$ will necessarily be orthogonal components aligned with the direction in which the variance of samples in $X$ is maximum, commonly referred to as \textbf{principal components} \cite{pca1989}. In figure \ref{fig:datasetrpc}, the orange and purple vectors are the principal components of the data set $K$.
+Principal Component Analysis (PCA) is a statistical technique that attempts to transform a $n$-dimensional data set $X$ into a $m$-dimensional data set $Y$, where, hopefully, $k \ll n$. Furthermore, the dimensions of $Y$ will necessarily be orthogonal components aligned with the direction in which the variance of samples in $X$ is maximum, commonly referred to as \textbf{principal components}. \cite{pca1989} In figure \ref{fig:datasetrpc}, the orange and purple vectors are the principal components of the data set $K$.
 
 \begin{figure}[H]
 	\centering
@@ -824,7 +824,7 @@ Let $D$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 
 \subsection{Multidimensional Scaling}
 
-Alternatively to PCA, Multidimensional Scaling (or simply MDS) can be used to reduce the dimensionality of a data set. The method has, however, an extensive application domain and often appears in the literature in different contexts. An example of this is the problem of, given a set of objects $O$ and a dissimilarity measurement $\delta_{rs}, \forall (r, s) \in O\times O$, finding a suitable representation in the $\mathbb{R}^n$ for the objects in $O$ \cite{cox2001}.
+Alternatively to PCA, Multidimensional Scaling (or simply MDS) can be used to reduce the dimensionality of a data set. The method has, however, an extensive application domain and often appears in the literature in different contexts. An example of this is the problem of, given a set of objects $O$ and a dissimilarity measurement $\delta_{rs}, \forall (r, s) \in O\times O$, finding a suitable representation in the $\mathbb{R}^n$ for the objects in $O$. \cite{cox2001}
 
 For this project, we study the \textbf{classic MDS}. That is, when the dissimilarities considered are the euclidean distances between coordinates in the $\mathbb{R}^n$.
 
@@ -1046,7 +1046,7 @@ Although PCA has presented promising results in the previous section, hence its 
 	\label{fig:swiss_pca}
 \end{figure}
 
-Specially in the last reduction, to a single dimension, a big drawback of the algorithm PCA is clear: it assumes that the data lies roughly on a liner subspace, causing it to incorrect extract the underlying structure when this is not the case \cite{cay2005}.
+Specially in the last reduction, to a single dimension, a big drawback of the algorithm PCA is clear: it assumes that the data lies roughly on a liner subspace, causing it to incorrect extract the underlying structure when this is not the case. \cite{cay2005}
 
 The table bellow describes a regression attempt over the data sets illustrated in figure \ref{fig:swiss_pca}, were the feature being predicted is the contiguous value represented by the vertexes' colors:
 
@@ -1072,7 +1072,7 @@ In this section we will discuss the Isomap algorithm and its inner workings. We 
 
 \subsubsection{Study of the Isomap Algorithm}
 
-As the original data set might be folded, twisted or curved \cite{ten2000}, we must first find a suitable linear representation for it.
+As the original data set might be folded, twisted or curved, \cite{ten2000} we must first find a suitable linear representation for it.
 
 Let $S$ be our original data set, as illustrated in figure \ref{fig:mani_s}.
 
@@ -1099,7 +1099,7 @@ Now that only distances were kept, an infinite number of n-dimensional embedding
 
 At this moment, not all distances in $H$ are defined. This can be easily handled, though, by performing the \textbf{Floyd-Warshall} algorithm over $H$. Alternatively, $M$ can be achieved by performing \textbf{Dijkstra's algorithm} for all nodes and joining all shortest-path trees found.
 
-Finally, $M$ is a euclidean graph which roughly lies on a hyperplane. Furthermore, the adjacency matrix associated to $M$ contains not the distance induced by the $L_2$ norm, but the geodesic pairwise distances \cite{gho2006}. The \textbf{MDS} method can now be used to construct a representation in sub-spaces of the $\mathbb{R}^n$. $S$, specifically, can be reduced to the $\mathbb{R}^2$ or $\mathbb{R}^1$:
+Finally, $M$ is a euclidean graph which roughly lies on a hyperplane. Furthermore, the adjacency matrix associated to $M$ contains not the distance induced by the $L_2$ norm, but the geodesic pairwise distances. \cite{gho2006} The \textbf{MDS} method can now be used to construct a representation in sub-spaces of the $\mathbb{R}^n$. $S$, specifically, can be reduced to the $\mathbb{R}^2$ or $\mathbb{R}^1$:
 
 \begin{figure}[H]
     \begin{subfigure}{.5\linewidth}
@@ -1189,16 +1189,42 @@ We will analyze Digits once again, only this time it will be reduced with the Is
 	\begin{tabular}{|c|c|c|c|c|c|}
 		\hline
 		& \textbf{$\mathbb{R}^{64}$} & \textbf{$\mathbb{R}^{10}$} & \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
-		\textbf{Pred. accuracy}   & .98           & .96           & .91         & .69 & .45  				  \\\hline
-		\textbf{GridSearch time} & 12.22s      & 98.08s      & 287.46s   & 630.47s & 949.88s 	\\\hline
-		\textbf{Reduction time}  & $-$           & 5.43s        & 2.72s       & 2.71s & 2.04s 			\\\hline
-		\textbf{Data size}          & 898.50 KB & 140.39 KB & 42.12 KB  & 28.08 KB & 14.04 KB \\\hline
+		\textbf{Pred. accuracy}   & .98 & .96 & .91 & .69 & .45 \\\hline
+		\textbf{GridSearch time} & 12.22 s & 98.08 s & 287.46 s & 630.47 s & 949.88 s \\\hline
+		\textbf{Reduction time}  & $-$ & 5.43 s & 2.72 s & 2.71 s & 2.04 s \\\hline
+		\textbf{Data size} & 898.50 KB & 140.39 KB & 42.12 KB & 28.08 KB & 14.04 KB \\\hline
 	\end{tabular}
 
 	\caption{Description of predictions and reduction performance for Digits.}
 \end{table}
 
 Notice that we managed to reduce the data set to only 3 dimensions while maintaining 91\% of accuracy (remember that dimensionality reduction with PCA would reduce accuracy to 74\%). Accuracy loss is still observable when reducing it to two or one dimensions, although it is less intense than losses caused by linear reduction.
+
+\subsubsection{The Leukemia Data Set}
+
+Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 72 samples and 7130 features. The first 7129 features are expression levels of the genes in a given patient. The 7130th feature $t \in \{-1, 1\}$ indicate which of two variants of leukemia is present in the sample (AML, 25 samples, or ALL, 47 samples). \cite{on:duc_ds}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{img/experiments/leukemia}
+	\captionsetup{justification=centering}
+	\caption{The Leukemia data set and its reduction to 30, 20 and 10 dimensions, respectively.}
+	\label{fig:leukemiads}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		& \textbf{$\mathbb{R}^{7129}$} & \textbf{$\mathbb{R}^{30}$} & \textbf{$\mathbb{R}^{20}$} & \textbf{$\mathbb{R}^{10}$} \\\hline
+		\textbf{Pred. accuracy}    & .99 & .88 & .85 & .88 \\\hline
+		\textbf{GridSearch time}   & 2.42 s & .26 s & .26 s & 141.13 s \\\hline
+		\textbf{Reduction time}    & $-$ & .06 s & .04 s & .04 s \\\hline
+		\textbf{Data size}         & 4010.06 KB & 16.88 KB & 11.25 KB & 5.62 KB \\\hline
+	\end{tabular}
+	\captionsetup{justification=centering}	
+	\caption{Description of predictions and reduction performance for Leukemia data set.}
+\end{table}
 
 \subsection{Applicability and Limitations of Isomap}
 
@@ -1208,7 +1234,7 @@ Isomap has time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ (see section \ref
 
 \subsubsection{Necessary Settings for Convergence}
 
-The experiments in the previous section made it quite clear that Isomap outperforms PCA on the selected data sets. Unfortunately, this trend cannot be projected for a generic case considering our experiments were strictly controlled. In real-world data sets, the application of Isomap may lead to poor low-dimensional embeddings \cite{herik2009}. Bellow are listed some the issues that have great influence over Isomap's results:
+The experiments in the previous section made it quite clear that Isomap outperforms PCA on the selected data sets. Unfortunately, this trend cannot be projected for a generic case considering our experiments were strictly controlled. In real-world data sets, the application of Isomap may lead to poor low-dimensional embeddings. \cite{herik2009} Bellow are listed some the issues that have great influence over Isomap's results:
 \begin{description}
 	\item[Manifold Assumption] It refers to the initial assumption that the data lies on a low-dimensional manifold. Although wildly exploited by many authors, it is difficult to assert whether such assumption holds or not in real-world data sets. \cite{lin2008riemannian} Furthermore, even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations would be produced.
 
@@ -1240,19 +1266,22 @@ The experiments in the previous section made it quite clear that Isomap outperfo
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=.6\linewidth]{img/noise/s/5_0_20-original.png}
-		\captionsetup{justification=centering}
-		\caption{The data set $S_{n=.4}$.}
+		\begin{subfigure}{.36\linewidth}
+			\centering
+			\includegraphics[width=\linewidth]{img/noise/s/5_0_20-original.png}
+			\captionsetup{justification=centering}
+			\caption{The data set $S_{n=.4}$.}
+		\end{subfigure}~
+		\begin{subfigure}{.6\linewidth}
+			\centering
+			\includegraphics[width=\linewidth]{img/noise/s/5_0_20-graph}
+			\captionsetup{justification=centering}
+			\caption{The neighborhood graph extracted from $S_{n=.4}$.}					
+		\end{subfigure}
 	\end{figure}
 	\begin{figure}[H]
 		\centering
-	    \includegraphics[width=.8\linewidth]{img/noise/s/5_0_20-graph}
-		\captionsetup{justification=centering}
-		\caption{The neighborhood graph extracted from $S_{n=.4}$.}
-	\end{figure}
-	\begin{figure}[H]
-		\centering
-	    \includegraphics[width=.6\linewidth]{img/noise/s/5_0_20-reduced}
+	    \includegraphics[width=.4\linewidth]{img/noise/s/5_0_20-reduced}
 		\captionsetup{justification=centering}
 		\caption{$S_{n=.4}$ reduced.}
 	\end{figure}
@@ -1262,7 +1291,7 @@ The experiments in the previous section made it quite clear that Isomap outperfo
 
 \newpage
 
-\bibliographystyle{plain}
+\bibliographystyle{ieeetr}
 \bibliography{references}
 
 \end{document}
