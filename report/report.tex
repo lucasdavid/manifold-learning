@@ -919,7 +919,7 @@ Let $X$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 	\item Calculate the dissimilarity matrix $[\delta]_{rs}$, where $\delta_{rs} = \sqrt{\sum_i (x_{ri} - x_{si})^2}$
 	\item Calculate the matrix $B=H-\frac{1}{2}\delta_{rs}^2H$.
 
-	\item Use singular value decomposition to find the matrices $\Sigma$ and $U$.
+	\item Use spectral decomposition to find the matrices $\Sigma$ and $U$.
 
 	\item Select the $m$ greatest eigenvalues in $\Sigma$. From these, create the matrices $\Sigma'=[\sigma'_{m\times m}]$ and $U'=[u'_{n\times m}]$ (where each column $i$ contains the eigenvector associated with $\sigma'_i$).
 
@@ -1127,16 +1127,93 @@ Let $X$ be the original data set and $p \in \mathbb{R}$ the number of dimensions
 If $n$ is the number of training samples, $f \in \mathbb{R}$ the number of features and $k \in \mathbb{R}$ the number of nearest neighbors:
 
 \begin{enumerate}
-	\item The time complexity associated with building the neighborhood graph is $O(n^2)$.
-	\item For calculating the shortest path graph:
+	\item The time complexity associated with building the neighborhood graph is $O(n^2)$, whereas the space necessary to represent the distances kept is $n^2$.
+	\item For calculating the shortest path graph, the following algorithms can be executed in-place and do not increase space complexity. Regarding time complexity, however:
 	\begin{enumerate}
 		\item Dijkstra's algorithm implementation using Fibonacci Heaps have time complexity $O(nk + n \log n)$. As the algorithm must be calculated for each node, this step has time complexity $O[n^2(k + \log n)]$.
 		\item Alternatively, using the Floyd-Warshall algorithm, this step has time complexity equals to $O(n^3)$.
 	\end{enumerate}
-	\item MDS: taking $O(n^3)$ time steps to calculate the SVD decomposition, it is the bottleneck of the entire algorithm. \cite{cay2005}
+	\item Taking $O(n^3)$ time steps to calculate the spectral decomposition, MDS clearly is the bottleneck of the entire algorithm. \cite{cay2005} \cite{silva2002global} As for space complexity, $O(f^2 + nf)$ is required for storing the vector $\Sigma$ and the matrix $V$.
 \end{enumerate}
 
-The time complexity of the Isomap algorithm (when using Dijkstra's) is, therefore, $O[n^2 + n^2(k + \log n) + n^3]$. Better implementations exist, of course. For example, \textbf{Ball Tree} can be used for efficient neighbor search, requiring only $O(f n \log k \log n)$ time steps. \cite{skisomap}
+The time complexity of the Isomap algorithm (when using Dijkstra's) is, therefore, $O[n^2 + n^2(k + \log n) + n^3]$, and the space complexity is $O(n^2 + f^2 + nf)$.
+
+\paragraph{Infeasibility on Highly Dense Data Sets}
+
+In practice, Isomap's time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ (see section \ref{sec:isocomplexity}) makes it unsuitable for data sets with great number of samples. This is illustrated in Shi and Gu's experiments: Isomap could not reduce data sets with more than 6000 samples in reasonable time. \cite{shi2012fast}
+
+In order to visualize this issue, an experiment was made. Consider Spam the data set with 4601 samples and 57 features and the implementations MDS, Isomap, sk-PCA and sk-Isomap (the last two being native algorithms from the \href{http://scikit-learn.org}{scikit-learn} library).
+
+\paragraph{Variations for Performance Gain}
+
+Better implementations exist, of course. For example, \textbf{Ball Tree} can be used for efficient neighbor search, requiring only $O(f n \log k \log n)$ time steps. \cite{skisomap}
+
+\subsection{Applicability and Limitations of Isomap}
+
+\subsubsection{Necessary Settings for Convergence}
+
+The experiments in the previous section made it quite clear that Isomap outperforms PCA on the selected data sets. Unfortunately, this trend cannot be projected for a generic case considering our experiments were strictly controlled. In real-world data sets, the application of Isomap may lead to poor low-dimensional embeddings. \cite{herik2009} Bellow are listed some the issues that have great influence over Isomap's results:
+\begin{description}
+	\item[Manifold Assumption] It refers to the initial assumption that the data lies on a low-dimensional manifold. Although wildly exploited by many authors, it is difficult to assert whether such assumption holds or not in real-world data sets. \cite{lin2008riemannian} Furthermore, even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations would be produced.
+	
+	\newpage
+	\item[Convexity] "Isomap relies on the data being geodesically convex." \cite{donoho2002does} This issue becomes clear when dealing with data sets with ``holes" in it that are too big, resulting in great disconnected areas that require paths with great curvature to get around. Lerman demonstrated how reducing non-convex data sets can easily yeild distorted results, when these have big enough ``holes" on them: \cite{lerman2005}
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}[H]{.45\linewidth}
+			\includegraphics[width=\linewidth]{img/convexity/original.png}
+			\captionsetup{justification=centering}
+			\caption{The non-convex Swiss-roll.}
+		\end{subfigure}
+		~
+		\begin{subfigure}[H]{.45\linewidth}
+			\includegraphics[width=\linewidth]{img/convexity/expected.png}
+			\captionsetup{justification=centering}
+			\caption{The expected reduction.}
+		\end{subfigure}
+		\newline\newline
+		
+		\begin{subfigure}[H]{.45\linewidth}
+			\includegraphics[width=\linewidth]{img/convexity/actual.png}
+			\captionsetup{justification=centering}
+			\caption{The actual reduction.}
+		\end{subfigure}
+	\end{figure}
+	
+	\newpage
+	\item[Noise] Noise in data is expressed by samples that somehow diverge from their neighborhood (outliers). As these samples become farthest from its original neighborhood, the chances of being linked to samples from other neighborhood increase, possibly decreasing the quality of the solution. A possible solution is to remove these samples during the pre-processing stage \cite{herik2009}.
+	
+	The image bellow illustrates an attempt to use Isomap to reduce the $M_{n=.4}$, which is the Swiss-roll data set subjected to a noise factor of $.8$:
+	
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{.55\linewidth}
+			\centering
+			\includegraphics[width=\linewidth]{img/noise/sr/1}
+			\captionsetup{justification=centering}
+			\caption{The data set $M_{n=.8}$.}
+		\end{subfigure}~
+		\begin{subfigure}{.45\linewidth}
+			\centering
+			\includegraphics[width=\linewidth]{img/noise/sr/3}
+			\captionsetup{justification=centering}
+			\caption{The neighborhood graph extracted from $M_{n=.8}$.}
+			\label{fig:noise_3}
+		\end{subfigure}
+		\newline\newline\newline
+		\begin{subfigure}{.6\linewidth}
+			\centering
+			\includegraphics[width=\linewidth]{img/noise/sr/2}
+			\captionsetup{justification=centering}
+			\caption{$M_{n=.8}$ reduced.}
+			\label{fig:noise_2}
+		\end{subfigure}
+		\captionsetup{justification=centering}
+		\caption{The Isomap applied on a noisy data set.}
+	\end{figure}
+	
+	Observe how some outliers were sufficiently far from their original neighborhood in the graph \ref{fig:noise_3}, to the point that Nearest-Neighbor Search maintained the edge between them and samples of completely different colors. MDS then attempted to maintain this dissimilarity, resulting in a deformed reduction (figure \ref{fig:noise_2}).
+\end{description}
 
 \subsection{Classification and Regression Over Data Sets Reduced with Isomap}
 
@@ -1218,79 +1295,6 @@ Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 
 	\captionsetup{justification=centering}	
 	\caption{Description of predictions and reduction performance for Leukemia data set.}
 \end{table}
-
-\subsection{Applicability and Limitations of Isomap}
-
-\subsubsection{Infeasibility on Highly Dense Data Sets}
-
-In practice, Isomap's time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ (see section \ref{sec:isocomplexity}) makes it unsuitable for data sets with great number of samples. This is illustrated in Shi and Gu's experiments: Isomap could not reduce data sets with more than 6000 samples in reasonable time. \cite{shi2012fast}
-
-In order to visualize this issue, an experiment was made. Consider Spam the data set with 4601 samples and 57 features and the implementations MDS, Isomap, sk-PCA and sk-Isomap (the last two being native algorithms from the \href{http://scikit-learn.org}{scikit-learn} library).
-
-\subsubsection{Necessary Settings for Convergence}
-
-The experiments in the previous section made it quite clear that Isomap outperforms PCA on the selected data sets. Unfortunately, this trend cannot be projected for a generic case considering our experiments were strictly controlled. In real-world data sets, the application of Isomap may lead to poor low-dimensional embeddings. \cite{herik2009} Bellow are listed some the issues that have great influence over Isomap's results:
-\begin{description}
-	\item[Manifold Assumption] It refers to the initial assumption that the data lies on a low-dimensional manifold. Although wildly exploited by many authors, it is difficult to assert whether such assumption holds or not in real-world data sets. \cite{lin2008riemannian} Furthermore, even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations would be produced.
-
-	\newpage
-	\item[Convexity] "Isomap relies on the data being geodesically convex." \cite{donoho2002does} This issue becomes clear when dealing with data sets with ``holes" in it that are too big, resulting in great disconnected areas that require paths with great curvature to get around. Lerman demonstrated how reducing non-convex data sets can easily yeild distorted results, when these have big enough ``holes" on them: \cite{lerman2005}
-		\begin{figure}[H]
-		    \centering
-			\begin{subfigure}[H]{.45\linewidth}
-				\includegraphics[width=\linewidth]{img/convexity/original.png}
-				\captionsetup{justification=centering}
-				\caption{The non-convex Swiss-roll.}
-			\end{subfigure}
-			~
-			\begin{subfigure}[H]{.45\linewidth}
-				\includegraphics[width=\linewidth]{img/convexity/expected.png}
-				\captionsetup{justification=centering}
-				\caption{The expected reduction.}
-			\end{subfigure}
-			\newline\newline
-
-			\begin{subfigure}[H]{.45\linewidth}
-				\includegraphics[width=\linewidth]{img/convexity/actual.png}
-				\captionsetup{justification=centering}
-				\caption{The actual reduction.}
-			\end{subfigure}
-		\end{figure}
-
-	\newpage
-	\item[Noise] Noise in data is expressed by samples that somehow diverge from their neighborhood (outliers). As these samples become farthest from its original neighborhood, the chances of being linked to samples from other neighborhood increase, possibly decreasing the quality of the solution. A possible solution is to remove these samples during the pre-processing stage \cite{herik2009}.
-
-	The image bellow illustrates an attempt to use Isomap to reduce the $M_{n=.4}$, which is the Swiss-roll data set subjected to a noise factor of $.8$:
-
-	\begin{figure}[H]
-		\centering
-		\begin{subfigure}{.55\linewidth}
-			\centering
-			\includegraphics[width=\linewidth]{img/noise/sr/1}
-			\captionsetup{justification=centering}
-			\caption{The data set $M_{n=.8}$.}
-		\end{subfigure}~
-		\begin{subfigure}{.45\linewidth}
-			\centering
-			\includegraphics[width=\linewidth]{img/noise/sr/3}
-			\captionsetup{justification=centering}
-			\caption{The neighborhood graph extracted from $M_{n=.8}$.}
-			\label{fig:noise_3}
-		\end{subfigure}
-		\newline\newline\newline
-		\begin{subfigure}{.6\linewidth}
-			\centering
-			\includegraphics[width=\linewidth]{img/noise/sr/2}
-			\captionsetup{justification=centering}
-			\caption{$M_{n=.8}$ reduced.}
-			\label{fig:noise_2}
-		\end{subfigure}
-		\captionsetup{justification=centering}
-		\caption{The Isomap applied on a noisy data set.}
-	\end{figure}
-	
-	Observe how some outliers were sufficiently far from their original neighborhood in the graph \ref{fig:noise_3}, to the point that Nearest-Neighbor Search maintained the edge between them and samples of completely different colors. MDS then attempted to maintain this dissimilarity, resulting in a deformed reduction (figure \ref{fig:noise_2}).
-\end{description}
 
 \section{Final Considerations}
 
