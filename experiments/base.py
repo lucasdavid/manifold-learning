@@ -1,9 +1,9 @@
 import abc
-import time
 import multiprocessing
+import time
 
-from scipy.spatial import distance
 from sklearn import grid_search, decomposition, svm, manifold
+
 from manifold.infrastructure import Displayer
 from manifold.learning.algorithms import Isomap, MDS
 
@@ -87,16 +87,16 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
             self.data = self.reducer.fit_transform(data)
 
         if self.reduction_method == 'mds':
-            self.reducer = MDS(distance.squareform(distance.pdist(self.data)), **self.reduction_params)
-            self.data = self.reducer.run()
+            self.reducer = MDS(**self.reduction_params)
+            self.data = self.reducer.transform(data)
 
         elif self.reduction_method == 'skisomap':
             self.reducer = manifold.Isomap(**self.reduction_params)
             self.data = self.reducer.fit_transform(data)
 
         else:
-            self.reducer = Isomap(self.data, **self.reduction_params)
-            self.data = self.reducer.run()
+            self.reducer = Isomap(**self.reduction_params)
+            self.data = self.reducer.transform(data)
 
         print('\tNew data set\'s size: %.2f KB' % (self.data.nbytes / 1024))
         print('Done (%.2f s).' % (time.time() - start))

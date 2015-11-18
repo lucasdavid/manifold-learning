@@ -7,20 +7,24 @@ from experiments.base import ReductionExample
 class ReducingSwissRollIsomapExample(ReductionExample):
     title = '5. Reducing The Swiss-roll with Isomap'
     plotting = True
+    samples = 1000
 
-    def _run(self):
-        n = 1000
+    def generate_data(self):
+        self.data, self.target = datasets.make_swiss_roll(n_samples=self.samples, random_state=0)
+        self.original_data = self.data
 
-        self.data, self.target = datasets.make_swiss_roll(n_samples=n, random_state=0)
         self.displayer.load(self.data, self.target)
 
         print('Covariance of K')
         print(np.cov(self.data, rowvar=0))
 
+    def _run(self):
+        self.generate_data()
+
         self.reduction_method = 'isomap'
 
-        for d in (2, 1):
-            self.reduction_params = {'n_components': d, 'k': 7}
+        for d in (2,):
+            self.reduction_params = {'n_components': d, 'k': 4}
             self.reduce()
 
         if self.plotting:

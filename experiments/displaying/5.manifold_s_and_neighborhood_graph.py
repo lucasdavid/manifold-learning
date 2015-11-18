@@ -1,5 +1,6 @@
 import networkx as nx
 import pylab as plt
+from scipy.spatial import distance
 from sklearn import datasets
 
 from experiments.base import ReductionExample
@@ -34,7 +35,7 @@ class DisplayingDatasetAsGraphExample(ReductionExample):
             self.displayer.render()
 
     def draw_nearest_neighbor_graph_found(self):
-        d = algorithms.EuclideanDistancesFromDataSet(self.original_data).run()
+        d = distance.squareform(distance.pdist(self.original_data))
         e = algorithms.KNearestNeighbors(d, alpha=10).run()
         g = nx.Graph(e)
         del d, e
