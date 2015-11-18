@@ -26,6 +26,7 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{remark}{Remark}[section]
 \newtheorem{example}{Example}[section]
+\newtheorem{experiment}{Experiment}[section]
 
 \graphicspath{{img/}}
 
@@ -998,7 +999,7 @@ The Iris flower being reduced from 4 to 2 features. Although the data set became
 
 \subsubsection{The Digits data set}
 
-Digits data set is composed by 1.797 samples, 64 features and 10 classes. Each sample is a 8x8 image of a hand-written digit from 0 to 9.
+Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sample is a 8x8 image of a hand-written digit from 0 to 9.
 
 \begin{figure}[H]
 	\centering
@@ -1133,16 +1134,36 @@ If $n$ is the number of training samples, $f \in \mathbb{R}$ the number of featu
 		\item Dijkstra's algorithm implementation using Fibonacci Heaps have time complexity $O(nk + n \log n)$. As the algorithm must be calculated for each node, this step has time complexity $O[n^2(k + \log n)]$.
 		\item Alternatively, using the Floyd-Warshall algorithm, this step has time complexity equals to $O(n^3)$.
 	\end{enumerate}
-	\item Taking $O(n^3)$ time steps to calculate the spectral decomposition, MDS clearly is the bottleneck of the entire algorithm. \cite{cay2005} \cite{silva2002global} As for space complexity, $O(f^2 + nf)$ is required for storing the vector $\Sigma$ and the matrix $V$.
+	\item Taking $O(n^3)$ time steps to calculate the spectral decomposition, MDS clearly is the bottleneck of the entire algorithm. \cite{cay2005} \cite{silva2002global} As for space complexity, $O(f^2 + nf)$ is required for storing the matrices $\Sigma$ and $U$.
 \end{enumerate}
 
 The time complexity of the Isomap algorithm (when using Dijkstra's) is, therefore, $O[n^2 + n^2(k + \log n) + n^3]$, and the space complexity is $O(n^2 + f^2 + nf)$.
+
+\begin{experiment}[Timing the Isomap Algorithm]
+	Consider the data set \textbf{Digits} with 1797 samples and 64 features. The following table indicates the time duration for each step of the Isomap algorithm when reducing Digits to 3 dimensions:
+	
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|l|r|}
+			\hline
+			\textbf{Pairwise distances from data set} & .44 s \\\hline
+			\textbf{K Nearest Neighbors Search} & 1.3 s \\\hline
+			\textbf{All Pairs Dijkstra's} & 51.44 s\\\hline
+			\textbf{MDS} & 118.84 s \\\hline
+			\textbf{Total Time} & 172.69 s \\\hline
+		\end{tabular}
+		
+		\caption{Listing of time spent on each step of the Isomap algorithm.}
+	\end{table}
+	
+	As expected, most of the time (68.81\%) was spent executing MDS.
+\end{experiment}
 
 \paragraph{Infeasibility on Highly Dense Data Sets}
 
 In practice, Isomap's time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ (see section \ref{sec:isocomplexity}) makes it unsuitable for data sets with great number of samples. This is illustrated in Shi and Gu's experiments: Isomap could not reduce data sets with more than 6000 samples in reasonable time. \cite{shi2012fast}
 
-In order to visualize this issue, an experiment was made. Consider Spam the data set with 4601 samples and 57 features and the implementations MDS, Isomap, sk-PCA and sk-Isomap (the last two being native algorithms from the \href{http://scikit-learn.org}{scikit-learn} library).
+In order to visualize this issue, consider the following experiment: let \textbf{Spam} be a data set with 4601 samples and 57 features and implementations MDS, Isomap, sk-PCA and sk-Isomap (the last two being native algorithms from the \href{http://scikit-learn.org}{scikit-learn} library).
 
 \paragraph{Variations for Performance Gain}
 
