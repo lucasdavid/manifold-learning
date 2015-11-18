@@ -26,6 +26,7 @@ class SpamExample(ReductionExample):
         for m, params in (
                 ('pca', {'n_components': 3}),
                 ('skisomap', {'n_components': 3, 'n_neighbors': 7}),
+                ('mds', {'n_components': 3}),
                 ('isomap', {'n_components': 3, 'k': 7}),
         ):
             try:

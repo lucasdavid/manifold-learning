@@ -86,7 +86,7 @@ class ReductionExample(Example, metaclass=abc.ABCMeta):
             self.reducer = decomposition.PCA(**self.reduction_params)
             self.data = self.reducer.fit_transform(data)
 
-        if self.reduction_method == 'mds':
+        elif self.reduction_method == 'mds':
             self.reducer = MDS(**self.reduction_params)
             self.data = self.reducer.transform(data)
 
