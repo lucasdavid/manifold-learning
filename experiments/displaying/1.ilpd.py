@@ -1,8 +1,8 @@
-from experiments.base import Example
+from experiments.base import Experiment
 from manifold.infrastructure import Retriever
 
 
-class DisplayingILPDExample(Example):
+class DisplayingILPDExperiment(Experiment):
     title = '1. Retrieving and displaying the ILPD data set'
 
     def _run(self):
@@ -24,4 +24,4 @@ class DisplayingILPDExample(Example):
 
 
 if __name__ == '__main__':
-    DisplayingILPDExample().start()
+    DisplayingILPDExperiment().start()

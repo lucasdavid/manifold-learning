@@ -1,10 +1,10 @@
 import numpy as np
 from sklearn import preprocessing, datasets
 
-from experiments.base import Example
+from experiments.base import Experiment
 
 
-class DisplayingSwissRollExample(Example):
+class DisplayingSwissRollExperiment(Experiment):
     title = '3. Displaying The Swiss-roll data set'
 
     def _run(self):
@@ -21,4 +21,4 @@ class DisplayingSwissRollExample(Example):
 
 
 if __name__ == '__main__':
-    DisplayingSwissRollExample().start()
+    DisplayingSwissRollExperiment().start()

@@ -2,12 +2,12 @@ import time
 import numpy as np
 from scipy.spatial import distance
 from sklearn import datasets
-from experiments.base import ReductionExample
+from experiments.base import ReductionExperiment
 from manifold.infrastructure import Retriever
 from manifold.learning.algorithms import MDS
 
 
-class SpamExample(ReductionExample):
+class SpamExperiment(ReductionExperiment):
     title = '7. Spam Reduced Example'
     file = '../../datasets/spam/spambase.data'
     plotting = True
@@ -45,4 +45,4 @@ class SpamExample(ReductionExample):
 
 
 if __name__ == '__main__':
-    SpamExample().start()
+    SpamExperiment().start()

@@ -1,9 +1,9 @@
 from sklearn import datasets, svm
 
-from experiments.base import LearningExample
+from experiments.base import LearningExperiment
 
 
-class LearningIrisExample(LearningExample):
+class LearningIrisExample(LearningExperiment):
     title = '2. Learning the Iris data set'
     learner = svm.SVC
     plotting = True

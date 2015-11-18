@@ -1,10 +1,10 @@
 import numpy as np
 from sklearn import datasets
 
-from experiments.base import ReductionExample
+from experiments.base import ReductionExperiment
 
 
-class ReducingSwissRollIsomapExample(ReductionExample):
+class ReducingSwissRollIsomapExperiment(ReductionExperiment):
     title = '5. Reducing The Swiss-roll with Isomap'
     plotting = True
     samples = 1000
@@ -32,4 +32,4 @@ class ReducingSwissRollIsomapExample(ReductionExample):
 
 
 if __name__ == '__main__':
-    ReducingSwissRollIsomapExample().start()
+    ReducingSwissRollIsomapExperiment().start()

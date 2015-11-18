@@ -1,9 +1,9 @@
 from sklearn import datasets
 
-from experiments.base import ReductionExample, LearningExample
+from experiments.base import ReductionExperiment, LearningExperiment
 
 
-class IrisExample(ReductionExample, LearningExample):
+class IrisExperiment(ReductionExperiment, LearningExperiment):
     title = '2. Iris flower PCA Example'
 
     def _run(self):
@@ -33,4 +33,4 @@ class IrisExample(ReductionExample, LearningExample):
 
 
 if __name__ == '__main__':
-    IrisExample().start()
+    IrisExperiment().start()

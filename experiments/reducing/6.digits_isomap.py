@@ -1,9 +1,9 @@
 from sklearn import datasets
 
-from experiments.base import ReductionExample
+from experiments.base import ReductionExperiment
 
 
-class DigitsIsomapExample(ReductionExample):
+class DigitsIsomapExperiment(ReductionExperiment):
     title = '7. Digits Reduced with Isomap Example'
     plotting = True
 
@@ -25,4 +25,4 @@ class DigitsIsomapExample(ReductionExample):
 
 
 if __name__ == '__main__':
-    DigitsIsomapExample().start()
+    DigitsIsomapExperiment().start()

@@ -1,9 +1,9 @@
 from sklearn import datasets
 
-from experiments.base import ReductionExample
+from experiments.base import ReductionExperiment
 
 
-class ReducingSwissRollExample(ReductionExample):
+class ReducingSwissRollExperiment(ReductionExperiment):
     title = '4. Reducing The Swiss-roll with a PCA'
 
     def _run(self):
@@ -23,4 +23,4 @@ class ReducingSwissRollExample(ReductionExample):
 
 
 if __name__ == '__main__':
-    ReducingSwissRollExample().start()
+    ReducingSwissRollExperiment().start()

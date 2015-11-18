@@ -1,9 +1,9 @@
 from sklearn import datasets
 
-from experiments.base import ReductionExample
+from experiments.base import ReductionExperiment
 
 
-class ReducingDigitsExample(ReductionExample):
+class ReducingDigitsExperiment(ReductionExperiment):
     title = '3. Reducing Digits'
     plotting = True
 
@@ -24,4 +24,4 @@ class ReducingDigitsExample(ReductionExample):
 
 
 if __name__ == '__main__':
-    ReducingDigitsExample().start()
+    ReducingDigitsExperiment().start()

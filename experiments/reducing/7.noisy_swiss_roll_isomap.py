@@ -2,11 +2,11 @@ import networkx as nx
 import pylab as plt
 from sklearn import datasets
 
-from experiments.base import ReductionExample
+from experiments.base import ReductionExperiment
 from manifold.learning import algorithms
 
 
-class NoisySwissRollIsomapExample(ReductionExample):
+class NoisySwissRollIsomapExperiment(ReductionExperiment):
     title = '7. Noisy Swiss-roll Isomap example'
 
     plotting = True
@@ -62,4 +62,4 @@ class NoisySwissRollIsomapExample(ReductionExample):
 
 
 if __name__ == '__main__':
-    NoisySwissRollIsomapExample().start()
+    NoisySwissRollIsomapExperiment().start()

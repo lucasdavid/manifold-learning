@@ -1,9 +1,9 @@
 from sklearn import datasets, svm
 
-from experiments.base import ReductionExample, LearningExample
+from experiments.base import ReductionExperiment, LearningExperiment
 
 
-class SwissRollIsomapExample(ReductionExample, LearningExample):
+class SwissRollIsomapExperiment(ReductionExperiment, LearningExperiment):
     title = '5. Swiss-roll Isomap example'
     plotting = True
 
@@ -39,4 +39,4 @@ class SwissRollIsomapExample(ReductionExample, LearningExample):
 
 
 if __name__ == '__main__':
-    SwissRollIsomapExample().start()
+    SwissRollIsomapExperiment().start()

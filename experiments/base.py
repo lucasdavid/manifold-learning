@@ -8,7 +8,7 @@ from manifold.infrastructure import Displayer
 from manifold.learning.algorithms import Isomap, MDS
 
 
-class Example(metaclass=abc.ABCMeta):
+class Experiment(metaclass=abc.ABCMeta):
     title = None
 
     _displayer = None
@@ -34,7 +34,7 @@ class Example(metaclass=abc.ABCMeta):
         self._dispose()
 
 
-class LearningExample(Example, metaclass=abc.ABCMeta):
+class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
     learner = svm.SVC
     data = target = labels = grid = None
 
@@ -57,7 +57,7 @@ class LearningExample(Example, metaclass=abc.ABCMeta):
               % (self.grid.best_score_, time.time() - start, self.grid.best_params_))
 
 
-class ReductionExample(Example, metaclass=abc.ABCMeta):
+class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
     data = original_data = target = None
 
     reducer = None

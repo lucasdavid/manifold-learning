@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import Imputer
-from experiments.base import ReductionExample
+from experiments.base import ReductionExperiment
 
 
-class BrazilExample(ReductionExample):
+class BrazilExperiment(ReductionExperiment):
     title = '7. Brazil Example'
     data_file = '../../datasets/brazil/bra_Country_en_csv_v2.csv'
 
@@ -51,4 +51,4 @@ class BrazilExample(ReductionExample):
 
 
 if __name__ == '__main__':
-    BrazilExample().start()
+    BrazilExperiment().start()

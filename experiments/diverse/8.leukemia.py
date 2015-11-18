@@ -1,8 +1,8 @@
 from sklearn import datasets
-from experiments.base import ReductionExample, LearningExample
+from experiments.base import ReductionExperiment, LearningExperiment
 
 
-class LeukemiaExample(ReductionExample, LearningExample):
+class LeukemiaExperiment(ReductionExperiment, LearningExperiment):
     title = '9. Leukemia Example'
     plotting = True
 
@@ -40,4 +40,4 @@ class LeukemiaExample(ReductionExample, LearningExample):
 
 
 if __name__ == '__main__':
-    LeukemiaExample().start()
+    LeukemiaExperiment().start()

@@ -1,10 +1,10 @@
 import numpy as np
 from sklearn import preprocessing
 
-from experiments.base import ReductionExample
+from experiments.base import ReductionExperiment
 
 
-class ReducingKExample(ReductionExample):
+class ReducingKExperiment(ReductionExperiment):
     title = '1. Reducing K With PCA Example'
     plotting = True
 
@@ -34,4 +34,4 @@ class ReducingKExample(ReductionExample):
 
 
 if __name__ == '__main__':
-    ReducingKExample().start()
+    ReducingKExperiment().start()

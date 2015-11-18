@@ -1,9 +1,9 @@
 from sklearn import datasets
 
-from experiments.base import ReductionExample, LearningExample
+from experiments.base import ReductionExperiment, LearningExperiment
 
 
-class DigitsExample(ReductionExample, LearningExample):
+class DigitsExperiment(ReductionExperiment, LearningExperiment):
     title = '3. Digits PCA Example'
 
     def _run(self):
@@ -28,4 +28,4 @@ class DigitsExample(ReductionExample, LearningExample):
 
 
 if __name__ == '__main__':
-    DigitsExample().start()
+    DigitsExperiment().start()

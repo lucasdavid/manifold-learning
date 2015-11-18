@@ -1,9 +1,9 @@
 from sklearn import datasets
 
-from experiments.base import ReductionExample
+from experiments.base import ReductionExperiment
 
 
-class ReducingIrisExample(ReductionExample):
+class ReducingIrisExperiment(ReductionExperiment):
     title = '2. Reducing Iris flower'
 
     def _run(self):
@@ -20,4 +20,4 @@ class ReducingIrisExample(ReductionExample):
 
 
 if __name__ == '__main__':
-    ReducingIrisExample().start()
+    ReducingIrisExperiment().start()

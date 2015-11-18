@@ -1,10 +1,10 @@
 import numpy as np
 from sklearn import preprocessing
 
-from experiments.base import Example
+from experiments.base import Experiment
 
 
-class DisplayingKExample(Example):
+class DisplayingKExperiment(Experiment):
     title = '2. Displaying K data set'
 
     def _run(self):
@@ -22,4 +22,4 @@ class DisplayingKExample(Example):
 
 
 if __name__ == '__main__':
-    DisplayingKExample().start()
+    DisplayingKExperiment().start()

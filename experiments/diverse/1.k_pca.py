@@ -1,10 +1,10 @@
 import numpy as np
 from sklearn import preprocessing
 
-from experiments.base import ReductionExample, LearningExample
+from experiments.base import ReductionExperiment, LearningExperiment
 
 
-class KExample(ReductionExample, LearningExample):
+class KExperiment(ReductionExperiment, LearningExperiment):
     title = '1. K PCA Example'
 
     def _run(self):
@@ -39,4 +39,4 @@ class KExample(ReductionExample, LearningExample):
 
 
 if __name__ == '__main__':
-    KExample().start()
+    KExperiment().start()

@@ -3,11 +3,11 @@ import pylab as plt
 from scipy.spatial import distance
 from sklearn import datasets
 
-from experiments.base import ReductionExample
+from experiments.base import ReductionExperiment
 from manifold.learning import algorithms
 
 
-class DisplayingDatasetAsGraphExample(ReductionExample):
+class DisplayingDatasetAsGraphExperiment(ReductionExperiment):
     title = '5. Displaying the S-Dataset as a Graph Example'
     plotting = True
 
@@ -49,4 +49,4 @@ class DisplayingDatasetAsGraphExample(ReductionExample):
 
 
 if __name__ == '__main__':
-    DisplayingDatasetAsGraphExample().start()
+    DisplayingDatasetAsGraphExperiment().start()

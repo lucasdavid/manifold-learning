@@ -1,9 +1,9 @@
 from sklearn import datasets, svm
 
-from experiments.base import ReductionExample, LearningExample
+from experiments.base import ReductionExperiment, LearningExperiment
 
 
-class SwissRollPCAExample(ReductionExample, LearningExample):
+class SwissRollPCAExperiment(ReductionExperiment, LearningExperiment):
     title = '4. Swiss-roll PCA Example'
     learner = svm.SVR
     learning_parameters = [
@@ -34,4 +34,4 @@ class SwissRollPCAExample(ReductionExample, LearningExample):
 
 
 if __name__ == '__main__':
-    SwissRollPCAExample().start()
+    SwissRollPCAExperiment().start()

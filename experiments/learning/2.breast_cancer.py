@@ -1,8 +1,8 @@
-from experiments.base import LearningExample
+from experiments.base import LearningExperiment
 from manifold.infrastructure import Retriever
 
 
-class LearningBreastCancerExample(LearningExample):
+class LearningBreastCancerExample(LearningExperiment):
     title = '3. Learning Breast-cancer'
     plotting = True
     
