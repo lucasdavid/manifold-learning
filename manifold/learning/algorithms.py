@@ -1,6 +1,7 @@
 import abc
 import numpy as np
 import networkx as nx
+import time
 
 from ..infrastructure.base import Task, EuclideanDistancesFromDataSet, Reducer
 
@@ -15,6 +16,8 @@ class INearestNeighbors(Task, metaclass=abc.ABCMeta):
 
 class ENearestNeighbors(INearestNeighbors):
     def run(self):
+        start = time.time()
+
         m = self.data['m']
         e = self.data['a']
 
@@ -25,6 +28,7 @@ class ENearestNeighbors(INearestNeighbors):
                 if links[neighbor] > e:
                     del links[neighbor]
 
+        print('ENearestNeighbors took %.2f s.' % (time.time() - start))
         return m
 
 
@@ -41,6 +45,8 @@ class KNearestNeighbors(INearestNeighbors):
     """
 
     def run(self):
+        start = time.time()
+
         m, k = self.data['m'], self.data['a']
         nodes = len(m) + 1
 
@@ -60,6 +66,7 @@ class KNearestNeighbors(INearestNeighbors):
                 _min, _max = min(v, neighbor), max(v, neighbor)
                 result[_min][_max] = m[_min][_max]
 
+        print('KNearestNeighbors took %.2f s.' % (time.time() - start))
         return result
 
 
@@ -75,12 +82,22 @@ class IShortestPathFinder(Task, metaclass=abc.ABCMeta):
 
 class AllPairsDijkstra(IShortestPathFinder):
     def run(self):
-        return nx.all_pairs_dijkstra_path_length(self.data['g'])
+        start = time.time()
+
+        answer = nx.all_pairs_dijkstra_path_length(self.data['g'])
+
+        print('AllPairsDijkstra took %.2f s.' % (time.time() - start))
+        return answer
 
 
 class FloydWarshall(IShortestPathFinder):
     def run(self):
-        return nx.floyd_warshall(self.data['g'])
+        start = time.time()
+
+        answer = nx.floyd_warshall(self.data['g'])
+
+        print('FloydWarshall took %.2f s.' % (time.time() - start))
+        return answer
 
 
 class MDS(Reducer):
@@ -97,6 +114,8 @@ class MDS(Reducer):
         super().__init__(m=m, n_components=n_components, copying=False)
 
     def run(self):
+        start = time.time()
+
         n_components = self.data['n_components']
         m = self.data['m']
         count = len(m)
@@ -128,7 +147,10 @@ class MDS(Reducer):
 
         # Return v * w ^ (1/2), the list of components (x, y, ...),
         # len = :n_components, corresponding to each sample in the data set.
-        return np.real(np.dot(v, np.sqrt(np.diag(w))))
+        answer = np.real(np.dot(v, np.sqrt(np.diag(w))))
+
+        print('MDS took %.2f s.' % (time.time() - start))
+        return answer
 
 
 class Isomap(Reducer):
@@ -136,7 +158,8 @@ class Isomap(Reducer):
                  nearest_method='auto', k=10, e=None,
                  n_components=3,
                  shortest_path_method='d',
-                 copying=False):
+                 copying=False,
+                 debugging=True):
 
         # Shortest-path-method must be d: dijkstra or fw: floyd-warshall.
         assert shortest_path_method == 'd' or shortest_path_method == 'fw'
@@ -161,6 +184,8 @@ class Isomap(Reducer):
         )
 
     def run(self):
+        start = time.time()
+
         m = self.data['data']
         k = self.data['k']
         e = self.data['e']
@@ -179,4 +204,8 @@ class Isomap(Reducer):
                 distance_matrix[node, neighbor] = distance
 
         self.data['mds'] = MDS(distance_matrix, n_components=self.data['n_components'])
-        return self.data['mds'].run()
+
+        answer = self.data['mds'].run()
+
+        print('Isomap took %.2f s.' % (time.time() - start))
+        return answer

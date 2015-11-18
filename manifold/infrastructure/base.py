@@ -1,6 +1,7 @@
 import abc
 import copy
 
+import time
 from scipy.spatial.distance import pdist
 
 
@@ -33,6 +34,8 @@ class EuclideanDistancesFromDataSet(Task):
         super().__init__(data_set=data_set, copying=False)
 
     def run(self):
+        start = time.time()
+
         data_set = self.data['data_set']
         samples = data_set.shape[0]
 
@@ -45,6 +48,7 @@ class EuclideanDistancesFromDataSet(Task):
             distances[i] = {i + n + 1: d for n, d in enumerate(d[0:samples - i - 1])}
             d = d[samples - i - 1:]
 
+        print('Task EuclideanDistancesFromDataSet took %.2f s.' % (time.time() - start))
         return distances
 
 
