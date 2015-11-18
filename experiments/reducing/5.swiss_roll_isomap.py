@@ -24,7 +24,7 @@ class ReducingSwissRollIsomapExample(ReductionExample):
         self.reduction_method = 'isomap'
 
         for d in (2,):
-            self.reduction_params = {'n_components': d, 'k': 10}
+            self.reduction_params = {'n_components': d, 'k': 7}
             self.reduce()
 
         if self.plotting:

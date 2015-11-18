@@ -27,7 +27,7 @@ class SKLearnIsomapTest(TestCase):
                 color=c)
 
         start = time()
-        result = Isomap(data, k=neighbors, n_components=n_components).run()
+        result = Isomap(k=neighbors, n_components=n_components).transform(data)
         elapsed = time() - start
 
         displayer \

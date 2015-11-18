@@ -35,8 +35,8 @@ class SmallDataSetsTest(TestCase):
                color=c)
 
         start = time()
-        result = algorithms.Isomap(data, nearest_method='e', e=epsilon, n_components=to_dimension) \
-            .run()
+        result = algorithms.Isomap(nearest_method='e', e=epsilon, n_components=to_dimension) \
+            .transform(data)
         elapsed = time() - start
 
         d.load(title="My E-Isomap with epsilon %i, taking %.1fs." % (epsilon, elapsed),
@@ -44,8 +44,8 @@ class SmallDataSetsTest(TestCase):
                color=c)
 
         start = time()
-        result = algorithms.Isomap(data, k=neighbors, n_components=to_dimension) \
-            .run()
+        result = algorithms.Isomap(k=neighbors, n_components=to_dimension) \
+            .transform(data)
         elapsed = time() - start
 
         d.load(title="My K-Isomap with %i neighbors, taking %.1fs." % (neighbors, elapsed),
@@ -72,16 +72,16 @@ class SmallDataSetsTest(TestCase):
                data=result)
 
         start = time()
-        result = algorithms.Isomap(data, nearest_method='e', e=epsilon, n_components=to_dimension) \
-            .run()
+        result = algorithms.Isomap(nearest_method='e', e=epsilon, n_components=to_dimension) \
+            .transform(data)
         elapsed = time() - start
 
         d.load(title="My E-Isomap with epsilon %i, taking %.1fs." % (epsilon, elapsed),
                data=result)
 
         start = time()
-        result = algorithms.Isomap(data, k=neighbors, n_components=to_dimension) \
-            .run()
+        result = algorithms.Isomap(k=neighbors, n_components=to_dimension) \
+            .transform(data)
         elapsed = time() - start
 
         d.load(title="My K-Isomap with %i neighbors, taking %.1fs." % (neighbors, elapsed),

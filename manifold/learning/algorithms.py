@@ -3,6 +3,8 @@ import numpy as np
 import networkx as nx
 import time
 
+from scipy.spatial import distance
+
 from ..infrastructure.base import Task, EuclideanDistancesFromDataSet, Reducer
 
 
@@ -101,23 +103,21 @@ class FloydWarshall(IShortestPathFinder):
 
 
 class MDS(Reducer):
-    def __init__(self, m, n_components=3):
+    def __init__(self, n_components=3):
         """Constructs a Multidimensional Scaling task.
 
-        :param m: :numpy array that represents the shortest-path distances between the graph's nodes.
         :param n_components: :int number of eigenvalues kept during the dimensionality reduction step, or the string
         'auto', which will reduce all eigenvalues that are 0.
         """
-        assert m is not None
         assert isinstance(n_components, int) and n_components > 0
 
-        super().__init__(m=m, n_components=n_components, copying=False)
+        super().__init__(n_components=n_components, copying=False)
 
     def run(self):
         start = time.time()
 
         n_components = self.data['n_components']
-        m = self.data['m']
+        m = self.data['data']
         count = len(m)
 
         # Converts dictionary to matrix.
@@ -151,6 +151,14 @@ class MDS(Reducer):
 
         print('MDS took %.2f s.' % (time.time() - start))
         return answer
+
+    def transform(self, data):
+        return self.transform_dissimilarities(
+            distance.squareform(
+                distance.pdist(data)))
+
+    def transform_dissimilarities(self, d):
+        return self.store(data=d).run()
 
 
 class Isomap(Reducer):
@@ -197,15 +205,15 @@ class Isomap(Reducer):
         m = self.data['shortest_path_method'] == 'fw' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
 
         # Create distance matrix from neighbor map.
-        distance_matrix = np.zeros((instances_count, instances_count))
+        dissimilarities = np.zeros((instances_count, instances_count))
 
         for node, links in m.items():
             for neighbor, distance in links.items():
-                distance_matrix[node, neighbor] = distance
+                dissimilarities[node, neighbor] = distance
 
-        self.data['mds'] = MDS(distance_matrix, n_components=self.data['n_components'])
-
-        answer = self.data['mds'].run()
+        mds = MDS(n_components=self.data['n_components'])
+        answer = mds.transform_dissimilarities(dissimilarities)
+        self.data['mds'] = mds
 
         print('Isomap took %.2f s.' % (time.time() - start))
         return answer

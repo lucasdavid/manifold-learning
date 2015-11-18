@@ -39,8 +39,8 @@ class IsomapTest(TestCase):
 
         start = time()
         result = algorithms \
-            .Isomap(data, nearest_method='e', e=epsilon, n_components=to_dimension) \
-            .run()
+            .Isomap(nearest_method='e', e=epsilon, n_components=to_dimension) \
+            .transform(data)
         elapsed = time() - start
 
         displayer.load(
@@ -50,8 +50,8 @@ class IsomapTest(TestCase):
 
         start = time()
         result = algorithms \
-            .Isomap(data, nearest_method='e', shortest_path_method='fw', e=epsilon, n_components=to_dimension) \
-            .run()
+            .Isomap(nearest_method='e', shortest_path_method='fw', e=epsilon, n_components=to_dimension) \
+            .transform(data)
         elapsed = time() - start
 
         displayer.load(
@@ -61,8 +61,8 @@ class IsomapTest(TestCase):
 
         start = time()
         result = algorithms \
-            .Isomap(data, k=neighbors, n_components=to_dimension) \
-            .run()
+            .Isomap(k=neighbors, n_components=to_dimension) \
+            .transform(data)
         elapsed = time() - start
 
         displayer.load(
@@ -72,8 +72,8 @@ class IsomapTest(TestCase):
 
         start = time()
         result = algorithms \
-            .Isomap(data, k=neighbors, n_components=to_dimension, shortest_path_method='fw') \
-            .run()
+            .Isomap(k=neighbors, n_components=to_dimension, shortest_path_method='fw') \
+            .transform(data)
         elapsed = time() - start
 
         displayer.load(
