@@ -133,7 +133,6 @@ class MDS(Reducer):
 
 class Isomap(Reducer):
     def __init__(self,
-                 data_set,
                  nearest_method='auto', k=10, e=None,
                  n_components=3,
                  shortest_path_method='d',
@@ -156,20 +155,19 @@ class Isomap(Reducer):
             k=k,
             e=e,
             n_components=n_components,
-            data_set=data_set,
             nearest_method=nearest_method,
             shortest_path_method=shortest_path_method,
             copying=copying
         )
 
     def run(self):
-        data_set = self.data['data_set']
+        m = self.data['data']
         k = self.data['k']
         e = self.data['e']
 
-        instances_count = data_set.shape[0]
+        instances_count = m.shape[0]
 
-        m = EuclideanDistancesFromDataSet(data_set).run()
+        m = EuclideanDistancesFromDataSet(m).run()
         m = self.data['nearest_method'] == 'k' and KNearestNeighbors(m, k).run() or ENearestNeighbors(m, e).run()
         m = self.data['shortest_path_method'] == 'fw' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
 

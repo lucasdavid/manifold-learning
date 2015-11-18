@@ -15,8 +15,8 @@ class ReducingSwissRollIsomapExample(ReductionExample):
 
         self.displayer.load(self.data, self.target)
 
-        print('Covariance of K')
-        print(np.cov(self.data, rowvar=0))
+        print('Correlation of K')
+        print(np.corrcoef(self.data, rowvar=0))
 
     def _run(self):
         self.generate_data()
@@ -24,7 +24,7 @@ class ReducingSwissRollIsomapExample(ReductionExample):
         self.reduction_method = 'isomap'
 
         for d in (2,):
-            self.reduction_params = {'n_components': d, 'k': 4}
+            self.reduction_params = {'n_components': d, 'k': 10}
             self.reduce()
 
         if self.plotting:
