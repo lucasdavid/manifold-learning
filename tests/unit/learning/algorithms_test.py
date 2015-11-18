@@ -1,7 +1,6 @@
 import numpy as np
 from unittest import TestCase
 from numpy import testing
-
 from manifold.learning import algorithms
 
 
@@ -60,10 +59,10 @@ class AllPairsDijkstraTest(TestCase):
         }
 
         expected = {
-            0: {0:  0, 1: 14, 2: 10, 3: 12},
-            1: {0: 14, 1:  0, 2:  4, 3:  2},
-            2: {0: 10, 1:  4, 2:  0, 3:  2},
-            3: {0: 12, 1:  2, 2:  2, 3:  0},
+            0: {0: 0, 1: 14, 2: 10, 3: 12},
+            1: {0: 14, 1: 0, 2: 4, 3: 2},
+            2: {0: 10, 1: 4, 2: 0, 3: 2},
+            3: {0: 12, 1: 2, 2: 2, 3: 0},
         }
 
         actual = algorithms.AllPairsDijkstra(m).run()
@@ -81,10 +80,10 @@ class FloydWarshallTest(TestCase):
         }
 
         expected = {
-            0: {0:  0, 1: 14, 2: 10, 3: 12},
-            1: {0: 14, 1:  0, 2:  4, 3:  2},
-            2: {0: 10, 1:  4, 2:  0, 3:  2},
-            3: {0: 12, 1:  2, 2:  2, 3:  0},
+            0: {0: 0, 1: 14, 2: 10, 3: 12},
+            1: {0: 14, 1: 0, 2: 4, 3: 2},
+            2: {0: 10, 1: 4, 2: 0, 3: 2},
+            3: {0: 12, 1: 2, 2: 2, 3: 0},
         }
 
         f = algorithms.FloydWarshall(distance)
@@ -109,8 +108,5 @@ class MDSTest(TestCase):
             [69.3, 18.7],
         ]
 
-        i = algorithms.MDS(proximity_matrix, n_components=2)
-
-        actual = i.run()
-
+        actual = algorithms.MDS(n_components=2).transform_dissimilarities(proximity_matrix)
         testing.assert_array_almost_equal(actual, expected, decimal=1)
