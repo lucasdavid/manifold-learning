@@ -946,6 +946,21 @@ Let $X$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 	\item Construct the $m$-dimensional embedding $Y=U'\Sigma'$
 \end{enumerate}
 
+\subsection{Evaluating Reductions}
+
+``Often it is the researcher's past experience with MDS and his or her judgment that
+ultimately determine whether the fit of a particular MDS solution is acceptable or not." \cite{naes1996multivariate}
+
+Although the factors that determine what is a ``good" reduction are strongly influenced by particularities of the problem in hand, some measures were developed to attempt to somehow formalize it. One in particular, which recurrently appears in literature, is known as the \textbf{Kruskal's stress}.
+
+% TODO Improve this description.
+Intuitively, Kruskal's stress \cite{naes1996multivariate} considers reductions that preserve dissimilarities between samples a better fit that the ones which highly distort them. Formally, let $X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $Y_{n \times p}$ its reduction to $p$ dimensions, and the dissimilarity measurements $\delta_{ij}$ and $\hat{\delta}_{ij}$ defined for all samples $i$ and $j$ in $X$ and $Y$, respectively:
+\begin{align*}
+	Stress &= [\frac{\sum_i \sum_j (\delta_{ij} - \hat{\delta}_{ij})^2}{\sum_i \sum_j \delta_{ij}^2}]^{\frac{1}{2}}
+\end{align*}
+
+From the formula above, {\em Stress} is visibly contained in the interval $[0, 1]$, where 0 represents the best possible fit (all dissimilarities are the same), while 1 represents the worse.
+
 \subsection{Classification and Regression Over Linearly Reduced Data Sets}
 \label{sec:experiments_linear_ds}
 
