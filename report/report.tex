@@ -95,7 +95,7 @@ Throughout the years, machine learning and pattern recognition techniques have g
 
 Machine learning can help us to understand, analyze and process large amount of data and even take decisions based on it. The size of data, however, is not necessarily the predominant factor which dictates how machine learning models perform. We are, of course, interested in the information that lies within the data and how to efficiently extract it.
 
-In the last 80 years, there were many different machine learning algorithms developed. Between those, many could successfully generalize low dimensional data \cite{wang2012geometric}. In the other hand, problems of our world are often too complex and may be represented by high dimensional data. For example, images, sounds or text documents can be expressed as vectors of the $\mathbb{R}^n$, where each element corresponds to a pixel, wave signal or character, respectively. When analyzing these problems, we observed that many of the algorithms would often become unstable. \textbf{Dimensionality reduction} (or DR) then quickly became a key concept for minimizing the data size while maintaining its meaning.
+In the last 80 years, there were many different machine learning algorithms developed. Between those, many could successfully generalize low dimensional data. \cite{wang2012geometric} In the other hand, problems of our world are often too complex and may be represented by high dimensional data. For example, images, sounds or text documents can be expressed as vectors of the $\mathbb{R}^n$, where each element corresponds to a pixel, wave signal or character, respectively. When analyzing these problems, we observed that many of the algorithms would often become unstable. \textbf{Dimensionality reduction} (or DR) then quickly became a key concept for minimizing the data size while maintaining its meaning.
 
 Finally, dimensionality reduction has evolved into an extensive area. Nowadays, DR is not only applied to data reduction, specifically, but often employed in order to improve visualization or as preprocessing step for noise reduction.
 
@@ -106,7 +106,7 @@ Finally, dimensionality reduction has evolved into an extensive area. Nowadays, 
 
 In the context of Computer Science, very often our goal is to develop machines that can assist or automate the process of solving real-world problems. Firstly, however, we must find ways to express these problems numerically.
 
-Although the recurrent usage of the term in scientific work, there is not a clear definition established. It is possible, however, to observe the regular presence of four related features: grouping, content, relatedness e purpose \cite{ren2010}.
+Although the recurrent usage of the term in scientific work, there is not a clear definition established. It is possible, however, to observe the regular presence of four related features: grouping, content, relatedness e purpose. \cite{ren2010}
 For the scope of this work, the term data set is invariably associated with the idea of a collection of samples. Each sample is a sequence of features, where the {\em i-th} feature of all instances belong to a same set of symbols $f_i$.
 
 Succinctly, consider $S$ a sequence of samples and
@@ -165,16 +165,16 @@ Composed by 583 samples and 11 features, the data set ILPD has a nominal feature
 	\centering
 	\captionsetup{justification=centering}
 
-	\includegraphics[scale=.3]{displaying_ILPD}
-	\caption{The data set ILPD mapped onto $\mathbb{R}^n$, where each of its features is an axis, except for $S \coloneqq \{1, 2\}$, which was represented by the vertex's color.}
+	\includegraphics[scale=.3]{experiments/3_1_2_displaying_ilpd}
+	\caption{The data set ILPD mapped onto $\mathbb{R}^n$, where each of its features is an axis, except for $S \coloneqq \{1, 2\}$, which was represented by the vertices' colors.}
 	\label{fig:disp_ilpd}
 \end{figure}
 
-Considering the many graphs required to display the data set, it is quite difficult to identify a plausible distribution for ILPD. We define here our first encouragement towards the study of dimensionality reduction: the identification of the most significant features and plotting of those might yield simpler and more intuitive representations.
+Considering the many graphs required to display the data set, it is quite difficult to identify a plausible distribution for ILPD. We define here our first encouragement towards the study of dimensionality reduction: the identification of the most significant features and plotting of those might result on simpler and more intuitive representations.
 
 \subsubsection{Modern Problems and Applications}
 
-Differently from Iris flower or even the Glass data set, modern problems are, in many cases, associated with large data sets. I.e., data sets that contain many samples and features. Although the high number of samples is essentially benefic, a high number of features might be irrelevant or even unconstructive to the learning process \cite{cay2005}.
+Differently from Iris flower or ILPD data set, data sets associated with modern problems are often very dense, i.e., data sets containing many samples and/or features. Although the high number of samples is essentially benefic, a high number of features might be irrelevant or even unconstructive to the learning process. \cite{cay2005}
 
 \begin{table}[H]
 	\begin{tabular}{ c | *{4}{|c}| }
@@ -188,10 +188,10 @@ Differently from Iris flower or even the Glass data set, modern problems are, in
 	\caption{A data set with 8200 samples and 100 features.}
 \end{table}
 
-In many cases, there are indicatives that the data set lie near a lower-dimensional manifold embedded in the $\mathbb{R}^n$ \cite{gho2006}. For the data set above, in special, the $\mathbb{R}^{100}$. A second encouragement can then be set: it is possible that the data set might be shrunk by combining similar (linearly dependent) features or eliminating the ones that poorly contribute towards the learning process. In order to do this, one must be able to qualify the “contribution” of each feature or even identify dependencies between features.
+In many cases, there are indicatives that the data set lie near a lower-dimensional manifold embedded in the $\mathbb{R}^n$. \cite{gho2006} For the data set above, in special, the $\mathbb{R}^{100}$. A second encouragement can then be set: it is possible that the data set might be shrunk by combining similar (linearly dependent) features or eliminating the ones that poorly contribute towards the learning process. In order to do this, one must be able to qualify the “contribution” of each feature or even identify dependencies between features.
 
 \subsection{Probability Theory}
-\subsubsection{Feature Normalization}
+\subsubsection{Feature Standardization}
 Many of the methods ahead will require the data set to be centered in the origin. To center a data set $X$, we build a data set $X'$ s.t. each column has zero mean and it is contracted by its standard deviation:
 $$X'_{.j} = \frac{X_{.j} - \mu}{\sigma} \textnormal{, where}$$
 \begin{enumerate}
@@ -338,9 +338,9 @@ Proving $AA^T = U \Sigma^2 U^T$ is analogous to the above.
 \subsection{Topology}
 \subsubsection{Manifolds}
 
-Intuitively, n-dimensional topological manifolds are sets that are ``locally Euclidean" \cite{lee2009}. In other words, they can be decomposed into sub sets that can be mapped to the $\mathbb{R}^n$.
+Intuitively, n-dimensional topological manifolds are sets that are ``locally Euclidean". \cite{lee2009} In other words, they can be decomposed into sub sets that can be mapped to the $\mathbb{R}^n$.
 
-Formally, a set $M$ is said to be a \textbf{n-dimensional topological manifold} $\iff M$ is a paracompact Hausdorff topological space $\mid \forall p \in M, p \in U_p$, where $U_p$ is an open set that is homeomorphic to an open set $V_p$ of the Euclidean space $\mathbb{R}^n$ \cite{lee2009}.
+Formally, a set $M$ is said to be a \textbf{n-dimensional topological manifold} $\iff M$ is a paracompact Hausdorff topological space $\mid \forall p \in M, p \in U_p$, where $U_p$ is an open set that is homeomorphic to an open set $V_p$ of the Euclidean space $\mathbb{R}^n$. \cite{lee2009}
 
 From here, we will use the word manifold to refer to the n-dimensional topological manifold.
 
@@ -356,7 +356,7 @@ A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a man
 \end{example}
 
 \begin{example}
-	A n-dimensional sphere is a manifold. Earth, in special, is a 3-dimensional sphere and its stereographic projection is its mapping to the $\mathbb{R}^2$ \cite{stereo_proj}.
+	A n-dimensional sphere is a manifold. Earth, in special, is a 3-dimensional sphere and its stereographic projection is its mapping to the $\mathbb{R}^2$. \cite{stereo_proj}
 
 	\begin{figure}[H]
 		\centering
@@ -371,7 +371,7 @@ A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a man
 \subsection{Graph Theory}
 \subsubsection{Graphs}
 
-Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph} \cite{berge1973} where
+Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph}, \cite{berge1973} where
 \begin{enumerate}
 	\item $X$ is a set of objects called \textbf{vertices}.
 	\item $U$ is a family of elements $u_i \in X\times X$ called arcs.
@@ -530,20 +530,20 @@ The shortest-path between a vertex $x_0 \in X$ and all other vertices can be exp
 \subsection{Machine Learning}
 “Learning is the improvement of performance is some environment through the acquisition of knowledge resulting from experience in that environment." \cite{pat1996}
 
-“Machine learning is the area in Computer Science that has as goal the projection and implementation of machines that have the ability to learn autonomously” \cite{hot2009}. In other words, the creation of machines that are able to recognize patterns in an environment and interpret those using concepts related to artificial intelligence. Such interpretation can create a model which might eventually be used to predict new patterns, take actions and/or solve domain problems.
+“Machine learning is the area in Computer Science that has as goal the projection and implementation of machines that have the ability to learn autonomously”. \cite{hot2009} In other words, the creation of machines that are able to recognize patterns in an environment and interpret those using concepts related to artificial intelligence. Such interpretation can create a model which might eventually be used to predict new patterns, take actions and/or solve domain problems.
 
 \subsubsection{Machine Learning Algorithms}
 
 Based on how the learning phase of a problem is, most of the ML algorithms may be divided into one of the following categories:
 
 \begin{description}
-	\item[Supervised] A direct feedback is presented during the learning phase \cite{pat1996}. For the instances where the ME problem relies on a data set, the learning task uses the labeled training samples (i.e., samples that present the \textbf{target feature}) to synthesize the model that attempts to generalize the relationship between the feature vectors and the target variable \cite{awa2015}.
+	\item[Supervised] A direct feedback is presented during the learning phase. \cite{pat1996} For the instances where the ME problem relies on a data set, the learning task uses the labeled training samples (i.e., samples that present the \textbf{target feature}) to synthesize the model that attempts to generalize the relationship between the feature vectors and the target variable. \cite{awa2015}
 
-	\item[Unsupervised] Infer hidden structures from the data set without direct feedback, such as known labels for the samples \cite{awa2015}.
+	\item[Unsupervised] Infer hidden structures from the data set without direct feedback, such as known labels for the samples. \cite{awa2015}
 
-	\item[Semi-supervised] Most commonly, it is given by the extension of either supervised or unsupervised learning to include the other paradigm, resulting in a combination of both \cite{zhu2009}.
+	\item[Semi-supervised] Most commonly, it is given by the extension of either supervised or unsupervised learning to include the other paradigm, resulting in a combination of both. \cite{zhu2009}
 
-	\item[Reinforcement] Through iterative exploration, the learner is positively or negatively reinforced for its actions. The learner's goal is, ultimately, maximize the cumulative reward gained \cite{awa2015}.
+	\item[Reinforcement] Through iterative exploration, the learner is positively or negatively reinforced for its actions. The learner's goal is, ultimately, maximize the cumulative reward gained. \cite{awa2015}
 \end{description}
 
 \paragraph{Support Vector Machine: An Example of Supervised Learning}
@@ -557,7 +557,7 @@ Intuitively, the SVM algorithm attempts to find a hyperplane that separates the 
 	\captionsetup{justification=centering}
 
 	\includegraphics[scale=.5]{svm_margin}
-	\caption{A SVM classifier projecting a hyperplane that perfectly separates two classes of samples \cite{sksvm}.}
+	\caption{A SVM classifier projecting a hyperplane that perfectly separates two classes of samples. \cite{sksvm}}
 	\label{fig:svmmargin}
 \end{figure}
 
@@ -567,7 +567,7 @@ $$\text{\textbf{decision rule}} \begin{cases}
 	w \cdot u +b < 0 \implies y_u=-1\\
 \end{cases}$$
 
-To prevent samples from falling into the margin or being misclassified \cite{wessvmdef}, reinforce that for any positive sample $x_+$, $w \cdot x_+ +b \geq 1$. Similarly for $x_-$ samples, $w \cdot x_- +b \leq 1$. These both constraints can be expressed as
+To prevent samples from falling into the margin or being misclassified, \cite{wessvmdef} reinforce that for any positive sample $x_+$, $w \cdot x_+ +b \geq 1$. Similarly for $x_-$ samples, $w \cdot x_- +b \leq 1$. These both constraints can be expressed as
 \begin{equation} \label{svmconst}
 y_i(w \cdot x_i +b) -1 \geq 0
 \end{equation}
@@ -592,7 +592,7 @@ Which can be solved using standard quadratic programming.
 
 \paragraph{SVM for non-separable data sets (soft margins)}
 
-To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$ \cite{wessvmdef}, which represent a trade-off between maximum margin/distance of the misclassified samples from the decision boundary.
+To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$, \cite{wessvmdef} which represent a trade-off between maximum margin/distance of the misclassified samples from the decision boundary.
 
 $$\min \frac{1}{2} \|w\|^2 + C \sum_{1}^{m}\xi_i \text{, constrained to:}$$
 $$y_i(w \cdot x_i +b) \geq 1- \xi_i, \xi_i \geq 0$$
@@ -601,7 +601,7 @@ Such trade-off can be adjusted through the parameter $C$. Notice that small valu
 
 \paragraph{Dependency over the dot product}
 
-By the Lagrange multipliers method \cite{mitsvm}:
+By the Lagrange multipliers method: \cite{mitsvm}
 
 \begin{gather} \label{svmlag1}
 	L = \frac{1}{2}\|w\|^2 - \sum \alpha_i[y_i(w \cdot x_i +b) -1] \\
@@ -621,7 +621,7 @@ L = \frac{1}{2}\sum\alpha_i y_i x_i \cdot \sum\alpha_j y_j x_j
 
 $w$ and $b$ can easily be found from (\ref{svmlag2}) and $\alpha_i[y_i(w \cdot x_i + b) - 1] = 0$ (for any $i \mid \alpha_i \ne 0$), respectively.
 
-Now, as we finally plug (\ref{svmlag2}) back into our decision rule, it becomes clear that both training and prediction phases depend only on the dot product between the sample vectors \cite{mitsvm}:
+Now, as we finally plug (\ref{svmlag2}) back into our decision rule, it becomes clear that both training and prediction phases depend only on the dot product between the sample vectors: \cite{mitsvm}
 
 $$\text{\textbf{decision rule}} \begin{cases}
 	\sum\alpha_i y_i x_i \cdot u +b \geq 0 \implies y_u=+1\\
@@ -632,7 +632,7 @@ The implications of such fact will be discussed in the next section.
 
 \paragraph{Kernel functions}
 
-"The kernel function represent the dot product of both vectors projected onto the new space" \cite{mitsvm}.
+"The kernel function represent the dot product of both vectors projected onto the new space". \cite{mitsvm}
 
 Some data sets are not linearly separable, as mentioned in a few sections above. They can, however, be projected to a different vector space, where they hopefully will be. To achieve this, a transformation $\phi$ is applied on both vectors. The dot product between those is then calculated in the new space and the value is used during training (the maximizing $L$) and prediction (the decision rule). Practically, let $k(u, v) \coloneqq f: (\mathbb{R}^n, \mathbb{R}^n) \rightarrow \mathbb{R} \mid k(u, v) = \phi(u) \cdot \phi(v)$,
 
@@ -652,7 +652,7 @@ The figure bellow illustrates a non-linearly separable data set defined in the $
 	\captionsetup{justification=centering}
 
 	\includegraphics[scale=.4]{svm_kernel}
-	\caption{Projection of samples from the $\mathbb{R}$ to the $\mathbb{R}^2$, allowing SVM to find a hyperplane that perfectly separates both classes \cite{svmkernels}.}
+	\caption{Projection of samples from the $\mathbb{R}$ to the $\mathbb{R}^2$, allowing SVM to find a hyperplane that perfectly separates both classes. \cite{svmkernels}}
 	\label{fig:svmkernel}
 \end{figure}
 
@@ -716,7 +716,7 @@ Machine Learning algorithms may require specific parameters to run. For instance
 
 Grid Search is a traditional method used to find the parameters that optimize the generalization of learning model over a specific data set. \cite{gridsearch} Given a set of possible parameters, it will exhaustively search for the combination of those that generate the best outcome, which might be evaluated by a validation method such as cross-validation.
 
-\subsubsection{Examples of learning}
+\subsubsection{Examples of Learning}
 
 \paragraph{Coffee Selling Rate}
 
@@ -727,15 +727,15 @@ The figure bellow illustrates a data set which express the relationship between 
 	\captionsetup{justification=centering}
 
 	\includegraphics[scale=.6]{rohrer2015}
-	\caption{graphic representation of a data set generalization by a linear (orange) and a non-linear model (green)}
+	\caption{graphic representation of a data set generalization by a linear (orange) and a nonlinear model (green)}
 	\label{fig:rohrer2015}
 \end{figure}
 
-The orange line and the green arc represent two different models. The orange line, which represents the linear model, clearly does not generalize the data set appropriately, once it induces an error much larger than necessary. \cite{roh2015} The non-linear model, i.e., the green arc, was capable of generalize the data inducing a smaller error.
+The orange line and the green arc represent two different models. The orange line, which represents the linear model, clearly does not generalize the data set appropriately, once it induces an error much larger than necessary. \cite{roh2015} The nonlinear model, i.e., the green arc, was capable of generalize the data inducing a smaller error.
 
 \paragraph{Iris Flower}
 
-Consider the Iris flower data set as defined in \ref{irisdataset}. In order to predict the feature {\em Species} of a given sample, one could train a classification model using the \textbf{Support Vector Machine} algorithm.
+Consider the Iris flower data set as defined in \ref{irisdataset}. In order to predict the feature {\em Species} of a given sample, one could train a Support Vector Machine classifier.
 
 Through GridSearch, it was found that the SVM algorithm with $C=100$, $gamma=.01$ and $rbf$ kernel is capable of finding a model yielding .99\% accuracy. The samples misclassified during the test phase were represented by the confusion matrix bellow.
 
@@ -815,8 +815,14 @@ From \ref{eq:pca-cov} and \ref{eq:pca-svd}:
 
 Which entails that $V$ is the orthonormal matrix with $\Sigma_X$'s eigenvectors as columns, whereas $\Sigma$ contains the correspondent eigenvalues $\sigma_{ii}^2$ associated with $v_i\in V$. $v_i\in V$ is, in fact, a principal component of $X$ and its associated eigenvalue $\sigma_i$ module gives $X$ spectral radius. As we are interested in the dimensions that give most variance, keep only the $m\in\mathbb{R}$ most significant eigenvalues and their correspondent eigenvectors.
 
-Finally, it also worth remarking once again that the principal components are linear combinations of the original features (the canonical base). $V^{-1}$ is, therefore, a change-of-basis matrix from the original feature basis (the canonical base) to a new one generated by the principal components. As $V$ is orthogonal, $V^{-1}$ exists and it is equal to $V^T$. Formally, if $x$ is a sample (row vector) from the $X$ data set,
+Finally, it also worth remarking once again that the principal components are linear combinations of the original features (the canonical base) and $V$ is the change-of-basis matrix from the generated base to the canonical. Naturally, $V^{-1}$ is a change-of-basis matrix from the original space to the one that is generated by the principal components. Formally, if $x$ is a sample (row vector) from the $X$ data set, its project $y$ is defined as:
+
 \begin{align*}
+	Vy^T &= x^T \\
+	y^T  &= V^{-1}x^T
+\end{align*}
+
+In the other hand, $V$ is orthogonal, hence $V^{-1}$ exists and it is equal to $V^T$: \begin{align*}
 	y^T &= V^Tx^T \\
 	y &= (V^Tx^T)^T \\
       &= xV
@@ -931,13 +937,13 @@ Let $X$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 
 \begin{enumerate}
 	\item Calculate the dissimilarity matrix $[\delta]_{rs}$, where $\delta_{rs} = \sqrt{\sum_i (x_{ri} - x_{si})^2}$
-	\item Calculate the matrix $B=H-\frac{1}{2}\delta_{rs}^2H$.
+	\item Calculate the matrix $A=-\frac{1}{2}\delta_{rs}^2$ and $B=HAH$, where $H$ is the centering matrix.
 
 	\item Use spectral decomposition to find the matrices $\Sigma$ and $U$.
 
-	\item Select the $m$ greatest eigenvalues in $\Sigma$. From these, create the matrices $\Sigma'=[\sigma'_{m\times m}]$ and $U'=[u'_{n\times m}]$ (where each column $i$ contains the eigenvector associated with $\sigma'_i$).
+	\item Select the $m$ greatest eigenvalues in $\Sigma$. From these, create the matrices $\Sigma'=[\sigma'_{m\times m}]$ and $U'=[u'_{n\times m}]$, where each column $i$ contains the eigenvector associated with $\sigma'_i$.
 
-	\item Construct $Y=U'\Sigma'$
+	\item Construct the $m$-dimensional embedding $Y=U'\Sigma'$
 \end{enumerate}
 
 \subsection{Classification and Regression Over Linearly Reduced Data Sets}
@@ -1038,7 +1044,7 @@ Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sa
 
 Notice that it was possible to eliminate 54 dimensions, consistently reducing the data set size, and only suffering 3\% of prediction accuracy loss. The score drastically decreased, however, when more dimensions were removed.
 
-\section{Non-linear Dimensionality Reduction}
+\section{Nonlinear Dimensionality Reduction}
 
 Although PCA has presented promising results in the previous section, hence its great popularity in dimensionality reduction problems, there are many examples in which PCA will fail in its task. Consider the example bellow:
 
@@ -1060,16 +1066,17 @@ The table bellow describes a regression attempt over the data sets illustrated i
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
 		& \textbf{Original data} & \textbf{Reduced ($\mathbb{R}^2$)} & \textbf{Reduced ($\mathbb{R}^1$)} \\\hline
-		\textbf{Accuracy}  & 1.       & .68       & .54 \\\hline
-		\textbf{GS time}    & 3.84s  & 2.26s   & 3.26s \\\hline
-		\textbf{Reduction time}    & $-$     & 0.00ms & 0.00ms \\\hline
+		\textbf{Accuracy} & 1. & .68 & .54 \\\hline
+		\textbf{GS time}  & 3.84 s & 2.26 s & 3.26 s \\\hline
+		\textbf{Reduction time} & $-$ & 0.00 ms & 0.00 ms \\\hline
 		\textbf{Data size} & 23.44 KB & 15.62 KB  & 7.81 KB \\\hline
 	\end{tabular}
 
+	\captionsetup{justification=centering}
 	\caption{Regression accuracy and reduction performance for the Swiss-roll data set.}
 \end{table}
 
-Clearly, linear dimensionality reduction techniques are not adequate to reduce the Swiss-roll.
+Clearly, linear dimensionality reduction techniques are not adequate to reduce the Swiss-roll, nor any other nonlinear manifold.
 
 \subsection{The Isomap Algorithm}
 
