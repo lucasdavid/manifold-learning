@@ -111,6 +111,7 @@ report/*.synctex.gz
 report/*.bbl
 report/*.blg
 report/*.lof
+report/*.lot
 
 *.gummi
 *.tex.swp
