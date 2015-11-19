@@ -1,10 +1,8 @@
 import time
-import numpy as np
-from scipy.spatial import distance
+
 from sklearn import datasets
+
 from experiments.base import ReductionExperiment
-from manifold.infrastructure import Retriever
-from manifold.learning.algorithms import MDS
 
 
 class TimingIsomapExperiment(ReductionExperiment):

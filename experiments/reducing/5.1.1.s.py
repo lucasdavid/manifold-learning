@@ -1,18 +1,17 @@
 import networkx as nx
 import pylab as plt
-from scipy.spatial import distance
 from sklearn import datasets
 
 from experiments.base import ReductionExperiment
 from manifold.learning import algorithms
 
 
-class DisplayingDatasetAsGraphExperiment(ReductionExperiment):
-    title = '5. Displaying the S-Dataset as a Graph Example'
+class SManifoldExperiment(ReductionExperiment):
+    title = '5.1.1. S Experiment'
     plotting = True
 
-    reduction_method = 'skisomap'
-    reduction_params = {'n_neighbors': 10}
+    reduction_method = 'isomap'
+    reduction_params = {'n_components': 2, 'k': 10}
 
     def load_data(self):
         self.data, self.target = datasets.make_s_curve(n_samples=1000)
@@ -24,15 +23,19 @@ class DisplayingDatasetAsGraphExperiment(ReductionExperiment):
     def _run(self):
         self.load_data()
 
-        for dimension in (1, 2):
-            self.reduction_params['n_components'] = dimension
-            self.reduce()
+        self.reduce()
 
         self.draw_nearest_neighbor_graph_found()
         self.displayer.show()
 
     def draw_nearest_neighbor_graph_found(self):
-        d = distance.squareform(distance.pdist(self.original_data))
+        """Draw Nearest Neighbor Graph.
+
+        This method must run after .reduce(), as it will use the
+        vertices' positions found by the MDS method.
+
+        """
+        d = algorithms.EuclideanDistancesFromDataSet(self.original_data).run()
         e = algorithms.KNearestNeighbors(d, alpha=10).run()
         g = nx.Graph(e)
         del d, e
@@ -46,4 +49,4 @@ class DisplayingDatasetAsGraphExperiment(ReductionExperiment):
 
 
 if __name__ == '__main__':
-    DisplayingDatasetAsGraphExperiment().start()
+    SManifoldExperiment().start()
