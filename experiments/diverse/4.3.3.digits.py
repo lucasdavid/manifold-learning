@@ -4,7 +4,7 @@ from experiments.base import ReductionExperiment, LearningExperiment
 
 
 class DigitsExperiment(ReductionExperiment, LearningExperiment):
-    title = '3. Digits PCA Example'
+    title = '4.3.3. Digits'
     plotting = True
 
     def _run(self):
@@ -18,7 +18,7 @@ class DigitsExperiment(ReductionExperiment, LearningExperiment):
             self.reduce()
             self.learn()
 
-        self.displayer.render()
+        self.displayer.show()
 
     def load_data(self):
         digits = datasets.load_digits()

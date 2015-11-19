@@ -16,7 +16,7 @@ class ReducingIrisExperiment(ReductionExperiment):
         self.reduction_params = {'n_components': 2}
         self.reduce()
 
-        self.displayer.render()
+        self.displayer.show()
 
 
 if __name__ == '__main__':

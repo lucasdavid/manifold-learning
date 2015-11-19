@@ -19,7 +19,7 @@ class ReducingSwissRollExperiment(ReductionExperiment):
             self.reduction_params = {'n_components': dimension}
             self.reduce()
 
-        self.displayer.render()
+        self.displayer.show()
 
 
 if __name__ == '__main__':

@@ -18,8 +18,7 @@ class LearningIrisExample(LearningExperiment):
         # the rest of the samples and constructs the confusion matrix.
         self.learn()
 
-        if self.plotting:
-            self.displayer.render()
+        self.displayer.show()
 
     def dispose(self):
         del self.data, self.target

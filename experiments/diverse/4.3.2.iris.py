@@ -7,33 +7,28 @@ class IrisExperiment(ReductionExperiment, LearningExperiment):
     title = '4.3.2. Iris Flower Data Set'
     plotting = True
 
+    reduction_method = 'pca'
+    reduction_params = {'n_components': 0}
+
     def _run(self):
         self.load_data()
-
         self.learn()
 
-        self.reduction_method = 'pca'
-        self.reduction_params = {'n_components': 2}
-        self.reduce()
-        self.learn()
+        for d in (2, 1):
+            self.reduction_params['n_components'] = d
+            self.reduce()
+            self.learn()
 
-        self.reduction_method = 'pca'
-        self.reduction_params = {'n_components': 1}
-        self.reduce()
-        self.learn()
-
-        if self.plotting:
-            self.displayer.render()
+        self.displayer.show()
 
     def load_data(self):
         iris = datasets.load_iris()
 
         self.data, self.target = iris.data, iris.target
         self.original_data = self.data
-        print('Data set size: %i' % self.data.nbytes)
+        print('Data set size: %.2f KB' % (self.data.nbytes / 1024))
 
-        if self.plotting:
-            self.displayer.load(self.data, self.target)
+        self.displayer.load(self.data, self.target)
 
 if __name__ == '__main__':
     IrisExperiment().start()

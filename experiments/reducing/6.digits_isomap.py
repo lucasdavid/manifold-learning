@@ -21,7 +21,7 @@ class DigitsIsomapExperiment(ReductionExperiment):
             self.reduce()
 
         if self.plotting:
-            self.displayer.render()
+            self.displayer.show()
 
 
 if __name__ == '__main__':

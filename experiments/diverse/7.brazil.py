@@ -47,7 +47,7 @@ class BrazilExperiment(ReductionExperiment):
 
         if self.plotting:
             self.displayer.aspect = (20, 30)
-            self.displayer.render()
+            self.displayer.show()
 
 
 if __name__ == '__main__':

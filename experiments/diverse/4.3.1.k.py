@@ -22,7 +22,7 @@ class KExperiment(ReductionExperiment, LearningExperiment):
             self.learn()
 
         if self.plotting:
-            self.displayer.render()
+            self.displayer.show()
 
     def generate_data(self):
         np.random.seed(0)

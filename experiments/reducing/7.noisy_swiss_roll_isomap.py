@@ -25,7 +25,7 @@ class NoisySwissRollIsomapExperiment(ReductionExperiment):
 
         self.displayer \
             .load(self.data, self.target, title='Swiss-roll (noise: %.2f)' % noise) \
-            .render() \
+            .show() \
             .dispose()
 
         print('Data set size: %.2fKB' % (self.data.nbytes / 1024))
@@ -44,7 +44,7 @@ class NoisySwissRollIsomapExperiment(ReductionExperiment):
 
             if self.plotting:
                 self.displayer.aspect = (10, 70)
-                self.displayer.render().dispose()
+                self.displayer.show().dispose()
                 self.draw_nearest_neighbor_graph_found()
 
     def draw_nearest_neighbor_graph_found(self):

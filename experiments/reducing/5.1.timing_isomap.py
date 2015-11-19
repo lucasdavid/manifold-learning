@@ -38,7 +38,7 @@ class TimingIsomapExperiment(ReductionExperiment):
             print('%.2f s spent in this last iteration. ' % (time.time() - start()))
 
         if self.plotting:
-            self.displayer.render()
+            self.displayer.show()
 
 
 if __name__ == '__main__':

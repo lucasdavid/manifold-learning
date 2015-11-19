@@ -15,7 +15,7 @@ class DisplayingKExperiment(Experiment):
         data = preprocessing.scale(data)
         target = data.sum(axis=1)
 
-        self.displayer.load(data, target).render()
+        self.displayer.load(data, target).show()
 
         print('Covariance of K')
         print(np.cov(data, rowvar=0))

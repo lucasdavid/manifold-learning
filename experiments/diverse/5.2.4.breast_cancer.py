@@ -1,12 +1,31 @@
-from experiments.base import LearningExperiment
+import numpy as np
+
+from experiments.base import LearningExperiment, ReductionExperiment
 from manifold.infrastructure import Retriever
 
 
-class LearningBreastCancerExample(LearningExperiment):
+class BreatCancerExperiment(LearningExperiment, ReductionExperiment):
     title = '3. Learning Breast-cancer'
     plotting = True
-    
+
+    learning_parameters = [
+        {'C': (100,), 'kernel': ('linear',)},
+    ]
+
+    reduction_method = 'isomap'
+
     def _run(self):
+        self.load_data()
+        self.learn()
+
+        for d in (3, 2):
+            self.reduction_params['n_components'] = d
+            self.reduce()
+            self.learn()
+
+        self.displayer.show()
+
+    def load_data(self):
         r = Retriever('../../datasets/breast-cancer/wdbc.data', delimiter=',')
 
         # Remove ids, as they are not correlated in any way with the target feature.
@@ -20,11 +39,9 @@ class LearningBreastCancerExample(LearningExperiment):
 
         self.displayer.load(self.data, self.target, 'Breast-cancer')
 
-        self.learn()
-
-        if self.plotting:
-            self.displayer.render()
+        print('Covariance matrix:')
+        print(self.data.shape)
 
 
 if __name__ == '__main__':
-    LearningBreastCancerExample().start()
+    BreatCancerExperiment().start()

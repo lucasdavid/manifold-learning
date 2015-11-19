@@ -11,28 +11,25 @@ class DisplayingDatasetAsGraphExperiment(ReductionExperiment):
     title = '5. Displaying the S-Dataset as a Graph Example'
     plotting = True
 
+    reduction_method = 'skisomap'
+    reduction_params = {'n_neighbors': 10}
+
     def load_data(self):
         self.data, self.target = datasets.make_s_curve(n_samples=1000)
         self.original_data = self.data
 
-        if self.plotting:
-            self.displayer.load(self.data, self.target)
-            self.displayer.aspect = (20, -30)
+        self.displayer.load(self.data, self.target)
+        self.displayer.aspect = (20, -30)
 
     def _run(self):
         self.load_data()
-
-        self.reduction_method = 'skisomap'
-        self.reduction_params = {'n_neighbors': 10}
 
         for dimension in (1, 2):
             self.reduction_params['n_components'] = dimension
             self.reduce()
 
         self.draw_nearest_neighbor_graph_found()
-
-        if self.plotting:
-            self.displayer.render()
+        self.displayer.show()
 
     def draw_nearest_neighbor_graph_found(self):
         d = distance.squareform(distance.pdist(self.original_data))

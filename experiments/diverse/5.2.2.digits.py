@@ -4,7 +4,7 @@ from experiments.base import ReductionExperiment, LearningExperiment
 
 
 class DigitsIsomapExperiment(ReductionExperiment, LearningExperiment):
-    title = '6. Digits Reduced with Isomap and Learned Example'
+    title = '5.1. Timing the Isomap Algorithm Experiment'
     plotting = True
 
     reduction_method = 'isomap'
@@ -13,23 +13,21 @@ class DigitsIsomapExperiment(ReductionExperiment, LearningExperiment):
     def _run(self):
         digits = datasets.load_digits()
         self.data, self.target = digits.data, digits.target
+        self.original_data = self.data
 
         self.displayer.load(self.data[:, 1:4], self.target)
-        print('Data set size: %.2fKB' % (self.data.nbytes / 1024))
+        print('Data set size: %.2f KB' % (self.data.nbytes / 1024))
 
         self.learn()
 
         for dimensions in (10, 3, 2, 1):
             self.reduction_params['n_components'] = dimensions
             self.reduce()
-
-            self.data = self.reduced_data
             self.learn()
             self.data = digits.data
-            del self.reduced_data
 
         if self.plotting:
-            self.displayer.render()
+            self.displayer.show()
 
 
 if __name__ == '__main__':

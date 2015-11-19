@@ -30,7 +30,7 @@ class ReducingKExperiment(ReductionExperiment):
             print(np.cov(self.reducer.components_, rowvar=0))
 
         if self.plotting:
-            self.displayer.render()
+            self.displayer.show()
 
 
 if __name__ == '__main__':
