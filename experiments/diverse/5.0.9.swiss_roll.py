@@ -16,6 +16,7 @@ class SwissRollPCAExperiment(ReductionExperiment, LearningExperiment):
 
         swiss_roll, swiss_roll_colors = datasets.make_swiss_roll(n_samples=samples, random_state=0)
         self.data, self.target = swiss_roll, swiss_roll_colors
+        self.original_data = self.data
         self.displayer.load(swiss_roll, swiss_roll_colors, title='Swiss-roll')
 
         print('Data set size: %.2fKB' % (self.data.nbytes / 1024))
@@ -28,8 +29,6 @@ class SwissRollPCAExperiment(ReductionExperiment, LearningExperiment):
             self.data = swiss_roll
             self.reduction_params = {'n_components': dimensions}
             self.reduce()
-
-            self.data = self.reduced_data
             self.learn()
 
 

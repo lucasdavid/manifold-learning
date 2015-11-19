@@ -18,7 +18,7 @@ class Experiment(metaclass=abc.ABCMeta):
 
     @property
     def displayer(self):
-        self._displayer = self._displayer or Displayer()
+        self._displayer = self._displayer or Displayer(plotting=self.plotting)
         return self._displayer
 
     def _run(self):
