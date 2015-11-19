@@ -12,34 +12,47 @@ class Displayer(object):
         self.aspect = kwargs.pop('aspect', (20, -40))
         self.rows = kwargs.pop('rows', None)
         self.columns = kwargs.pop('columns', None)
+        self.parent_is_plotting = kwargs.pop('plotting', True)
 
         self.parameters = ', '.join(['%s: %s' % (k, str(v)) for k, v in kwargs.items()])
         self.items = []
 
     def load(self, data, color=None, title=None):
-        # Always copy the data, and, of course, only the first three dimensions.
-        self.items.append((data[:, :3], color, title))
+        if self.parent_is_plotting:
+            # Always copy the data, and, of course, only the first three dimensions.
+            # Doesnt do anything if parent isn't plotting, though, as it would wasting memory.
+            self.items.append((data[:, :3], color, title))
 
         return self
 
-    def render(self):
-        self._process_figure()
-        plt.show()
+    def show(self):
+        """Show graphs.
+
+        Returns
+        -------
+        self.
+        """
+        if self.parent_is_plotting:
+            # Ignores calls if parent is not plotting.
+            self._process_figure()
+            plt.show()
 
         return self
 
     def save(self, name=None):
-        figure = self._process_figure()
+        if self.parent_is_plotting:
+            # Ignore calls if parent is not plotting.
+            figure = self._process_figure()
 
-        name = name or '%s.png' % str(datetime.datetime.now()).replace(':', '.')
-        plt.savefig(name, bbox_inches='tight')
-        plt.close(figure)
+            name = name or '%s.png' % str(datetime.datetime.now()).replace(':', '.')
+            plt.savefig(name, bbox_inches='tight')
+            plt.close(figure)
 
         return self
 
     def _process_figure(self):
         # Assert that there is at least one graph to show.
-        assert self.items, 'nothing graphs to render.'
+        assert self.items, 'no graphs to render.'
 
         figure = plt.figure(figsize=(16, 9))
         plt.suptitle(self.parameters)

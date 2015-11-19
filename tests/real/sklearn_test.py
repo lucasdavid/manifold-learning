@@ -35,4 +35,4 @@ class SKLearnIsomapTest(TestCase):
                 title="Isomap with %i neighbors, taking %.1fs" % (neighbors, elapsed),
                 data=result,
                 color=c)
-        displayer.render()
+        displayer.show()

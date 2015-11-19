@@ -23,7 +23,7 @@ class DisplayerTest(TestCase):
             .load(data, color, title='Graphic II') \
             .load(data, color, title='Graphic III') \
             .load(data, color, title='Graphic IV') \
-            .render()
+            .show()
 
     def test_similar_graphics(self):
         """Tests if Displayer class is presenting a similar graphic from the one printed
@@ -54,4 +54,4 @@ class DisplayerTest(TestCase):
         Displayer(title="Actual image", points=points, neighbors=neighbors) \
             .load(data, color, title='Graphic I') \
             .load(result, color, title='SKLearn\'s Isomap') \
-            .render()
+            .show()

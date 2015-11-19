@@ -32,4 +32,4 @@ class GlassDataSetTest(TestCase):
 
         d \
             .load('Reduced glass data-set', reduced_data, c) \
-            .render()
+            .show()

@@ -22,4 +22,4 @@ class IsomapPrintingTest(TestCase):
 
         Displayer() \
             .load(result, np.random.rand(4), title='K-Isomap') \
-            .render()
+            .show()

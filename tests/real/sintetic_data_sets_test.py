@@ -81,4 +81,4 @@ class IsomapTest(TestCase):
             data=result,
             color=c)
 
-        displayer.render()
+        displayer.show()

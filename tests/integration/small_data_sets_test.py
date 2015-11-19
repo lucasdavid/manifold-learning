@@ -52,7 +52,7 @@ class SmallDataSetsTest(TestCase):
                data=result,
                color=c)
 
-        d.render()
+        d.show()
 
     def test_random_matrix(self):
         data = np.trunc(5 + 10 * np.random.rand(10, 3))
@@ -87,4 +87,4 @@ class SmallDataSetsTest(TestCase):
         d.load(title="My K-Isomap with %i neighbors, taking %.1fs." % (neighbors, elapsed),
                data=result)
 
-        d.render()
+        d.show()
