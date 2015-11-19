@@ -955,7 +955,7 @@ This section reports the performance of classifiers and regressors over determin
 	\end{enumerate}
 \end{enumerate}
 
-\subsubsection{$K$ data set}
+\subsubsection{$K$ Data Set}
 
 The figure bellow illustrates the results of PCA algorithm application over the artificial $K$ data set. Notice that, for the second application, it correctly chose to discard the vertical dimension, as the samples offer less variability in this component.
 
@@ -973,16 +973,16 @@ The figure bellow illustrates the results of PCA algorithm application over the 
 	\begin{tabular}{|c|c|c|c|}
 		\hline
 		& \textbf{Original data} & \textbf{Reduced data ($\mathbb{R}^2$)} & \textbf{Reduced data ($\mathbb{R}$)} \\\hline
-		\textbf{Pred. accuracy} & .97 & .98 & .99 \\\hline
-		\textbf{GridSearch time} & 1.98s & 2s & 2.26s \\\hline
-		\textbf{Reduction time} & $-$ & 0.995ms & 1.118ms \\\hline
-		\textbf{Data size} & 1600 bytes & 1600 bytes & 8000 bytes \\\hline
+		\textbf{Pred. accuracy} & .98 & .98 & .99 \\\hline
+		\textbf{GridSearch time} & 1.15 s & .84 s & 1.26 s \\\hline
+		\textbf{Reduction time} & $-$ & 0.995 ms & 1.118 ms \\\hline
+		\textbf{Data size} & 15.62 KB & 15.62 KB & 7.81 KB \\\hline
 	\end{tabular}
 
-	\caption{Description of predictions and reduction performance for $k$.}
+	\caption{Description of predictions and reduction performance for $K$.}
 \end{table}
 
-\subsubsection{The Iris flower data set}
+\subsubsection{The Iris Flower Data Set}
 
 The Iris flower being reduced from 4 to 2 features. Although the data set became non-linearly separable, classes are still somewhat organized in different clusters.
 
@@ -1002,15 +1002,15 @@ The Iris flower being reduced from 4 to 2 features. Although the data set became
 		\hline
 		& \textbf{Original data} & \textbf{Reduced data ($\mathbb{R}^2$)} & \textbf{Reduced data ($\mathbb{R}$)} \\\hline
 		\textbf{Pred. accuracy} & .99 & .97 & .94 \\\hline
-		\textbf{GridSearch time} & 1.71s & 1.64s & 1.78s \\\hline
-		\textbf{Reduction time} & $-$ & 0.995ms & 1.118ms \\\hline
-		\textbf{Data size} & 4800 bytes & 2400 bytes & 1200 bytes \\\hline
+		\textbf{GridSearch time} & 1.71 s & 1.64 s & 1.78 s \\\hline
+		\textbf{Reduction time} & $-$ & 0.995 ms & 1.118 ms \\\hline
+		\textbf{Data size} & 4.68 KB & 2.34 KB & 1.17 KB \\\hline
 	\end{tabular}
 
 	\caption{Description of predictions and reduction performance for Iris flower.}
 \end{table}
 
-\subsubsection{The Digits data set}
+\subsubsection{The Digits Data Set}
 
 Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sample is a 8x8 image of a hand-written digit from 0 to 9.
 
@@ -1027,10 +1027,10 @@ Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sa
 	\begin{tabular}{|c|c|c|c|c|c|}
 		\hline
 		& \textbf{$\mathbb{R}^{64}$} & \textbf{$\mathbb{R}^{10}$} & \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
-		\textbf{Pred. accuracy}   & .98          & .95          & .74 & .64 & .39  \\\hline
-		\textbf{GridSearch time} & 12.82s     & 30.25s     & 186.73s & 154.56s & 122.47s \\\hline
-		\textbf{Reduction time}       & $-$          & 0.02s       & 0.01s & 0.01s & 0.01s \\\hline
-		\textbf{Data size}           & 920064 B & 143760 B & 43128 B & 28752 B & 14376 B \\\hline
+		\textbf{Pred. accuracy}   & .98 & .95 & .74 & .64 & .39 \\\hline
+		\textbf{GridSearch time} & 8.51 s & 21.33 s & 151.04 s & 132.18 s & 113.78 s \\\hline
+		\textbf{Reduction time} & $-$ & 0.02 s & 0.01 s & 0.01 s & 0.01 s \\\hline
+			\textbf{Data size} & 898.5 KB & 140.39 KB & 42.11 KB & 28.07 KB & 14.03 KB \\\hline
 	\end{tabular}
 
 	\caption{Description of predictions and reduction performance for Digits.}
@@ -1051,7 +1051,7 @@ Although PCA has presented promising results in the previous section, hence its 
 	\label{fig:swiss_pca}
 \end{figure}
 
-Specially in the last reduction, to a single dimension, a big drawback of the algorithm PCA is clear: it assumes that the data lies roughly on a liner subspace, causing it to incorrect extract the underlying structure when this is not the case. \cite{cay2005}
+Looking at figure \ref{fig:swiss_pca} (specially in the last reduction, to a single dimension), it becomes clear that PCA has a big draw back: it assumes that the data lies on a liner subspace \cite{cay2005} and, therefore, applying linear transformations to it will rotate and scale it, without distort the original data structure. When this assumption does not hold, PCA will incorrectly extract the underlying structure, possibly mixing very dissimilar samples.
 
 The table bellow describes a regression attempt over the data sets illustrated in figure \ref{fig:swiss_pca}, were the feature being predicted is the contiguous value represented by the vertexes' colors:
 
@@ -1068,6 +1068,8 @@ The table bellow describes a regression attempt over the data sets illustrated i
 
 	\caption{Regression accuracy and reduction performance for the Swiss-roll data set.}
 \end{table}
+
+Clearly, linear dimensionality reduction techniques are not adequate to reduce the Swiss-roll.
 
 \subsection{The Isomap Algorithm}
 
@@ -1089,10 +1091,10 @@ Let $S$ be our original data set, as illustrated in figure \ref{fig:mani_s}.
 	\label{fig:mani_s}
 \end{figure}
 
-Additionally, consider the undirected weighted graph $G=(V, E)$. If $e_{xy} \in E, w(e_{xy}) = \delta_{xy}$, where $\delta_{xy}$ is the euclidean distance between the samples $x$ and $y$ in $S$. That is,
+Additionally, consider the symmetric undirected weighted graph $G=(V, E)$ and $w \colon E \to \mathbb{R} \mid w(x, y) = \delta_{xy}$, where $\delta_{xy}$ is the euclidean distance between the samples $x$ and $y$ in $S$. That is,
 $$\delta_{xy} = \sqrt{\sum_{i} (x_i - y_i)^2}, \forall (x, y) \in S\times S \mid x\ne y$$
 
-Now that only distances were kept, an infinite number of n-dimensional embeddings can be found with \textbf{MDS}, as every solution can be transposed, rotated or reflected. This does not fix the non-linearity of the data, though, as the original distances strictly constraint the samples to their original pattern. In order to achieve this, \textbf{Nearest neighbor search} can be performed over $G$, resulting in the graph $H$. Nearest-neighbor search will preserve edges connecting closer nodes, hence preserving local (linear) distances, but erase edges connecting nodes which are far from each other (non necessarily linear). Obviously, the search parameters ($K$ or $\epsilon$) must be carefully chosen to limit the connectivity of the nodes to a small (linear) neighborhood while maintaining the graph completely connected. Ideally, $H$ will be a \textbf{mesh graph}.
+Now that only distances were kept, an infinite number of n-dimensional embeddings can be found with \textbf{MDS}, as every solution can be transposed, rotated or reflected. This does not fix the non-linearity of the data, though, as the original distances strictly constraint the samples to their original pattern. In order to achieve this, \textbf{Nearest neighbor search} can be performed over $G$, resulting in the graph $H$. Nearest-neighbor search will preserve edges connecting closer samples, hence preserving local (linear) distances, but erase edges connecting samples which are far from each other (non necessarily linear). Obviously, the search parameters ($K$ or $\epsilon$) must be carefully chosen to limit the connectivity of the vertices to a small (linear) neighborhood while maintaining the graph completely connected. Ideally, $H$ will be a \textbf{mesh graph}.
 
 \begin{figure}[H]
 	\centering
