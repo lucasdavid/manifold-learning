@@ -6,7 +6,7 @@ from experiments.base import ReductionExperiment
 
 
 class TimingIsomapExperiment(ReductionExperiment):
-    title = '5.1. Timing Isomap Experiment'
+    title = 'Timing Isomap Experiment'
     plotting = True
 
     samples = 1000

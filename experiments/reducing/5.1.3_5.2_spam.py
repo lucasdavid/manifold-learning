@@ -5,7 +5,7 @@ from manifold.infrastructure import Retriever
 
 
 class SpamExperiment(ReductionExperiment):
-    title = '7. Spam Reduced Example'
+    title = 'Spam Reduced Experiment'
     file = '../../datasets/spam/spambase.data'
     plotting = True
 

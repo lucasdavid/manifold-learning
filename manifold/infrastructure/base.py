@@ -53,6 +53,21 @@ class EuclideanDistancesFromDataSet(Task):
 
 
 class Reducer(Task, metaclass=abc.ABCMeta):
+    _stress = None
+    embedding = None
+
+    @property
+    def stress(self):
+        return self._stress
+
     def transform(self, data):
         self.store(data=data)
-        return self.run()
+        self.run()
+
+        return self.embedding
+
+    def dispose(self):
+        super().dispose()
+        del self.embedding, self._stress
+
+        return self

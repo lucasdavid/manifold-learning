@@ -7,7 +7,7 @@ from manifold.learning import algorithms
 
 
 class NoisySwissRollIsomapExperiment(ReductionExperiment):
-    title = '7. Noisy Swiss-roll Isomap example'
+    title = 'Noisy Swiss-roll Isomap example'
 
     plotting = True
 

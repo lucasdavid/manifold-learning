@@ -98,7 +98,10 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             self.reducer = Isomap(**self.reduction_params)
             self.data = self.reducer.transform(data)
 
-        print('\tNew data set\'s size: %.2f KB' % (self.data.nbytes / 1024))
+        if self.reduction_method in ('mds', 'isomap'):
+            print('\tstress: %.4f' % self.reducer.stress)
+
+        print('\tsize: %.2f KB' % (self.data.nbytes / 1024))
         print('Done (%.2f s).' % (time.time() - start))
 
         if self.plotting:

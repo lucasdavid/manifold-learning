@@ -7,7 +7,7 @@ from manifold.learning import algorithms
 
 
 class SManifoldExperiment(ReductionExperiment):
-    title = '5.1.1. S Experiment'
+    title = 'S Experiment'
     plotting = True
 
     reduction_method = 'isomap'

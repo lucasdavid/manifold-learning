@@ -2,9 +2,7 @@ import abc
 import numpy as np
 import networkx as nx
 import time
-
 from scipy.spatial import distance
-
 from ..infrastructure.base import Task, EuclideanDistancesFromDataSet, Reducer
 
 
@@ -76,8 +74,8 @@ class IShortestPathFinder(Task, metaclass=abc.ABCMeta):
     def __init__(self, distance_upper_matrix):
         g = nx.Graph()
 
-        for v, links in distance_upper_matrix.items():
-            g.add_weighted_edges_from([(v, n, link) for n, link in links.items()])
+        for v, edges in distance_upper_matrix.items():
+            g.add_weighted_edges_from(((v, n, cost) for n, cost in edges.items()))
 
         super().__init__(g=g, copying=False)
 
@@ -145,12 +143,16 @@ class MDS(Reducer):
         w = w[permutations][:n_components]
         v = v[:, permutations][:, :n_components]
 
+        del permutations
+
         # Return v * w ^ (1/2), the list of components (x, y, ...),
         # len = :n_components, corresponding to each sample in the data set.
-        answer = np.real(np.dot(v, np.sqrt(np.diag(w))))
+        self.embedding = np.real(np.dot(v, np.sqrt(np.diag(w))))
+
+        del w, v
 
         print('MDS took %.2f s.' % (time.time() - start))
-        return answer
+        return self.embedding
 
     def transform(self, data):
         return self.transform_dissimilarities(
@@ -158,7 +160,26 @@ class MDS(Reducer):
                 distance.pdist(data)))
 
     def transform_dissimilarities(self, d):
-        return self.store(data=d).run()
+        self.store(data=d).run()
+        return self.embedding
+
+    @property
+    def stress(self):
+        """Calculates Kruskal's stress.
+
+        Returns
+        -------
+
+        Stress, float in the interval [0, 1], where 0 is the best possible fit and 1 is the worse.
+        """
+        assert self.embedding is not None, 'Cannot calculate stress of invalid embedding.'
+
+        if self._stress is None:
+            delta = self.data['data']
+            dissimilarity_differences = np.power(delta - distance.squareform(distance.pdist(self.embedding)), 2).sum()
+            self._stress = np.sqrt(dissimilarity_differences / np.power(delta, 2).sum())
+
+        return self._stress
 
 
 class Isomap(Reducer):
@@ -191,6 +212,9 @@ class Isomap(Reducer):
             copying=copying
         )
 
+        self._mds = None
+        self._nearest_neighbors = None
+
     def run(self):
         start = time.time()
 
@@ -201,19 +225,55 @@ class Isomap(Reducer):
         instances_count = m.shape[0]
 
         m = EuclideanDistancesFromDataSet(m).run()
-        m = self.data['nearest_method'] == 'k' and KNearestNeighbors(m, k).run() or ENearestNeighbors(m, e).run()
-        m = self.data['shortest_path_method'] == 'fw' and FloydWarshall(m).run() or AllPairsDijkstra(m).run()
+        self._nearest_neighbors = self.data['nearest_method'] == 'k' and \
+                                  KNearestNeighbors(m, k).run() or \
+                                  ENearestNeighbors(m, e).run()
+        m = self.data['shortest_path_method'] == 'fw' and \
+            FloydWarshall(self._nearest_neighbors).run() or \
+            AllPairsDijkstra(self._nearest_neighbors).run()
 
         # Create distance matrix from neighbor map.
         dissimilarities = np.zeros((instances_count, instances_count))
 
-        for node, links in m.items():
-            for neighbor, distance in links.items():
-                dissimilarities[node, neighbor] = distance
+        for node, edges in m.items():
+            for neighbor, dissimilarity in edges.items():
+                dissimilarities[node, neighbor] = dissimilarity
 
-        mds = MDS(n_components=self.data['n_components'])
-        answer = mds.transform_dissimilarities(dissimilarities)
-        self.data['mds'] = mds
+        self._mds = MDS(n_components=self.data['n_components'])
+        self._mds.transform_dissimilarities(dissimilarities)
+        self.embedding = self._mds.embedding
 
         print('Isomap took %.2f s.' % (time.time() - start))
-        return answer
+        return self.embedding
+
+    @property
+    def stress(self):
+        """Calculates Isomap's stress according to L Shi and J. Gu's paper
+        "A Fast Manifold Learning Algorithm".
+
+        Returns
+        -------
+
+        Stress, float in the interval [0, 1], where 0 is the best possible fit and 1 is the worse.
+        """
+        assert self.embedding is not None, 'Cannot calculate stress from invalid embedding.'
+
+        if self._stress is None:
+            embedding_dissimilarities = EuclideanDistancesFromDataSet(self.embedding).run()
+
+            d, d2 = 0, 0
+
+            for node, edges in self._nearest_neighbors.items():
+                for neighbor, dissimilarity in edges.items():
+                    d += np.power(dissimilarity - embedding_dissimilarities[node][neighbor], 2)
+                    d2 += np.power(dissimilarity, 2)
+
+            self._stress = np.sqrt(d / d2)
+
+        return self._stress
+
+    def dispose(self):
+        super().dispose()
+        del self._mds, self._nearest_neighbors
+
+        return self

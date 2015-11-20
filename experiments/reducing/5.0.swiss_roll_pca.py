@@ -4,7 +4,7 @@ from experiments.base import ReductionExperiment
 
 
 class ReducingSwissRollExperiment(ReductionExperiment):
-    title = '4. Reducing The Swiss-roll with a PCA'
+    title = 'Reducing The Swiss-roll with a PCA'
 
     def _run(self):
         samples = 10000
