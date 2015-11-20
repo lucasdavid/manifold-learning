@@ -256,16 +256,16 @@ $$
 	For a random variate $X$, $var(X) = \sigma(X, X)$.
 \end{remark}
 
-\paragraph{Covariance Matrix of Features in a Data Set}
+\paragraph{Covariance Matrix of Features in a Centered Data Set}
 
-For a data set $D$, where its {\em i-th} feature column is represented by $D_{\_i}$, the covariance between each one of its features can be represented by the matrix:
+Let $D$ be a data set, $H$ the centering matrix and $HD_{\_i}$ the {\em i-th} feature column of the centered data set $HD$, the covariance between each one of its features can be represented by the matrix:
 \begin{align*}
 \Sigma &= [\sigma_{xy}]_{n \times n} \\
 &= \begin{bmatrix}
-\sigma(D_{\_0}, D_{\_0}) & \sigma(D_{\_0}, D_{\_1}) & \cdots & \sigma(D_{\_0}, D_{\_n-1}) \\
-\sigma(D_{\_1}, D_{\_0}) & \sigma(D_{\_1}, D_{\_1}) & & \sigma(D_{\_1}, D_{\_n-1}) \\
+\sigma(HD_{\_0}, HD_{\_0}) & \sigma(HD_{\_0}, HD_{\_1}) & \cdots & \sigma(HD_{\_0}, HD_{\_n-1}) \\
+\sigma(HD_{\_1}, HD_{\_0}) & \sigma(HD_{\_1}, HD_{\_1}) & & \sigma(HD_{\_1}, HD_{\_n-1}) \\
 \vdots &&& \vdots \\
-\sigma(D_{\_n-1}, D_{\_0}) & \sigma(D_{\_n-1}, D_{\_1}) & \cdots & \sigma(D_{\_n-1}, D_{\_n-1})
+\sigma(HD_{\_n-1}, HD_{\_0}) & \sigma(HD_{\_n-1}, HD_{\_1}) & \cdots & \sigma(HD_{\_n-1}, D_{\_n-1})
 \end{bmatrix} \\
 &= \frac{1}{n} (HD)^T HD \\
 &= \frac{1}{n} D^T H^T H D \\
@@ -285,15 +285,19 @@ Let $X$ and $Y$ be two random variables, $r(X, Y)$, i.e., the correlation betwee
 
 where $\sigma_X$ and $\sigma_Y$ are the standard deviations of the variables $X$ and $Y$, respectively.
 
-\paragraph{Correlation Matrix of Features in a Data Set}
+\begin{remark}
+	If $X$ and $Y$ are two random variables and $\sigma(X, Y) = 1$, $X=Y$.
+\end{remark}
 
-For a data set $D$, where its {\em i-th} feature column is represented by $D_{\_i}$, the correlation between each one of its features can be represented by the matrix:
+\paragraph{Correlation Matrix of Features in a Centered Data Set}
+
+Let $D$ be a data set, $H$ the centering matrix and $HD_{\_i}$ the {\em i-th} feature column of the centered data set $HD$. The correlation between each one of its features can be represented by the matrix:
 \begin{align*}
 	corr(D) &= \begin{bmatrix}
-		\frac{\sigma(D_{\_0}, D_{\_0})}{\sigma_{D_{\_0}}^2} & \frac{\sigma(D_{\_0}, D_{\_1})}{\sigma_{D_{\_0}} \sigma_{D_{\_1}}} & \cdots & \frac{\sigma(D_{\_0}, D_{\_n-1})}{\sigma_{D_{\_0}} \sigma_{D_{\_n-1}}} \\
-		\frac{\sigma(D_{\_1}, D_{\_0})}{\sigma_{D_{\_1}} \sigma_{D_{\_0}}} & \frac{\sigma(D_{\_1}, D_{\_1})}{\sigma_{D_{\_1}}^2} & \cdots & \frac{\sigma(D_{\_1}, D_{\_n-1})}{\sigma_{D_{\_1}} \sigma_{D_{\_n-1}}} \\
-		\vdots &&& \vdots \\
-		\frac{\sigma(D_{\_n-1}, D_{\_0})}{\sigma_{D_{\_n-1}} \sigma_{D_{\_0}}} & \frac{\sigma(D_{\_n-1}, D_{\_1})}{\sigma_{D_{\_n-1}} \sigma_{D_{\_1}}} & \cdots & \frac{\sigma(D_{\_n-1}, D_{\_n-1})}{\sigma_{D_{\_n-1}}^2}
+		1 & \frac{\sigma(HD_{\_0}, HD_{\_1})}{\sigma_{HD_{\_0}} \sigma_{HD_{\_1}}} & \cdots & \frac{\sigma(HD_{\_0}, HD_{\_n-1})}{\sigma_{HD_{\_0}} \sigma_{HD_{\_n-1}}} \\
+		\frac{\sigma(HD_{\_1}, HD_{\_0})}{\sigma_{HD_{\_1}} \sigma_{HD_{\_0}}} & 1 & \cdots & \frac{\sigma(HD_{\_1}, HD_{\_n-1})}{\sigma_{HD_{\_1}} \sigma_{HD_{\_n-1}}} \\
+		\vdots & \vdots && \vdots \\
+		\frac{\sigma(HD_{\_n-1}, HD_{\_0})}{\sigma_{HD_{\_n-1}} \sigma_{HD_{\_0}}} & \frac{\sigma(HD_{\_n-1}, HD_{\_1})}{\sigma_{HD_{\_n-1}} \sigma_{HD_{\_1}}} & \cdots & 1
 	\end{bmatrix}
 \end{align*}
 
@@ -634,11 +638,19 @@ The implications of such fact will be discussed in the next section.
 
 "The kernel function represent the dot product of both vectors projected onto the new space". \cite{mitsvm}
 
-Some data sets are not linearly separable, as mentioned in a few sections above. They can, however, be projected to a different vector space, where they hopefully will be. To achieve this, a transformation $\phi$ is applied on both vectors. The dot product between those is then calculated in the new space and the value is used during training (the maximizing $L$) and prediction (the decision rule). Practically, let $k(u, v) \coloneqq f: (\mathbb{R}^n, \mathbb{R}^n) \rightarrow \mathbb{R} \mid k(u, v) = \phi(u) \cdot \phi(v)$,
-
+Some data sets are not linearly separable, as mentioned in a few sections above. They can, however, be projected to a different vector space, where they hopefully will be. To achieve this, a transformation $\phi$ is applied on both vectors. The dot product between those is then calculated in the new space and the value is used during training (the maximizing $L$) and prediction (the decision rule):
 \begin{gather*}
-L = \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j k(x_i, x_j)
+L = \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j \phi(x_i) \cdot \phi(x_j)
 \end{gather*}
+
+\begin{remark}
+	Practically, Let $k: (\mathbb{R}^n, \mathbb{R}^n) \rightarrow \mathbb{R} \mid k(u, v) = \phi(u) \cdot \phi(v)$,
+	\begin{gather*}
+	L = \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j k(x_i, x_j)
+	\end{gather*}
+	
+	Given a known function $k$, there is no need to explicitly know which are the projections of $x_i$ and $x_j$ onto the new vector space. This is commonly known as the \textbf{kernel trick}.
+\end{remark}
 
 $$\text{\textbf{decision rule}} \begin{cases}
 \sum\alpha_i y_i k(x_i, u) +b \geq 0 \implies y_u=+1\\
@@ -720,14 +732,14 @@ Grid Search is a traditional method used to find the parameters that optimize th
 
 \paragraph{Coffee Selling Rate}
 
-The figure bellow illustrates a data set which express the relationship between the variables \textbf{time of day} and the \textbf{selling rate} of coffee in a particular coffee-shop. Clearly being a regression problem, a machine learning algorithm must create a model that appropriately generalizes the distribution observed. Such model will eventually be used to predict the selling rate in the following days.
+The figure bellow illustrates the distribution of coffee sales per time of the day in a particular coffee-shop. \cite{roh2015} Clearly being a regression problem, a machine learning algorithm must create a model that appropriately generalizes the distribution observed. Such model will eventually be used to predict the selling rate in the following days.
 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
 
 	\includegraphics[scale=.6]{rohrer2015}
-	\caption{graphic representation of a data set generalization by a linear (orange) and a nonlinear model (green)}
+	\caption{graphic representation of a data set generalization by a linear (orange) and a nonlinear model (green).}
 	\label{fig:rohrer2015}
 \end{figure}
 
@@ -970,8 +982,8 @@ This section reports the performance of classifiers and regressors over determin
 	\item Grid Search was executed over the original data set.
 	\item for $d \in D \subset \mathbb{N} \mid d \in D \implies d < m$:
 	\begin{enumerate}
-		\item The $d$-dimensional embedding $X_d$ of $X$ was calculated.
-		\item Grid Search was executed over $X_d$.
+		\item The $d$-dimensional embedding $Y$ of $X$ was calculated.
+		\item Grid Search was executed over $Y$.
 	\end{enumerate}
 \end{enumerate}
 
@@ -1084,19 +1096,19 @@ The table bellow describes a regression attempt over the data sets illustrated i
 	\centering
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
-		& \textbf{Original data} & \textbf{Reduced ($\mathbb{R}^3$)} & \textbf{Reduced ($\mathbb{R}^2$)} & \textbf{Reduced ($\mathbb{R}^1$)} \\\hline
-		\textbf{Accuracy} & 1. & .68 & .54 \\\hline
-		\textbf{GS time}  & 3.84 s & 2.26 s & 3.26 s \\\hline
-		\textbf{Reduction time} & - & 0.00 ms & 0.00 ms \\\hline
-		\textbf{Stress} & - & .1594 & .4218 & .5405 & .7092 \\\hline		
-		\textbf{Data size} & 23.44 KB & 15.62 KB  & 7.81 KB \\\hline
+		& \textbf{Original data} & \textbf{Reduc. ($\mathbb{R}^3$)} & \textbf{Reduc. ($\mathbb{R}^2$)} & \textbf{Reduc. ($\mathbb{R}^1$)} \\\hline
+		\textbf{Accuracy} & 1. & 1. & .68 & .54 \\\hline
+		\textbf{GS time}  & 10.98 s & 10.48 s & 5.20 s & 2.59 s \\\hline
+		\textbf{Reduc. time} & - & 0.038 s & 0.038 s & 0.035 s \\\hline
+		\textbf{Stress} & - & 0 & .2788 & .5271 \\\hline		
+		\textbf{Data size} & 23.44 KB & 23.44 KB & 15.62 KB  & 7.81 KB \\\hline
 	\end{tabular}
 
 	\captionsetup{justification=centering}
 	\caption{Regression accuracy and reduction performance for the Swiss-roll data set.}
 \end{table}
 
-Clearly, linear dimensionality reduction techniques are not adequate to reduce the Swiss-roll, nor any other nonlinear manifold.
+Clearly, linear dimensionality reduction techniques are not adequate to reduce the Swiss-roll. In fact, it is not adequate to reduce any data set lying on a nonlinear manifold.
 
 \subsection{The Isomap Algorithm}
 
@@ -1152,6 +1164,7 @@ Finally, $M$ is a euclidean graph which roughly lies on a hyperplane. Furthermor
 	\end{subfigure}
 \end{figure}
 
+\newpage
 \subsubsection{Formalization of the Isomap Algorithm}
 
 Let $X$ be the original data set and $p \in \mathbb{R}$ the number of dimensions desired for the reduced data set, \cite{ten2000}
@@ -1221,18 +1234,35 @@ In practice, Isomap's time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ makes 
 	The implemented Isomap required almost 30 minutes to reduce Spam.
 	Surprisingly, scikit-learn's implementation executed incredibly fast. A set of factors contribute for this result:
 
-	% TODO Talk about Kernel PCA.
 	\begin{itemize}
 		\item \textbf{Ball Tree} is used for efficient neighbor search (requiring only $O(f n \log k \log n)$ time steps).
 		\item Many components in scikit-learn have python signatures, but are actually implemented in C, considerably increasing performance.
+		\item Isomap is implemented as a kernel for the \textbf{KernelPCA} method. Further investigation is done in section \ref{sec:isomap_extensions}.
 	\end{itemize}
 	
 \end{experiment}
 
 \subsubsection{Extensions}
+\label{sec:isomap_extensions}
 
+\paragraph{Isomap as a variation of KernelPCA}
 
-\subsubsection{Applicability and Limitations of Isomap}
+% TODO This description needs extensive refactoring.
+Kernel PCA is out of the scope of this project. However, its intuitive idea should be mentioned: whereas ``classic" PCA will find the principal components of the covariance matrix $\Sigma = \frac{1}{n} X^T X = \frac{1}{n} \sum_k x_{ik} \cdot x_{kj}, \forall (i, j) \in [0, |S|]$ of a centered data set $X$, KernelPCA will attempt to do the same, but over the matrix $\Sigma' = \frac{1}{n} \sum_i \phi(x)_i \cdot \phi(y)_i$, where $\phi \colon \mathbb{R}^f \to \mathbb{R}^p$ is a kernel function that projects points in the original $f$-space to a different $p$-space.
+
+In his paper, Ghodsi describes how Isomap can be interpreted as the Kernel PCA method: \cite{gho2006}
+\begin{align*}
+K_{Isomap} = -\frac{1}{n}H \delta^2 H
+\end{align*}
+
+Where $H \delta H$ is the double centered dissimilarity matrix, i.e, the double centered geodesic distances between samples found from the shortest-path graph.
+
+\paragraph{Landmark Isomap}
+
+% TODO Fill this paragraph.
+...
+
+\subsubsection{Applicability and Limitations}
 
 The experiments in the previous section made it quite clear that Isomap outperforms PCA on the selected data sets. Unfortunately, this trend cannot be projected for a generic case considering our experiments were strictly controlled. In real-world data sets, the application of Isomap may lead to poor low-dimensional embeddings. \cite{herik2009} Bellow are listed some the issues that have great influence over Isomap's results:
 \begin{description}
