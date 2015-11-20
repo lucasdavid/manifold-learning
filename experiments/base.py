@@ -3,7 +3,7 @@ import multiprocessing
 import time
 import numpy as np
 from scipy.spatial import distance
-from sklearn import grid_search, decomposition, svm, manifold
+from sklearn import decomposition, svm, manifold, model_selection
 from manifold.infrastructure import Displayer
 from manifold.infrastructure.base import kruskal_stress
 from manifold.learning.algorithms import Isomap, MDS
@@ -49,7 +49,7 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
 
         start = time.time()
 
-        self.grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=-1)
+        self.grid = model_selection.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=-1)
         self.grid.fit(self.data, self.target)
 
         print('\tAccuracy: %.2f' % self.grid.best_score_)

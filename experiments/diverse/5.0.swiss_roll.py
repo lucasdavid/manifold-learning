@@ -1,4 +1,5 @@
-from sklearn import datasets, svm, preprocessing
+from sklearn import datasets, svm
+
 from experiments.base import ReductionExperiment, LearningExperiment
 
 
