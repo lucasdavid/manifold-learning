@@ -45,16 +45,16 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
     ]
 
     def learn(self):
+        print('Learning...')
+
         start = time.time()
-        print('GridSearch started at %s...' % start)
 
         self.grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=-1)
         self.grid.fit(self.data, self.target)
 
-        print('\tAccuracy: %.2f\n'
-              '\tTime elapsed: %.2f s\n'
-              '\tBest parameters: %s\n'
-              % (self.grid.best_score_, time.time() - start, self.grid.best_params_))
+        print('\tAccuracy: %.2f' % self.grid.best_score_)
+        print('\tBest parameters: %s' % self.grid.best_params_)
+        print('Done. (%.6f s)\n' % (time.time() - start))
 
 
 class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
@@ -68,7 +68,9 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
     }
 
     def reduce(self):
-        assert self.reduction_method in ('pca', 'mds', 'isomap', 'skisomap'), 'Unknown reduction method.'
+        assert self.reduction_method in ('pca', 'mds', 'isomap', 'skisomap'), 'Error: unknown reduction method.'
+
+        print('Reducing...')
 
         to_dimension = self.reduction_params['to_dimension'] if 'to_dimension' in self.reduction_params else \
             self.reduction_params['n_components'] if 'n_components' in self.reduction_params else \
@@ -76,7 +78,6 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
 
         data = self.original_data
 
-        print('Dimensionality reduction process has started.')
         print('\tMethod: %s' % self.reduction_method)
         print('\tR^%i --> R^%i' % (data.shape[1], to_dimension))
 
@@ -99,13 +100,13 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             self.data = self.reducer.transform(data)
 
         if self.reduction_method in ('mds', 'isomap'):
-            print('\tstress: %.4f' % self.reducer.stress)
+            print('\tstress: %f' % self.reducer.stress)
         else:
-            print('\tstress: %.4f' % kruskal_stress(
+            print('\tstress: %f' % kruskal_stress(
                 distance.squareform(distance.pdist(self.original_data)),
                 distance.squareform(distance.pdist(self.data))))
 
-        print('\tsize: %.2f KB' % (self.data.nbytes / 1024))
-        print('done (%.2f s).\n' % (time.time() - start))
+        print('\tsize: %f KB' % (self.data.nbytes / 1024))
+        print('Done. (%.6f s)\n' % (time.time() - start))
 
         self.displayer.load(self.data, self.target)
