@@ -923,7 +923,7 @@ B_{rs} = x_r\cdot x_s = -\frac{1}{2} (\delta_{rs}^2 - \frac{1}{n} [\sum_s \delta
 \end{split}
 \end{align}
 
-From \ref{eq:mds-defb}, it becomes clear that $B$ is, in fact, the double centering of the matrix $A=-\frac{1}{2}\delta^2$. I.e., $B=HAH$. Singular value decomposition can now be performed onto $B$, resulting in the matrices $U$ and $\Sigma$.
+From \ref{eq:mds-defb}, it becomes clear that $B$ is, in fact, the double centering of the matrix $A=-\frac{1}{2}\delta^2$. I.e., $B=HAH$. Spectral decomposition can now be performed onto $B$, resulting in the matrices $\Sigma$ and $U$.
 
 Finally, we can sort the eigenvalues (and their respective eigenvectors, the columns of $U$) in decrease order and keep only the ones that offer greater variance.
 
@@ -953,7 +953,6 @@ ultimately determine whether the fit of a particular MDS solution is acceptable 
 
 Although the factors that determine what is a ``good" reduction are strongly influenced by particularities of the problem in hand, some measures were developed to attempt to somehow formalize it. One in particular, which recurrently appears in literature, is known as the \textbf{Kruskal's stress}.
 
-% TODO Improve this description.
 Intuitively, Kruskal's stress \cite{naes1996multivariate} considers reductions that preserve dissimilarities between samples a better fit that the ones which highly distort them. Formally, let $X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $Y_{n \times p}$ its reduction to $p$ dimensions, and the dissimilarity measurements $\delta_{ij}$ and $\hat{\delta}_{ij}$ defined for all samples $i$ and $j$ in $X$ and $Y$, respectively:
 \begin{align*}
 	Stress &= [\frac{\sum_i \sum_j (\delta_{ij} - \hat{\delta}_{ij})^2}{\sum_i \sum_j \delta_{ij}^2}]^{\frac{1}{2}}
@@ -996,12 +995,15 @@ The figure bellow illustrates the results of PCA algorithm application over the 
 		& \textbf{Original data} & \textbf{Reduced data ($\mathbb{R}^2$)} & \textbf{Reduced data ($\mathbb{R}$)} \\\hline
 		\textbf{Pred. accuracy} & .98 & .98 & .99 \\\hline
 		\textbf{GridSearch time} & 1.15 s & .84 s & 1.26 s \\\hline
-		\textbf{Reduction time} & $-$ & 0.995 ms & 1.118 ms \\\hline
+		\textbf{Reduction time} & - & 0.995 ms & 1.118 ms \\\hline
+		\textbf{Stress} & - & 0 & .0399 \\\hline
 		\textbf{Data size} & 15.62 KB & 15.62 KB & 7.81 KB \\\hline
 	\end{tabular}
 
 	\caption{Description of predictions and reduction performance for $K$.}
 \end{table}
+
+From the table above, one can also observe how Kruskal's stress might not be an appropriate quality measurement, given a specific domain. Indeed, for data set $K$, stress increase resulted from the removal of one of the components did not imply on prediction accuracy decrease.
 
 \subsubsection{The Iris Flower Data Set}
 
@@ -1024,7 +1026,8 @@ The Iris flower being reduced from 4 to 2 features. Although the data set became
 		& \textbf{Original data} & \textbf{Reduced data ($\mathbb{R}^2$)} & \textbf{Reduced data ($\mathbb{R}$)} \\\hline
 		\textbf{Pred. accuracy} & .99 & .97 & .94 \\\hline
 		\textbf{GridSearch time} & 1.71 s & 1.64 s & 1.78 s \\\hline
-		\textbf{Reduction time} & $-$ & 0.995 ms & 1.118 ms \\\hline
+		\textbf{Reduction time} & - & 0.995 ms & 1.118 ms \\\hline
+		\textbf{Stress} & - & .0418 & .1095 \\\hline
 		\textbf{Data size} & 4.68 KB & 2.34 KB & 1.17 KB \\\hline
 	\end{tabular}
 
@@ -1050,14 +1053,15 @@ Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sa
 		& \textbf{$\mathbb{R}^{64}$} & \textbf{$\mathbb{R}^{10}$} & \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
 		\textbf{Pred. accuracy}   & .98 & .95 & .74 & .64 & .39 \\\hline
 		\textbf{GridSearch time} & 8.51 s & 21.33 s & 151.04 s & 132.18 s & 113.78 s \\\hline
-		\textbf{Reduction time} & $-$ & 0.02 s & 0.01 s & 0.01 s & 0.01 s \\\hline
-			\textbf{Data size} & 898.5 KB & 140.39 KB & 42.11 KB & 28.07 KB & 14.03 KB \\\hline
+		\textbf{Reduction time} & - & 0.02 s & 0.01 s & 0.01 s & 0.01 s \\\hline
+		\textbf{Stress} & - & .1594 & .4218 & .5405 & .7092 \\\hline
+		\textbf{Data size} & 898.5 KB & 140.39 KB & 42.11 KB & 28.07 KB & 14.03 KB \\\hline
 	\end{tabular}
 
 	\caption{Description of predictions and reduction performance for Digits.}
 \end{table}
 
-Notice that it was possible to eliminate 54 dimensions, consistently reducing the data set size, and only suffering 3\% of prediction accuracy loss. The score drastically decreased, however, when more dimensions were removed.
+Notice that it was possible to eliminate 54 dimensions, consistently reducing the data set size, and only suffering 3\% of prediction accuracy loss. The score drastically decreased, however, when more dimensions were removed. Furthermore, accuracy decrease was followed by stress increase.
 
 \section{Nonlinear Dimensionality Reduction}
 
@@ -1080,10 +1084,11 @@ The table bellow describes a regression attempt over the data sets illustrated i
 	\centering
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
-		& \textbf{Original data} & \textbf{Reduced ($\mathbb{R}^2$)} & \textbf{Reduced ($\mathbb{R}^1$)} \\\hline
+		& \textbf{Original data} & \textbf{Reduced ($\mathbb{R}^3$)} & \textbf{Reduced ($\mathbb{R}^2$)} & \textbf{Reduced ($\mathbb{R}^1$)} \\\hline
 		\textbf{Accuracy} & 1. & .68 & .54 \\\hline
 		\textbf{GS time}  & 3.84 s & 2.26 s & 3.26 s \\\hline
-		\textbf{Reduction time} & $-$ & 0.00 ms & 0.00 ms \\\hline
+		\textbf{Reduction time} & - & 0.00 ms & 0.00 ms \\\hline
+		\textbf{Stress} & - & .1594 & .4218 & .5405 & .7092 \\\hline		
 		\textbf{Data size} & 23.44 KB & 15.62 KB  & 7.81 KB \\\hline
 	\end{tabular}
 
@@ -1312,7 +1317,7 @@ Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, clas
 		& \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
 		\textbf{Prediction accuracy}   & 1            & 1             & 1     \\\hline
 		\textbf{GridSearch time} & 15.53 s   & 415.72 s  & 387.98 s  \\\hline
-		\textbf{Reduction time}  & $-$         & 0.51 s       & 0.48 s     \\\hline
+		\textbf{Reduction time}  & -         & 0.51 s       & 0.48 s     \\\hline
 		\textbf{Data size}          & 23.44 KB & 15.62 KB  & 7.81 KB   \\\hline
 	\end{tabular}
 
@@ -1338,7 +1343,7 @@ We will analyze Digits once again, only this time it will be reduced with the Is
 		& \textbf{$\mathbb{R}^{64}$} & \textbf{$\mathbb{R}^{10}$} & \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
 		\textbf{Pred. accuracy}   & .98 & .96 & .91 & .69 & .45 \\\hline
 		\textbf{GridSearch time} & 12.22 s & 98.08 s & 287.46 s & 630.47 s & 949.88 s \\\hline
-		\textbf{Reduction time}  & $-$ & 5.43 s & 2.72 s & 2.71 s & 2.04 s \\\hline
+		\textbf{Reduction time}  & - & 5.43 s & 2.72 s & 2.71 s & 2.04 s \\\hline
 		\textbf{Data size} & 898.50 KB & 140.39 KB & 42.12 KB & 28.08 KB & 14.04 KB \\\hline
 	\end{tabular}
 
@@ -1366,7 +1371,7 @@ Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 
 		& \textbf{$\mathbb{R}^{7129}$} & \textbf{$\mathbb{R}^{30}$} & \textbf{$\mathbb{R}^{20}$} & \textbf{$\mathbb{R}^{10}$} \\\hline
 		\textbf{Pred. accuracy}    & .99 & .88 & .85 & .88 \\\hline
 		\textbf{GridSearch time}   & 2.42 s & .26 s & .26 s & 141.13 s \\\hline
-		\textbf{Reduction time}    & $-$ & .06 s & .04 s & .04 s \\\hline
+		\textbf{Reduction time}    & - & .06 s & .04 s & .04 s \\\hline
 		\textbf{Data size}         & 4010.06 KB & 16.88 KB & 11.25 KB & 5.62 KB \\\hline
 	\end{tabular}
 	\captionsetup{justification=centering}	
