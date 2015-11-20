@@ -3,7 +3,7 @@ import numpy as np
 import networkx as nx
 import time
 from scipy.spatial import distance
-from ..infrastructure.base import Task, EuclideanDistancesFromDataSet, Reducer
+from ..infrastructure.base import Task, EuclideanDistancesFromDataSet, Reducer, kruskal_stress
 
 
 class INearestNeighbors(Task, metaclass=abc.ABCMeta):
@@ -175,9 +175,9 @@ class MDS(Reducer):
         assert self.embedding is not None, 'Cannot calculate stress of invalid embedding.'
 
         if self._stress is None:
-            delta = self.data['data']
-            dissimilarity_differences = np.power(delta - distance.squareform(distance.pdist(self.embedding)), 2).sum()
-            self._stress = np.sqrt(dissimilarity_differences / np.power(delta, 2).sum())
+            d_x = self.data['data']
+
+            self._stress = kruskal_stress(d_x, distance.squareform(distance.pdist(self.embedding)))
 
         return self._stress
 

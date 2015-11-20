@@ -1,7 +1,8 @@
 import abc
 import copy
-
 import time
+
+import numpy as np
 from scipy.spatial.distance import pdist
 
 
@@ -71,3 +72,20 @@ class Reducer(Task, metaclass=abc.ABCMeta):
         del self.embedding, self._stress
 
         return self
+
+
+def kruskal_stress(d_x, d_y):
+    """Calculates Kruskal's stress.
+
+    Parameters
+    ----------
+    d_x numpy matrix, the dissimilarities between the objects in data set X.
+    d_y numpy matrix, the dissimilarities between the objects in data set Y.
+
+    Returns
+    -------
+
+    Stress, float in the interval [0, 1], where 0 is the best possible fit and 1 is the worse.
+    """
+    return np.sqrt(np.power(d_x - d_y, 2).sum()
+                   / np.power(d_x, 2).sum())
