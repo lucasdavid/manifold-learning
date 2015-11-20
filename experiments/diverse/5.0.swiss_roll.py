@@ -1,5 +1,4 @@
-from sklearn import datasets, svm
-
+from sklearn import datasets, svm, preprocessing
 from experiments.base import ReductionExperiment, LearningExperiment
 
 
@@ -25,12 +24,13 @@ class SwissRollPCAExperiment(ReductionExperiment, LearningExperiment):
             self.reduce()
             self.learn()
 
+        self.displayer.show()
+
     def load_data(self):
-        swiss_roll, swiss_roll_colors = datasets.make_swiss_roll(n_samples=self.samples, random_state=0)
-        self.data, self.target = swiss_roll, swiss_roll_colors
+        self.data, self.target = datasets.make_swiss_roll(n_samples=self.samples, random_state=0)
         self.original_data = self.data
 
-        self.displayer.load(swiss_roll, swiss_roll_colors, title='Swiss-roll')
+        self.displayer.load(self.data, self.target, title='Swiss-roll')
 
         print('Data set size: %.2fKB' % (self.data.nbytes / 1024))
 

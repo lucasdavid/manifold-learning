@@ -1,10 +1,11 @@
 import abc
 import multiprocessing
 import time
-
+import numpy as np
+from scipy.spatial import distance
 from sklearn import grid_search, decomposition, svm, manifold
-
 from manifold.infrastructure import Displayer
+from manifold.infrastructure.base import kruskal_stress
 from manifold.learning.algorithms import Isomap, MDS
 
 
@@ -47,8 +48,7 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
         start = time.time()
         print('GridSearch started at %s...' % start)
 
-        self.grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters,
-                                             n_jobs=multiprocessing.cpu_count())
+        self.grid = grid_search.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=-1)
         self.grid.fit(self.data, self.target)
 
         print('\tAccuracy: %.2f\n'
@@ -100,9 +100,12 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
 
         if self.reduction_method in ('mds', 'isomap'):
             print('\tstress: %.4f' % self.reducer.stress)
+        else:
+            print('\tstress: %.4f' % kruskal_stress(
+                distance.squareform(distance.pdist(self.original_data)),
+                distance.squareform(distance.pdist(self.data))))
 
         print('\tsize: %.2f KB' % (self.data.nbytes / 1024))
-        print('Done (%.2f s).' % (time.time() - start))
+        print('done (%.2f s).\n' % (time.time() - start))
 
-        if self.plotting:
-            self.displayer.load(self.data, self.target)
+        self.displayer.load(self.data, self.target)
