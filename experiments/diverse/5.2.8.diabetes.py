@@ -15,7 +15,7 @@ class DiabetesIsomapExperiment(ReductionExperiment, LearningExperiment):
     reduction_params = {'k': 7}
 
     learning_parameters = {
-        'kernel': ('linear',), 'C': (1,)
+        'kernel': ('poly',), 'C': (1,), 'degree': (2, 3,)
     }
 
     def _run(self):

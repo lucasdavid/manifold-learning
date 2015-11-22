@@ -45,9 +45,9 @@ class NoisySwissRollIsomapExperiment(ReductionExperiment):
             if self.plotting:
                 self.displayer.aspect = (10, 70)
                 self.displayer.show().dispose()
-                self.draw_nearest_neighbor_graph_found()
+                self.plot_nearest_neighbors_graph()
 
-    def draw_nearest_neighbor_graph_found(self):
+    def plot_nearest_neighbors_graph(self):
         d = algorithms.EuclideanDistancesFromDataSet(self.original_data).run()
         e = algorithms.KNearestNeighbors(d, alpha=10).run()
         g = nx.Graph(e)
