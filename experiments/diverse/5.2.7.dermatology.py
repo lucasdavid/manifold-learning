@@ -26,8 +26,6 @@ class DermatologyIsomapExperiment(ReductionExperiment, LearningExperiment):
         self.displayer.save(self.title)
 
     def load_data(self):
-        r = Retriever(self.file, delimiter=',')
-        r.split_column(0)
         data = np.genfromtxt(self.file, missing_values='?', delimiter=',')
 
         # Handle missing values by replacing them by the mean.

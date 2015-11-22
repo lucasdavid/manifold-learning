@@ -33,7 +33,10 @@ class LeukemiaExperiment(ReductionExperiment, LearningExperiment):
         self.data, self.target = leukemia.data, leukemia.target
         self.original_data = self.data
 
-        self.displayer.load(self.data[:, 1:4], self.target)
+        self.displayer \
+            .load(self.data[:, 1:4], self.target) \
+            .save('datasets/leukemia') \
+            .dispose()
 
         print('Shape: %s' % str(self.data.shape))
         print('Data set size: %.2fKB' % (self.data.nbytes / 1024))

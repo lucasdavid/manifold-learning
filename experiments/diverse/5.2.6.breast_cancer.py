@@ -1,5 +1,4 @@
 import numpy as np
-
 from experiments.base import LearningExperiment, ReductionExperiment
 from manifold.infrastructure import Retriever
 
@@ -37,7 +36,10 @@ class BreastCancerExperiment(LearningExperiment, ReductionExperiment):
         self.data, self.target = r.split_target(0).retrieve()
         self.data = self.data.astype(float)
 
-        self.displayer.load(self.data, self.target, 'Breast-cancer')
+        self.displayer \
+            .load(self.data, self.target, 'Breast-cancer') \
+            .save('datasets/breast_cancer') \
+            .dispose()
 
         print('Covariance matrix:')
         print(self.data.shape)

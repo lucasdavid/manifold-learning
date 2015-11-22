@@ -1,6 +1,5 @@
 import numpy as np
 from sklearn import datasets, svm
-
 from experiments.base import ReductionExperiment, LearningExperiment
 from manifold.infrastructure import Retriever
 
@@ -34,9 +33,13 @@ class DiabetesIsomapExperiment(ReductionExperiment, LearningExperiment):
         self.data, self.target = r.split_target().retrieve()
         self.original_data = self.data
 
-        self.displayer.load(self.data, self.target)
+        self.displayer \
+            .load(self.data, self.target) \
+            .save('datasets/diabetes') \
+            .dispose()
 
         print('Data set size: %.2f KB' % (self.data.nbytes / 1024))
+        print('Shape: %s' % str(self.data.shape))
         print('Correlation matrix:')
         print(np.corrcoef(self.data, rowvar=0))
 
