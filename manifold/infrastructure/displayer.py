@@ -1,11 +1,10 @@
-import math
 import datetime
+import math
 import os
 
-import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from sklearn.metrics import confusion_matrix
+import numpy as np
 
 
 class Displayer(object):
@@ -106,18 +105,3 @@ class Displayer(object):
         self.items = []
 
         return self
-
-    @classmethod
-    def confusion_matrix_for(cls, target_test, target_predicted, title='Confusion matrix'):
-        cm = confusion_matrix(target_test, target_predicted)
-        np.set_printoptions(precision=2)
-
-        plt.figure()
-        plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
-        plt.title(title)
-        plt.colorbar()
-        plt.tight_layout()
-        plt.ylabel('True label')
-        plt.xlabel('Predicted label')
-
-        plt.show()

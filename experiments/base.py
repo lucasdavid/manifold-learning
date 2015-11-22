@@ -1,12 +1,16 @@
 import abc
-import multiprocessing
 import time
+
+import matplotlib.pyplot as plt
+import networkx as nx
 import numpy as np
 from scipy.spatial import distance
 from sklearn import decomposition, svm, manifold, model_selection
+from sklearn.metrics import confusion_matrix
+
 from manifold.infrastructure import Displayer
 from manifold.infrastructure.base import kruskal_stress
-from manifold.learning.algorithms import Isomap, MDS
+from manifold.learning.algorithms import Isomap, MDS, EuclideanDistancesFromDataSet, KNearestNeighbors
 
 
 class Experiment(metaclass=abc.ABCMeta):
@@ -42,17 +46,38 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
         {'C': (1, 10, 100, 1000), 'gamma': (.001, .01, .1, 1, 10), 'kernel': ('rbf', 'sigmoid')}
     ]
 
+    test_after_train = False
+    test_size = .2
+
     def learn(self):
         print('Learning...')
 
         start = time.time()
 
-        self.grid = model_selection.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=-1)
-        self.grid.fit(self.data, self.target)
+        X1, X2, y1, y2 = model_selection.train_test_split(self.data, self.target, test_size=self.test_size) \
+                             if self.test_after_train \
+                             else self.data, None, self.target, None
 
-        print('\tAccuracy: %.2f' % self.grid.best_score_)
+        self.grid = model_selection.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=-1)
+        self.grid.fit(X1, y1)
+
+        print('\tGrid accuracy: %.2f' % self.grid.best_score_)
         print('\tBest parameters: %s' % self.grid.best_params_)
         print('Done. (%.6f s)\n' % (time.time() - start))
+
+        if self.test_after_train:
+            y2_predicted = self.grid.predict(X2)
+            cm = confusion_matrix(y2, y2_predicted)
+            np.set_printoptions(precision=2)
+
+            plt.figure()
+            plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+            plt.colorbar()
+            plt.tight_layout()
+            plt.ylabel('True label')
+            plt.xlabel('Predicted label')
+
+            plt.show()
 
 
 class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
@@ -64,6 +89,8 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
         'k': 4,
         'n_components': 3
     }
+
+    verbose_reduction = True
 
     def reduce(self):
         assert self.reduction_method in ('pca', 'mds', 'isomap', 'skisomap'), 'Error: unknown reduction method.'
@@ -86,7 +113,7 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             self.data = self.reducer.fit_transform(data)
 
         elif self.reduction_method == 'mds':
-            self.reducer = MDS(**self.reduction_params)
+            self.reducer = MDS(verbose=self.verbose_reduction, **self.reduction_params)
             self.data = self.reducer.transform(data)
 
         elif self.reduction_method == 'skisomap':
@@ -94,7 +121,7 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             self.data = self.reducer.fit_transform(data)
 
         else:
-            self.reducer = Isomap(**self.reduction_params)
+            self.reducer = Isomap(verbose=self.verbose_reduction, **self.reduction_params)
             self.data = self.reducer.transform(data)
 
         if self.reduction_method in ('mds', 'isomap'):
@@ -108,3 +135,40 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
         print('Done. (%.6f s)\n' % (time.time() - start))
 
         self.displayer.load(self.data, self.target)
+
+    def plot_nearest_neighbors_graph(self, position='reduced'):
+        """Draw Nearest Neighbor Graph.
+
+        Parameters
+        ----------
+        position
+            The position of the samples in the data set.
+            Must be 'original' or 'reduced'.
+        """
+        assert position in ('original', 'reduced'), 'Unknown position %s.' % position
+        assert self.data is not None or position != 'reduced', \
+            'Position cannot be "reduced", as reduction has not been performed yet.'
+
+        print('Plotting Nearest Neighbors...')
+        print('\tposition: %s' % position)
+
+        d = EuclideanDistancesFromDataSet(self.original_data).run()
+        e = KNearestNeighbors(d, alpha=10).run()
+        g = nx.Graph(e)
+        del d, e
+
+        pos = {}
+
+        for n, location in enumerate(self.original_data if position == 'original' else self.data):
+            location = location[:2]
+
+            if location.shape[0] == 1:
+                location = np.array([location[0], 0])
+
+            pos[n] = location
+
+        nx.draw(g, pos=pos, node_size=40, node_color=self.target, alpha=.6,
+                width=1, edge_color='#cccccc', with_labels=False)
+
+        print('Done.')
+        plt.show()
