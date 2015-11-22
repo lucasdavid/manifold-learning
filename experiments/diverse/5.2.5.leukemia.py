@@ -3,7 +3,7 @@ from experiments.base import ReductionExperiment, LearningExperiment
 
 
 class LeukemiaExperiment(ReductionExperiment, LearningExperiment):
-    title = '9. Leukemia Example'
+    title = '5.2.5. Leukemia Isomap Experiment'
     plotting = True
 
     reduction_method = 'isomap'
@@ -29,7 +29,6 @@ class LeukemiaExperiment(ReductionExperiment, LearningExperiment):
         self.displayer.show()
 
     def load_data(self):
-        # Leuke
         leukemia = datasets.fetch_mldata('leukemia', transpose_data=True)
         self.data, self.target = leukemia.data, leukemia.target
         self.original_data = self.data

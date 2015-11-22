@@ -4,8 +4,8 @@ from experiments.base import LearningExperiment, ReductionExperiment
 from manifold.infrastructure import Retriever
 
 
-class BreatCancerExperiment(LearningExperiment, ReductionExperiment):
-    title = '3. Learning Breast-cancer'
+class BreastCancerExperiment(LearningExperiment, ReductionExperiment):
+    title = '5.2.6 Breast-cancer Isomap Experiment'
     plotting = True
 
     learning_parameters = [
@@ -44,4 +44,4 @@ class BreatCancerExperiment(LearningExperiment, ReductionExperiment):
 
 
 if __name__ == '__main__':
-    BreatCancerExperiment().start()
+    BreastCancerExperiment().start()

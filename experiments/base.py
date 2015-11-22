@@ -15,8 +15,6 @@ class Experiment(metaclass=abc.ABCMeta):
     _displayer = None
     plotting = False
 
-    exporting_path = '../report/img/experiments'
-
     @property
     def displayer(self):
         self._displayer = self._displayer or Displayer(plotting=self.plotting)
