@@ -81,7 +81,7 @@ Dr. Alexandre M. \textsc{Levada}
 
 \section{Abstract}
 
-This project aims to study the foundations of nonlinear dimensionality reduction with the algorithm known as Isometric Mapping (or simply Isomap) and observe the application of the algorithm in practical experiments.
+This project aims to study the foundations of nonlinear dimensionality reduction through manifold learning with the algorithm known as Isometric Mapping (or simply Isomap) and observe the application of the algorithm in practical experiments.
 
 The report is structured in the following way: it will first present and demonstrate important concepts related to dimensionality reduction. It will then study and demonstrate linear dimensionality reduction methods, as they are closely related to Isomap. Finally, Isomap will be covered, from its concept to limitations and extensions.
 
@@ -91,13 +91,13 @@ The experiments here presented were developed in a linux Ubuntu 15.10 64 bits, I
 
 \section{Introduction}
 
-Throughout the years, machine learning and pattern recognition techniques have grown popular between both academical and the corporative sectors. Their vast applications and promising results indubitably contributed to our current scenario where not only computer scientists or mathematicians, but engineers, psychologists and many other groups have taken interest on how to adapt and apply these studies to their own problems.
+Throughout the years, machine learning techniques have grown popular between both academical and the corporative sectors. Their vast applications and promising results \cite{brownlee} indubitably contributed to our current scenario where not only computer scientists or mathematicians, but engineers, psychologists and many other groups have taken interest \cite{baldi2001bioinformatics} on how to adapt and apply these studies to their own problems.
 
-Machine learning can help us to understand, analyze and process large amount of data and even take decisions based on it. The size of data, however, is not necessarily the predominant factor which dictates how machine learning models perform. We are, of course, interested in the information that lies within the data and how to efficiently extract it.
+Machine learning can help us to understand large amount of data and take decisions based on it. To achieve this, however, we must first find ways to effectively (and efficiently) extract the information that lies within the data.
 
-In the last 80 years, there were many different machine learning algorithms developed. Between those, many could successfully generalize low dimensional data. \cite{wang2012geometric} In the other hand, problems of our world are often too complex and may be represented by high dimensional data. For example, images, sounds or text documents can be expressed as vectors of the $\mathbb{R}^n$, where each element corresponds to a pixel, wave signal or character, respectively. When analyzing these problems, we observed that many of the algorithms would often become unstable. \textbf{Dimensionality reduction} (or DR) then quickly became a key concept for minimizing the data size while maintaining its meaning.
+Many different machine learning algorithms have been developed during the this and the last century. Between those, many could successfully generalize low dimensional data. \cite{wang2012geometric} In the other hand, problems of our world are often too complex and may be represented by high dimensional data. For example, images, sounds or text documents can be expressed as vectors of the $\mathbb{R}^n$, where each element corresponds to a pixel, wave signal or character, respectively. When analyzing these problems, we observed that many of the algorithms would often become unstable. \textbf{Dimensionality reduction} (or DR) then quickly became a key concept for minimizing the data size while maintaining its meaning.
 
-Finally, dimensionality reduction has evolved into an extensive area. Nowadays, DR is not only applied to data reduction, specifically, but often employed in order to improve visualization or as preprocessing step for noise reduction.
+Finally, dimensionality reduction has evolved into an extensive area. Nowadays, DR is not only applied to data reduction, specifically, but often employed in data visualization, noise reduction and for many other purposes.
 
 \newpage
 
@@ -111,7 +111,7 @@ For the scope of this work, the term data set is invariably associated with the 
 
 Succinctly, consider $S$ a sequence of samples and
 $F \coloneqq  \{f_i \mid f_i \textnormal{ is a set of symbols}\}$. Then, the dataset $D$ is defined as:
-$$D\coloneqq [d]_{ij} \mid d_{ij} \in f_j, \forall i \in [1, |S|], \forall j \in [1, |F|]$$
+$$D\coloneqq [d_{ij}] \mid d_{ij} \in f_j, \forall i \in [1, |S|], \forall j \in [1, |F|]$$
 
 \subsubsection{Example of a canonical data set} \label{irisdataset}
 
@@ -579,16 +579,16 @@ y_i(w \cdot x_i +b) -1 \geq 0
 Notice that $y_i(w \cdot x_i +b) -1 = 0 \iff x_i $ is a \textbf{support vector}.
 
 The width (the distance between the two margins) of the street is the vector $(x_+^0 -x_-^0)$ projected onto the vector $w$, where $x_-^0$ is a positive support vector and $x_+^0$ is a negative one.
-\begin{equation} \label{eqsvmwidth}
+\begin{equation} \label{eq:eqsvmwidth}
 \begin{split}
-width & = (x_+^0 - x_-^0) \cdot \frac{w}{\|w\|} \\
-      & =\frac{x_+^0 \cdot w - x_-^0 \cdot w}{\|w\|} \\
-      & =\frac{1-b - (-1-b)}{\|w\|} = \frac{2}{\|w\|}
+width &= (x_+^0 - x_-^0) \cdot \frac{w}{\|w\|} \\
+      &=\frac{x_+^0 \cdot w - x_-^0 \cdot w}{\|w\|} \\
+      &=\frac{1-b - (-1-b)}{\|w\|} = \frac{2}{\|w\|}
 \end{split}
 \end{equation}
 
 As the goal is to maximize the width, while still respecting the constraint (\ref{svmconst}).
-\begin{equation} \label{svmminw}
+\begin{equation} \label{eq:svmminw}
 	\max width = \max \frac{2}{\|w\|} \equiv \min \frac{1}{2} \|w\|^2
 \end{equation}
 
@@ -597,7 +597,6 @@ Which can be solved using standard quadratic programming.
 \paragraph{SVM for non-separable data sets (soft margins)}
 
 To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$, \cite{wessvmdef} which represent a trade-off between maximum margin/distance of the misclassified samples from the decision boundary.
-
 $$\min \frac{1}{2} \|w\|^2 + C \sum_{1}^{m}\xi_i \text{, constrained to:}$$
 $$y_i(w \cdot x_i +b) \geq 1- \xi_i, \xi_i \geq 0$$
 
@@ -605,17 +604,16 @@ Such trade-off can be adjusted through the parameter $C$. Notice that small valu
 
 \paragraph{Dependency over the dot product}
 
-By the Lagrange multipliers method: \cite{mitsvm}
-
-\begin{gather} \label{svmlag1}
-	L = \frac{1}{2}\|w\|^2 - \sum \alpha_i[y_i(w \cdot x_i +b) -1] \\
+Equation \ref{eq:svmminw} does not explicitly illustrates how the model generated depents on the dot product between the training samples. The implications of such fact will be discussed in the next section. For now, let us convert \ref{eq:svmminw} to its dual form. By the Lagrange multipliers method: \cite{mitsvm}
+\begin{align} \label{eq:svmlag1}
+	L &= \frac{1}{2}\|w\|^2 - \sum \alpha_i[y_i(w \cdot x_i +b) -1] \\
 	\label{svmlag2}
-	\frac{\partial L}{\partial w} = w -\sum\alpha_i y_i x_i = 0 \implies w = \sum\alpha_i y_i x_i \\
+	\frac{\partial L}{\partial w} &= w -\sum\alpha_i y_i x_i = 0 \implies w = \sum\alpha_i y_i x_i \\
 	\label{svmlag3}
-	\frac{\partial L}{\partial b} = -\sum\alpha_i y_i = 0 \implies \sum\alpha_i y_i = 0
-\end{gather}
+	\frac{\partial L}{\partial b} &= -\sum\alpha_i y_i = 0 \implies \sum\alpha_i y_i = 0
+\end{align}
 
-Applying (\ref{svmlag2}) and (\ref{svmlag3}) on (\ref{svmlag1}), our problem of minimizing (\ref{svmminw}) constrained by (\ref{svmconst}) becomes maximizing $L$, subject to (\ref{svmlag3}):
+Applying (\ref{svmlag2}) and (\ref{svmlag3}) on (\ref{eq:svmlag1}), our problem of minimizing (\ref{eq:svmminw}) constrained by (\ref{svmconst}) becomes maximizing $L$, subject to (\ref{svmlag3}):
 \begin{gather*}
 L = \frac{1}{2}\sum\alpha_i y_i x_i \cdot \sum\alpha_j y_j x_j
 - \sum \alpha_i y_i x_i \cdot \sum \alpha_j y_j x_j
@@ -632,8 +630,6 @@ $$\text{\textbf{decision rule}} \begin{cases}
 	\sum\alpha_i y_i x_i \cdot u +b < 0 \implies y_u=-1\\
 \end{cases}$$
 
-The implications of such fact will be discussed in the next section.
-
 \paragraph{Kernel functions}
 
 "The kernel function represent the dot product of both vectors projected onto the new space". \cite{mitsvm}
@@ -649,7 +645,7 @@ L = \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j \phi(x_i) \cdot \p
 	L = \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j k(x_i, x_j)
 	\end{gather*}
 	
-	Given a known function $k$, there is no need to explicitly know which are the projections of $x_i$ and $x_j$ onto the new vector space. This is commonly known as the \textbf{kernel trick}.
+	Which entails, given a known function $k$, there is no need to explicitly know which are the projections of $x_i$ and $x_j$ onto the new vector space. This is commonly known as the \textbf{kernel trick}.
 \end{remark}
 
 $$\text{\textbf{decision rule}} \begin{cases}
@@ -853,6 +849,10 @@ Let $D$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 
 	\item Sort the eigenvalues by their absolute value in descending order and select the first $m$ ones and their respective eigenvectors.
 \end{enumerate}
+
+\subsubsection{Extensions: Kernel PCA}
+
+Firsly, Kernel PCA is out of this project's scope. The method will be briefly mentioned, though, as it will later compared to Isomap.
 
 \subsection{Multidimensional Scaling}
 
@@ -1075,6 +1075,7 @@ Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sa
 
 Notice that it was possible to eliminate 54 dimensions, consistently reducing the data set size, and only suffering 3\% of prediction accuracy loss. The score drastically decreased, however, when more dimensions were removed. Furthermore, accuracy decrease was followed by stress increase.
 
+\newpage
 \section{Nonlinear Dimensionality Reduction}
 
 Although PCA has presented promising results in the previous section, hence its great popularity in dimensionality reduction problems, there are many examples in which PCA will fail in its task. Consider the example bellow:
@@ -1408,7 +1409,16 @@ Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 
 	\caption{Description of predictions and reduction performance for Leukemia data set.}
 \end{table}
 
+\newpage
 \section{Final Considerations}
+
+% TODO Review this.
+
+In this report, we have approached the subjects of dimensionality reduction. First, focusing on linear methods and their capacity of extract features that maximize variance in a data set, we successfully reduced a limited set of data sets. We then followed to demonstrate how these methods would fail to reduce data sets that followed a nonlinear distribution.
+
+In order to reduce nonlinear data sets, we have introduced the Isomap algorithm, which uses properties commonly present in manifolds (e.g., linear locality, neighborhood). These properties allowed us to map the data sets to an intermediate representation that would only preserve dissimilarities of a restrictive neighborhood that, when given to linear methods, would result in the correct reduction. We then proceeded to formally define Isomap's implementation, and present some of its limitations, variations and applications. Finally, we saw that Isomap can successfully reduce data sets that roughly lie on nonlinear manifolds, but it also strongly dependents on many conditions, such as the manifold assumption, manifold convexity and controlled data noise, severly affecting the number of problems to which it might be applied.
+
+In conclusion, we have observed that although its limitations, Isomap is, indeed, a very regarded method in manifold learning, being cited by many authors since its first presentation and being implemented by many machine learning libraries, in many different languages and environments nowadays.
 
 \newpage
 
