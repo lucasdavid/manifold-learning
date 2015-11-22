@@ -1,5 +1,6 @@
 import math
 import datetime
+import os
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,6 +14,7 @@ class Displayer(object):
         self.rows = kwargs.pop('rows', None)
         self.columns = kwargs.pop('columns', None)
         self.parent_is_plotting = kwargs.pop('plotting', True)
+        self.saving_folder = kwargs.pop('folder', '/home/ldavid/Desktop/reports')
 
         self.parameters = ', '.join(['%s: %s' % (k, str(v)) for k, v in kwargs.items()])
         self.items = []
@@ -44,7 +46,10 @@ class Displayer(object):
             # Ignore calls if parent is not plotting.
             figure = self._process_figure()
 
-            name = name or '%s.png' % str(datetime.datetime.now()).replace(':', '.')
+            name = (name or str(datetime.datetime.now())).replace(':', '.')
+            name = os.path.join(self.saving_folder, name)
+            name += '.png'
+
             plt.savefig(name, bbox_inches='tight')
             plt.close(figure)
 
