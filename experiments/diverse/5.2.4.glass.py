@@ -11,13 +11,13 @@ class GlassIsomapExperiment(ReductionExperiment, LearningExperiment):
     file = '../../datasets/glass/glass.data'
 
     reduction_method = 'isomap'
-    reduction_params = {'k': 7}
+    reduction_params = {'k': 10}
 
     def _run(self):
         self.load_data()
         self.learn()
 
-        for d in (8, 6, 4, 3):
+        for d in (8, 6, 4, 3,):
             self.reduction_params['n_components'] = d
             self.reduce()
             self.learn()

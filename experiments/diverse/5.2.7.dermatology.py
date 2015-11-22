@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn import datasets, svm
 from sklearn.preprocessing import Imputer
 
 from experiments.base import ReductionExperiment, LearningExperiment
@@ -13,13 +12,13 @@ class DermatologyIsomapExperiment(ReductionExperiment, LearningExperiment):
     file = '../../datasets/dermatology/dermatology.data'
 
     reduction_method = 'isomap'
-    reduction_params = {'k': 7}
+    reduction_params = {'k': 20, 'n_components': 2}
 
     def _run(self):
         self.load_data()
         self.learn()
 
-        for d in (10, 3, 2, 1):
+        for d in (20, 10, 3, 2):
             self.reduction_params['n_components'] = d
             self.reduce()
             self.learn()
@@ -37,9 +36,13 @@ class DermatologyIsomapExperiment(ReductionExperiment, LearningExperiment):
         self.target = data[:, -1]
         self.original_data = self.data = data = np.delete(data, -1, axis=1)
 
-        self.displayer.load(self.data, self.target)
+        self.displayer \
+            .load(self.data, self.target) \
+            .save('datasets/dermatology') \
+            .dispose()
 
         print('Data set size: %.2f KB' % (self.data.nbytes / 1024))
+        print('shape: %s' % str(self.data.shape))
         print('Correlation matrix:')
         print(np.corrcoef(self.data, rowvar=0))
 

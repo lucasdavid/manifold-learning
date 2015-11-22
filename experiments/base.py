@@ -55,13 +55,13 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
         start = time.time()
 
         X1, X2, y1, y2 = model_selection.train_test_split(self.data, self.target, test_size=self.test_size) \
-                             if self.test_after_train \
-                             else self.data, None, self.target, None
+            if self.test_after_train \
+            else (self.data, None, self.target, None)
 
         self.grid = model_selection.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=-1)
         self.grid.fit(X1, y1)
 
-        print('\tGrid accuracy: %.2f' % self.grid.best_score_)
+        print('\tGrid accuracy: %.6f' % self.grid.best_score_)
         print('\tBest parameters: %s' % self.grid.best_params_)
         print('Done. (%.6f s)\n' % (time.time() - start))
 
@@ -170,5 +170,5 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
         nx.draw(g, pos=pos, node_size=40, node_color=self.target, alpha=.6,
                 width=1, edge_color='#cccccc', with_labels=False)
 
-        print('Done.')
+        print('Done.\n')
         plt.show()
