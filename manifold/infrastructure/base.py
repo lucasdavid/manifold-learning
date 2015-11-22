@@ -22,17 +22,24 @@ class Task(object, metaclass=abc.ABCMeta):
     def run(self):
         raise NotImplementedError
 
+    @property
+    def verbose(self):
+        return 'verbose' in self.data and self.data['verbose']
+
 
 class EuclideanDistancesFromDataSet(Task):
-    def __init__(self, data_set):
+    def __init__(self, data_set, verbose=False):
         """Creates a upper triangular matrix of distances between each sample of a given data set.
 
-        :param data_set: the data-set that contains the points used in the distance finding.
-        :return the constructed map, such that
-                {i: {j:d}}, for each j e [i+1, samples)
-                            for each i e [0, samples)
+        Parameters
+        ----------
+        data_set
+            The data set which contains the points used in the distance finding.
+
+        verbose
+            Flag indicating if info should be outputted.
         """
-        super().__init__(data_set=data_set, copying=False)
+        super().__init__(data_set=data_set, verbose=verbose, copying=False)
 
     def run(self):
         start = time.time()
@@ -49,7 +56,8 @@ class EuclideanDistancesFromDataSet(Task):
             distances[i] = {i + n + 1: d for n, d in enumerate(d[0:samples - i - 1])}
             d = d[samples - i - 1:]
 
-        print('Task EuclideanDistancesFromDataSet took %.2f s.' % (time.time() - start))
+        if self.verbose:
+            print('Task EuclideanDistancesFromDataSet took %.2f s.' % (time.time() - start))
         return distances
 
 

@@ -7,11 +7,20 @@ from ..infrastructure.base import Task, EuclideanDistancesFromDataSet, Reducer, 
 
 
 class INearestNeighbors(Task, metaclass=abc.ABCMeta):
-    def __init__(self, distance_matrix, alpha):
+    def __init__(self, distance_matrix, alpha, verbose=False):
+        """Performs Nearest Neighbors search in a given graph.
+
+        Parameters
+        ----------
+        distance_matrix
+        alpha
+        verbose
+        """
         assert distance_matrix is not None
         assert alpha > 0
 
-        super().__init__(m=distance_matrix, a=alpha, copying=False)
+        super().__init__(m=distance_matrix, a=alpha,
+                         verbose=verbose, copying=False)
 
 
 class ENearestNeighbors(INearestNeighbors):
@@ -28,7 +37,8 @@ class ENearestNeighbors(INearestNeighbors):
                 if links[neighbor] > e:
                     del links[neighbor]
 
-        print('ENearestNeighbors took %.2f s.' % (time.time() - start))
+        if self.verbose:
+            print('ENearestNeighbors took %.2f s.' % (time.time() - start))
         return m
 
 
@@ -66,18 +76,29 @@ class KNearestNeighbors(INearestNeighbors):
                 _min, _max = min(v, neighbor), max(v, neighbor)
                 result[_min][_max] = m[_min][_max]
 
-        print('KNearestNeighbors took %.2f s.' % (time.time() - start))
+        if self.verbose:
+            print('KNearestNeighbors took %.2f s.' % (time.time() - start))
         return result
 
 
 class IShortestPathFinder(Task, metaclass=abc.ABCMeta):
-    def __init__(self, distance_upper_matrix):
+    def __init__(self, distance_upper_matrix, verbose=False):
+        """Finds the shortest path between all nodes in a given graph.
+
+        Parameters
+        ----------
+        distance_upper_matrix
+            Adjacency matrix weights that represents the graph.
+
+        verbose
+            Flag indicating if info should be outputted.
+        """
         g = nx.Graph()
 
         for v, edges in distance_upper_matrix.items():
             g.add_weighted_edges_from(((v, n, cost) for n, cost in edges.items()))
 
-        super().__init__(g=g, copying=False)
+        super().__init__(g=g, verbose=verbose, copying=False)
 
 
 class AllPairsDijkstra(IShortestPathFinder):
@@ -86,7 +107,8 @@ class AllPairsDijkstra(IShortestPathFinder):
 
         answer = nx.all_pairs_dijkstra_path_length(self.data['g'])
 
-        print('AllPairsDijkstra took %.2f s.' % (time.time() - start))
+        if self.verbose:
+            print('AllPairsDijkstra took %.2f s.' % (time.time() - start))
         return answer
 
 
@@ -96,12 +118,13 @@ class FloydWarshall(IShortestPathFinder):
 
         answer = nx.floyd_warshall(self.data['g'])
 
-        print('FloydWarshall took %.2f s.' % (time.time() - start))
+        if self.verbose:
+            print('FloydWarshall took %.2f s.' % (time.time() - start))
         return answer
 
 
 class MDS(Reducer):
-    def __init__(self, n_components=3):
+    def __init__(self, n_components=3, verbose=False):
         """Constructs a Multidimensional Scaling task.
 
         :param n_components: :int number of eigenvalues kept during the dimensionality reduction step, or the string
@@ -109,7 +132,7 @@ class MDS(Reducer):
         """
         assert isinstance(n_components, int) and n_components > 0
 
-        super().__init__(n_components=n_components, copying=False)
+        super().__init__(n_components=n_components, verbose=verbose, copying=False)
 
     def run(self):
         start = time.time()
@@ -151,7 +174,8 @@ class MDS(Reducer):
 
         del w, v
 
-        print('MDS took %.2f s.' % (time.time() - start))
+        if self.verbose:
+            print('MDS took %.2f s.' % (time.time() - start))
         return self.embedding
 
     def transform(self, data):
@@ -187,9 +211,21 @@ class Isomap(Reducer):
                  nearest_method='auto', k=10, e=None,
                  n_components=3,
                  shortest_path_method='d',
-                 copying=False,
-                 debugging=True):
+                 verbose=False, copying=False):
 
+        """Performs dimensionality reduction over a data set d
+        using the Isomap algorithm.
+
+        Parameters
+        ----------
+        nearest_method
+        k
+        e
+        n_components
+        shortest_path_method
+        verbose
+        copying
+        """
         # Shortest-path-method must be d: dijkstra or fw: floyd-warshall.
         assert shortest_path_method == 'd' or shortest_path_method == 'fw'
 
@@ -224,13 +260,15 @@ class Isomap(Reducer):
 
         instances_count = m.shape[0]
 
-        m = EuclideanDistancesFromDataSet(m).run()
+        m = EuclideanDistancesFromDataSet(m, verbose=self.verbose).run()
+
         self._nearest_neighbors = self.data['nearest_method'] == 'k' and \
-                                  KNearestNeighbors(m, k).run() or \
-                                  ENearestNeighbors(m, e).run()
+                                  KNearestNeighbors(m, k, verbose=self.verbose).run() or \
+                                  ENearestNeighbors(m, e, verbose=self.verbose).run()
+
         m = self.data['shortest_path_method'] == 'fw' and \
-            FloydWarshall(self._nearest_neighbors).run() or \
-            AllPairsDijkstra(self._nearest_neighbors).run()
+            FloydWarshall(self._nearest_neighbors, verbose=self.verbose).run() or \
+            AllPairsDijkstra(self._nearest_neighbors, verbose=self.verbose).run()
 
         # Create distance matrix from neighbor map.
         dissimilarities = np.zeros((instances_count, instances_count))
@@ -239,11 +277,14 @@ class Isomap(Reducer):
             for neighbor, dissimilarity in edges.items():
                 dissimilarities[node, neighbor] = dissimilarity
 
-        self._mds = MDS(n_components=self.data['n_components'])
+        del m
+
+        self._mds = MDS(n_components=self.data['n_components'], verbose=self.verbose)
         self._mds.transform_dissimilarities(dissimilarities)
         self.embedding = self._mds.embedding
 
-        print('Isomap took %.2f s.' % (time.time() - start))
+        if self.verbose:
+            print('Isomap took %.2f s.' % (time.time() - start))
         return self.embedding
 
     @property
