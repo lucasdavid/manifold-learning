@@ -6,7 +6,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{mathtools}
-\usepackage{amsfonts}
+	\usepackage{amsfonts}
 \usepackage{hyperref}
 \usepackage{float}
 \usepackage{wrapfig}
@@ -406,7 +406,7 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph}, \cite{berge197
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=.5\linewidth]{graph}
+		\includegraphics[width=.5\linewidth]{graphs/graph}
 		\caption{The \textbf{Les Miserables} graph.}
 		\label{fig:graph}
 	\end{figure}
@@ -427,7 +427,7 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph}, \cite{berge197
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=.4\linewidth]{tree}
+		\includegraphics[width=.4\linewidth]{graphs/tree}
 		\captionsetup{justification=centering}
 		\caption{A tree extracted (a subgraph) from the \textbf{Les Miserables} graph.}
 		\label{tree}
@@ -476,19 +476,19 @@ Let's consider two (between many)  specifications of this algorithm:
 	\begin{figure}[H]
 		\begin{subfigure}{.33\linewidth}
 			\centering
-			\includegraphics[width=.8\linewidth]{example-graph}
+			\includegraphics[width=.8\linewidth]{graphs/example-graph}
 			\caption{$G$}
 			\label{fig:example-graph}
 		\end{subfigure}%
 		\begin{subfigure}{.33\linewidth}
 			\centering
-			\includegraphics[width=.8\linewidth]{example-graph-nn}
+			\includegraphics[width=.8\linewidth]{graphs/example-graph-nn}
 			\caption{$H$}
 			\label{fig:example-graph-nn}
 		\end{subfigure}%
 		\begin{subfigure}{.33\linewidth}
 			\centering
-			\includegraphics[width=.8\linewidth]{example-graph-en}
+			\includegraphics[width=.8\linewidth]{graphs/example-graph-en}
 			\caption{$I$}
 			\label{fig:example-graph-en}
 		\end{subfigure}
@@ -517,13 +517,13 @@ The shortest-path between a vertex $x_0 \in X$ and all other vertices can be exp
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}{.4\linewidth}
-			\includegraphics[width=\linewidth]{spa-graph}
+			\includegraphics[width=\linewidth]{graphs/spa-graph}
 			\captionsetup{justification=centering}
 			\caption{The weighted graph $G$.}
 			\label{fig:spa-graph}
 		\end{subfigure}
 		\begin{subfigure}{.4\linewidth}
-			\includegraphics[width=\linewidth]{spa-tree}
+			\includegraphics[width=\linewidth]{graphs/spa-tree}
 			\captionsetup{justification=centering}
 			\caption{The shortest-path tree $S$.}
 			\label{fig:spa-tree}
@@ -766,7 +766,7 @@ Consider the data set $K$. $K$ has its samples expressed by two similarly scaled
     \centering
 	\captionsetup{justification=centering}
 
-	\includegraphics[width=.8\linewidth]{datasetr}
+	\includegraphics[width=.8\linewidth]{datasets/r}
 	\caption{The data set $K \in \mathbb{R}^2$.}
 	\label{fig:datasetr}
 \end{figure}
@@ -793,7 +793,7 @@ Principal Component Analysis (PCA) is a statistical technique that attempts to t
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	\includegraphics[width=.8\linewidth]{datasetrpc}
+	\includegraphics[width=.8\linewidth]{datasets/r_pcs}
 	\caption{The principal components of $K$.}
 	\label{fig:datasetrpc}
 \end{figure}
@@ -995,7 +995,7 @@ The figure bellow illustrates the results of PCA algorithm application over the 
 	\centering
 	\captionsetup{justification=centering}
 
-	\includegraphics[width=.9\linewidth]{datasetrpca}
+	\includegraphics[width=.9\linewidth]{experiments/1_1_r_pca}
 	\caption{The PCA algorithm reducing $K$ to 2 and 1 dimension, respectively.}
 	\label{fig:datasetrpca}
 \end{figure}
@@ -1025,7 +1025,7 @@ The Iris flower being reduced from 4 to 2 features. Although the data set became
 	\centering
 	\captionsetup{justification=centering}
 
-	\includegraphics[width=\linewidth]{dsirispca}
+	\includegraphics[width=\linewidth]{experiments/1_2_iris_pca}
 	\caption{The PCA algorithm reducing the Iris flower to 2 and 1 dimension, respectively.}
 	\label{fig:dsirispca}
 \end{figure}
@@ -1053,7 +1053,7 @@ Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sa
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	\includegraphics[width=\linewidth]{dsdigitspca}
+	\includegraphics[width=\linewidth]{experiments/1_3_digits_pca}
 	\caption{Digits data set reduced to 10, 3, 2 and 1 dimension, respectively.}
 	\label{fig:dsdigitspca}
 \end{figure}
@@ -1084,7 +1084,7 @@ Although PCA has presented promising results in the previous section, hence its 
 	\centering
 	\captionsetup{justification=centering}
 
-	\includegraphics[width=\linewidth]{swiss_pca}
+	\includegraphics[width=\linewidth]{experiments/2_1_swiss_pca}
 	\caption{The \textbf{Swiss-roll manifold} and its reductions to 3, 2 and 1 dimensions, respectively, using the PCA algorithm.}
 	\label{fig:swiss_pca}
 \end{figure}
@@ -1126,7 +1126,7 @@ Let $S$ be our original data set, as illustrated in figure \ref{fig:mani_s}.
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	\includegraphics[width=.5\linewidth]{mani_s}
+	\includegraphics[width=.5\linewidth]{datasets/s}
 	\caption{The data set $S$, consisting of $1000$ samples and $3$ features.}
 	\label{fig:mani_s}
 \end{figure}
@@ -1139,7 +1139,7 @@ Now that only distances were kept, an infinite number of n-dimensional embedding
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	\includegraphics[width=.5\linewidth]{mani_s_3}
+	\includegraphics[width=.5\linewidth]{studying_isomap/neighbors}
 	\caption{The graph $H$.}
 	\label{fig:mani_s_graph_h}
 \end{figure}
@@ -1152,14 +1152,14 @@ Finally, $M$ is a euclidean graph which roughly lies on a hyperplane. Furthermor
     \begin{subfigure}{.5\linewidth}
 		\centering
 		\captionsetup{justification=centering}
-		\includegraphics[width=\linewidth]{mani_s_4}
+		\includegraphics[width=\linewidth]{studying_isomap/embedding_2}
 		\caption{$S$ reduced to two dimensions.}
 		\label{fig:mani_s_reduced_1}
 	\end{subfigure}%
 	\begin{subfigure}{.5\linewidth}
 		\centering
 		\captionsetup{justification=centering}
-		\includegraphics[width=.63\linewidth]{mani_s_5}
+		\includegraphics[width=.63\linewidth]{studying_isomap/embedding_1}
 		\caption{$S$ reduced to one dimension.}
 		\label{fig:mani_s_reduced_2}
 	\end{subfigure}
@@ -1336,7 +1336,7 @@ Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, clas
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{swiss_isomap}
+	\includegraphics[width=\linewidth]{experiments/2_2_swiss_isomap}
 	\captionsetup{justification=centering}
 	\caption{The Swiss Roll data set and its reductions to two and one dimensions, respectively.}
 \end{figure}
@@ -1355,15 +1355,84 @@ Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, clas
 	\caption{Description of predictions and reduction performance for Swiss Roll.}
 \end{table}
 
+\subsubsection{The Iris Data Set}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{experiments/2_3_iris_isomap}
+	\captionsetup{justification=centering}
+	\caption{The Iris data set and its reductions to 3, 2 an 1 dimensions, respectively.}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		& \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
+		\textbf{Prediction accuracy}   & 1            & 1             & 1     \\\hline
+		\textbf{GridSearch time} & 15.53 s   & 415.72 s  & 387.98 s  \\\hline
+		\textbf{Reduction time}  & -         & 0.51 s       & 0.48 s     \\\hline
+		\textbf{Data size}          & 23.44 KB & 15.62 KB  & 7.81 KB   \\\hline
+	\end{tabular}
+	
+	\caption{Description of predictions and reduction performance for Iris.}
+\end{table}
+
+\subsubsection{The Glass Data Set}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{experiments/2_4_glass_isomap}
+	\captionsetup{justification=centering}
+	\caption{The Glass data set and its reductions to 3, 2 an 1 dimensions, respectively.}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		& \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
+		\textbf{Prediction accuracy}   & 1            & 1             & 1     \\\hline
+		\textbf{GridSearch time} & 15.53 s   & 415.72 s  & 387.98 s  \\\hline
+		\textbf{Reduction time}  & -         & 0.51 s       & 0.48 s     \\\hline
+		\textbf{Data size}          & 23.44 KB & 15.62 KB  & 7.81 KB   \\\hline
+	\end{tabular}
+	
+	\caption{Description of predictions and reduction performance for Glass.}
+\end{table}
+
+\subsubsection{The Dermatology Data Set}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{experiments/2_5_dermatology_isomap}
+	\captionsetup{justification=centering}
+	\caption{The Dermatology data set and its reductions to 3, 2 and 1 dimensions, respectively.}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		& \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
+		\textbf{Prediction accuracy}   & 1            & 1             & 1     \\\hline
+		\textbf{GridSearch time} & 15.53 s   & 415.72 s  & 387.98 s  \\\hline
+		\textbf{Reduction time}  & -         & 0.51 s       & 0.48 s     \\\hline
+		\textbf{Data size}          & 23.44 KB & 15.62 KB  & 7.81 KB   \\\hline
+	\end{tabular}
+	
+	\caption{Description of predictions and reduction performance for Dermatology.}
+\end{table}
+
 \subsubsection{The Digits Data Set}
 
 We will analyze Digits once again, only this time it will be reduced with the Isomap algorithm.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{dsdigitsiso}
+	\includegraphics[width=\linewidth]{experiments/2_6_digits_isomap}
 	\captionsetup{justification=centering}
-	\caption{Digits data set reduced to 10, 3, 2 and 1 dimension, respectively.}
+	\caption{Digits data set and its reductions to 3, 2 and 1 dimension, respectively.}
 	\label{fig:dsdigitsiso}
 \end{figure}
 
@@ -1389,7 +1458,7 @@ Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{img/experiments/leukemia}
+	\includegraphics[width=\linewidth]{img/experiments/2_7_leukemia_isomap}
 	\captionsetup{justification=centering}
 	\caption{The Leukemia data set and its reduction to 30, 20 and 10 dimensions, respectively.}
 	\label{fig:leukemiads}
