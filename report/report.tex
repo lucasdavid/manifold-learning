@@ -1328,6 +1328,7 @@ The experiments in the previous section made it quite clear that Isomap outperfo
 	Observe how some outliers were sufficiently far from their original neighborhood in the graph \ref{fig:noise_3}, to the point that Nearest-Neighbor Search maintained the edge between them and samples of completely different colors. MDS then attempted to maintain this dissimilarity, resulting in a deformed reduction (figure \ref{fig:noise_2}).
 \end{description}
 
+\newpage
 \subsection{Classification and Regression Over Data Sets Reduced with Isomap}
 
 Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, classification and regression experiments made in common data sets, following the same format as before.
@@ -1366,19 +1367,23 @@ Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, clas
 
 \begin{table}[H]
 	\centering
-	\begin{tabular}{|c|c|c|c|}
+	\begin{tabular}{|c|c|c|c|c|}
 		\hline
-		& \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
-		\textbf{Prediction accuracy}   & 1            & 1             & 1     \\\hline
-		\textbf{GridSearch time} & 15.53 s   & 415.72 s  & 387.98 s  \\\hline
-		\textbf{Reduction time}  & -         & 0.51 s       & 0.48 s     \\\hline
-		\textbf{Data size}          & 23.44 KB & 15.62 KB  & 7.81 KB   \\\hline
+		& \textbf{Original data} & \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
+		\textbf{Prediction accuracy}   & .99       & .97  s     & .97      & .89    \\\hline
+		\textbf{GridSearch time}           & .27 s & .25 s   & .25 s        & .27 s \\\hline
+		\textbf{Reduction time}             & -            & .19 s   & .19 s & .36 s   \\\hline
+		\textbf{Stress}                                & - & .474525         & .569293   & .655614 \\\hline 
+		\textbf{Data size}                       & 4.69 KB & 3.52 KB  & 2.34 KB  & 1.17 KB \\\hline
 	\end{tabular}
 	
 	\caption{Description of predictions and reduction performance for Iris.}
 \end{table}
 
+\newpage
 \subsubsection{The Glass Data Set}
+
+The Glass data set contains 214 samples and 11 features, were the first one is the identification number of a given sample and the last one is the class to which that sample belongs.
 
 \begin{figure}[H]
 	\centering
@@ -1389,18 +1394,20 @@ Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, clas
 
 \begin{table}[H]
 	\centering
-	\begin{tabular}{|c|c|c|c|}
+	\begin{tabular}{|c|c|c|c|c|c|}
 		\hline
-		& \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
-		\textbf{Prediction accuracy}   & 1            & 1             & 1     \\\hline
-		\textbf{GridSearch time} & 15.53 s   & 415.72 s  & 387.98 s  \\\hline
-		\textbf{Reduction time}  & -         & 0.51 s       & 0.48 s     \\\hline
-		\textbf{Data size}          & 23.44 KB & 15.62 KB  & 7.81 KB   \\\hline
+		& \textbf{Orig. d.} & \textbf{$\mathbb{R}^8$} & \textbf{$\mathbb{R}^6$} & \textbf{$\mathbb{R}^4$}  & \textbf{$\mathbb{R}^3$} \\\hline
+		\textbf{Prediction accuracy}   & .64 & .63  & .66 & .65  & .65 \\\hline
+		\textbf{GridSearch time} & .36 s & .35 s   & 2.77 s & 2.36 s & 1.26 s  \\\hline
+		\textbf{Reduction time}  & -  & .66 s & .65 s & .68 s    & .64 s     \\\hline
+		\textbf{Stress} & - & .513717 & .462840 & .362030 & .306092 \\\hline
+		\textbf{Data size}          & 15.05 KB & 13.37 KB & 10.03 KB & 6.69 KB & 5.02 KB   \\\hline
 	\end{tabular}
 	
 	\caption{Description of predictions and reduction performance for Glass.}
 \end{table}
 
+\newpage
 \subsubsection{The Dermatology Data Set}
 
 \begin{figure}[H]
@@ -1424,6 +1431,7 @@ Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, clas
 	\caption{Description of predictions and reduction performance for Dermatology.}
 \end{table}
 
+\newpage
 \subsubsection{The Digits Data Set}
 
 We will analyze Digits once again, only this time it will be reduced with the Isomap algorithm.
@@ -1452,6 +1460,7 @@ We will analyze Digits once again, only this time it will be reduced with the Is
 
 Notice that we managed to reduce the data set to only 3 dimensions while maintaining 91\% of accuracy (remember that dimensionality reduction with PCA would reduce accuracy to 74\%). Accuracy loss is still observable when reducing it to two or one dimensions, although it is less intense than losses caused by linear reduction.
 
+\newpage
 \subsubsection{The Leukemia Data Set}
 
 Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 72 samples and 7130 features. The first 7129 features are expression levels of the genes in a given patient. The 7130th feature $t \in \{-1, 1\}$ indicate which of two variants of leukemia is present in the sample (AML, 25 samples, or ALL, 47 samples). \cite{on:duc_ds}
