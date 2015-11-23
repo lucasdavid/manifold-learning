@@ -1118,6 +1118,7 @@ Firstly suggested by Tenenbaum, de Silva and Langfor, \textbf{Isometric Mapping}
 In this section we will discuss the Isomap algorithm and its inner workings. We will then proceed to formalize it. Finally, empirical tests results achieved during the project will be shown.
 
 \subsubsection{Study of the Isomap Algorithm}
+\label{sec:studying_isomap}
 
 As the original data set might be folded, twisted or curved, \cite{ten2000} we must first find a suitable linear representation for it.
 
@@ -1146,7 +1147,7 @@ Now that only distances were kept, an infinite number of n-dimensional embedding
 
 At this moment, not all distances in $H$ are defined. This can be easily handled, though, by performing the \textbf{Floyd-Warshall} algorithm over $H$. Alternatively, $M$ can be achieved by performing \textbf{Dijkstra's algorithm} for all nodes and joining all shortest-path trees found.
 
-Finally, $M$ is a euclidean graph which roughly lies on a hyperplane. Furthermore, the adjacency matrix associated to $M$ contains not the distance induced by the $L_2$ norm, but the geodesic pairwise distances. \cite{gho2006} The \textbf{MDS} method can now be used to construct a representation in sub-spaces of the $\mathbb{R}^n$. $S$, specifically, can be reduced to the $\mathbb{R}^2$ or $\mathbb{R}^1$:
+Finally, $M$ is a euclidean graph which roughly lies on a linear subspace. Furthermore, the adjacency matrix associated to $M$ contains not the distance induced by the $L_2$ norm, but the geodesic pairwise distances. \cite{gho2006} The \textbf{MDS} method can now be used to construct a representation in sub-spaces of the $\mathbb{R}^n$. $S$, specifically, can be reduced to the $\mathbb{R}^2$ or $\mathbb{R}$:
 
 \begin{figure}[H]
     \begin{subfigure}{.5\linewidth}
@@ -1262,6 +1263,15 @@ Where $H \delta H$ is the double centered dissimilarity matrix, i.e, the double 
 
 % TODO Fill this paragraph.
 ...
+
+\subsubsection{Evaluating Reductions}
+
+Isomap's aim to ``unfold" the data set and, of course, it might distort dissimilarities between samples in the process. Hence drastically increasing Kruskal's stress. Clearly, this measure is unfittable for evaluating Isomap. As proposed by L. Shi and J. Gu, Kruskal's stress can be easily updated to match Isomap nature. That is, to preserve dissimilarities within neighborhoods: \cite{shi2012fast}
+
+Let $X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $Y_{n \times p}$ its reduction to $p$ dimensions, and $\delta_{ij}$ and $\hat{\delta}_{ij}$ the dissimilarity measurements defined for all samples $i$ and $j$ in both $X$ and $Y$. Furthermore, given a sample $i$ and $\beta \in \mathbb{N} \mid \beta \le n$, take $\Omega=K \bigcup \Theta$, where $K$ is the set containing the nearest neighbors of $i$ and $\Theta$ is a set of random samples such that $|\Theta| \le \beta \le n$:
+\begin{align*}
+	Stress_{Isomap} &= [\frac{\sum_i \sum_{j \in \Omega} (\delta_{ij} - \hat{\delta}_{ij})^2}{\sum_i \sum_{j \in \Omega} \delta_{ij}^2}]^{\frac{1}{2}}
+\end{align*}
 
 \subsubsection{Applicability and Limitations}
 
@@ -1410,22 +1420,31 @@ The Glass data set contains 214 samples and 11 features, were the first one is t
 \newpage
 \subsubsection{The Dermatology Data Set}
 
+With 366 samples, 35 features, the Dermatology data set is illustrated by the following figure:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.5\linewidth]{datasets/dermatology}
+	\captionsetup{justification=centering}
+	\caption{The Dermatology data set.}
+\end{figure}
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{experiments/2_5_dermatology_isomap}
 	\captionsetup{justification=centering}
-	\caption{The Dermatology data set and its reductions to 3, 2 and 1 dimensions, respectively.}
+	\caption{The Dermatology data set reduced to 20, 10, 3 and 2 dimensions, respectively.}
 \end{figure}
 
 \begin{table}[H]
 	\centering
-	\begin{tabular}{|c|c|c|c|}
+	\begin{tabular}{|c|c|c|c|c|c|}
 		\hline
-		& \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
-		\textbf{Prediction accuracy}   & 1            & 1             & 1     \\\hline
-		\textbf{GridSearch time} & 15.53 s   & 415.72 s  & 387.98 s  \\\hline
-		\textbf{Reduction time}  & -         & 0.51 s       & 0.48 s     \\\hline
-		\textbf{Data size}          & 23.44 KB & 15.62 KB  & 7.81 KB   \\\hline
+		& \textbf{Orig. d.} & \textbf{$\mathbb{R}^{20}$} & \textbf{$\mathbb{R}^{10}$} & \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} \\\hline
+		\textbf{Prediction accuracy}  & .953552 & .915301 & .907104 & .827869 & .784153 \\\hline
+		\textbf{GridSearch time} & .67 s & .76 s & 2.06 s & 27 s & 44.1 s  \\\hline
+		\textbf{Reduction time}  & -         & 5.1 s & 4.89 s & 4.91 s & 4.96 s    \\\hline
+		\textbf{Stress} & - & .771817 & .597724 & .465458 & .416376 \\\hline
+		\textbf{Data size}          & 97.22 KB & 57.19 KB & 28.59 KB  & 8.59 KB & 5.72 KB  \\\hline
 	\end{tabular}
 	
 	\caption{Description of predictions and reduction performance for Dermatology.}
@@ -1433,8 +1452,6 @@ The Glass data set contains 214 samples and 11 features, were the first one is t
 
 \newpage
 \subsubsection{The Digits Data Set}
-
-We will analyze Digits once again, only this time it will be reduced with the Isomap algorithm.
 
 \begin{figure}[H]
 	\centering
@@ -1486,6 +1503,8 @@ Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 
 	\captionsetup{justification=centering}	
 	\caption{Description of predictions and reduction performance for Leukemia data set.}
 \end{table}
+
+The Results in the table above are quite impressive: although visualization has barely improved, a 7129-dimensional space was reduced to a 10-dimensional one with only 10\% of accuracy loss.
 
 \newpage
 \section{Final Considerations}
