@@ -7,22 +7,18 @@ class BreastCancerExperiment(LearningExperiment, ReductionExperiment):
     title = '5.2.6 Breast-cancer Isomap Experiment'
     plotting = True
 
-    learning_parameters = [
-        {'C': (100,), 'kernel': ('linear',)},
-    ]
-
     reduction_method = 'isomap'
 
     def _run(self):
         self.load_data()
         self.learn()
 
-        for d in (3, 2):
+        for d in (20, 10, 3, 2):
             self.reduction_params['n_components'] = d
             self.reduce()
             self.learn()
 
-        self.displayer.show()
+        self.displayer.save(self.title)
 
     def load_data(self):
         r = Retriever('../../datasets/breast-cancer/wdbc.data', delimiter=',')
@@ -34,15 +30,16 @@ class BreastCancerExperiment(LearningExperiment, ReductionExperiment):
         # Target feature is actually located in the 2nd column, but considering we
         # had the ids removed, it's now in the 1st one.
         self.data, self.target = r.split_target(0).retrieve()
-        self.data = self.data.astype(float)
+        self.original_data = self.data = self.data.astype(float)
 
         self.displayer \
             .load(self.data, self.target, 'Breast-cancer') \
             .save('datasets/breast_cancer') \
             .dispose()
 
-        print('Covariance matrix:')
-        print(self.data.shape)
+        print('Shape: %s' % str(self.data.shape))
+        print('Correlation matrix:')
+        print(np.corrcoef(self.data, rowvar=0))
 
 
 if __name__ == '__main__':

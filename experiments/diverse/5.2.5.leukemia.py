@@ -26,7 +26,7 @@ class LeukemiaExperiment(ReductionExperiment, LearningExperiment):
             self.reduce()
             self.learn()
 
-        self.displayer.show()
+        self.displayer.save(self.title)
 
     def load_data(self):
         leukemia = datasets.fetch_mldata('leukemia', transpose_data=True)

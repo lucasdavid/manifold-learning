@@ -11,17 +11,19 @@ class DiabetesIsomapExperiment(ReductionExperiment, LearningExperiment):
     file = '../../datasets/diabetes/pima-indians-diabetes.data'
 
     reduction_method = 'isomap'
-    reduction_params = {'k': 7}
+    reduction_params = {'k': 20}
 
-    learning_parameters = {
-        'kernel': ('poly',), 'C': (1,), 'degree': (2, 3,)
-    }
+    learning_parameters = [
+        {'C': (1,), 'kernel': ('linear',)},
+        # {'C': (1, 10, 100, 1000), 'gamma': (.001, .01, .1, 1, 10), 'kernel': ('rbf', 'sigmoid')},
+        # {'kernel': ('poly',), 'C': (1,), 'degree': (2,)},
+    ]
 
     def _run(self):
         self.load_data()
         self.learn()
 
-        for d in (8, 3, 2, 1):
+        for d in (6, 4, 2, 1):
             self.reduction_params['n_components'] = d
             self.reduce()
             self.learn()
