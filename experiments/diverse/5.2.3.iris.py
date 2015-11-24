@@ -5,7 +5,7 @@ from experiments.base import ReductionExperiment, LearningExperiment
 
 
 class IrisIsomapExperiment(ReductionExperiment, LearningExperiment):
-    title = '5.2.3. Iris Isomap Experiment'
+    title = 'Iris Isomap'
     plotting = True
 
     samples = 1000
