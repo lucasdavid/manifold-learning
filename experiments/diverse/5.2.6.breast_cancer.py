@@ -33,7 +33,7 @@ class BreastCancerExperiment(LearningExperiment, ReductionExperiment):
         self.original_data = self.data = self.data.astype(float)
 
         self.displayer \
-            .load(self.data, self.target, 'Breast-cancer') \
+            .load(self.data, self.target) \
             .save('datasets/breast_cancer') \
             .dispose()
 
