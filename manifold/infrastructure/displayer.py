@@ -1,6 +1,7 @@
 import datetime
 import math
 import os
+import random
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -8,6 +9,8 @@ import numpy as np
 
 
 class Displayer(object):
+    colors = [plt.cm.jet, plt.cm.rainbow, plt.cm.hsv, plt.cm.CMRmap]
+
     def __init__(self, **kwargs):
         self.aspect = kwargs.pop('aspect', (20, -40))
         self.rows = kwargs.pop('rows', None)
@@ -88,7 +91,7 @@ class Displayer(object):
             ax.scatter(*components, **{
                 'c': color,
                 's': 50,
-                'cmap': plt.cm.rainbow
+                'cmap': random.choice(self.colors)
             })
 
             if title:
