@@ -4,7 +4,7 @@ from experiments.base import ReductionExperiment, LearningExperiment
 
 
 class KExperiment(ReductionExperiment, LearningExperiment):
-    title = '4.3.1. K Data Set'
+    title = 'K PCA'
     plotting = True
 
     def _run(self):
@@ -21,8 +21,7 @@ class KExperiment(ReductionExperiment, LearningExperiment):
             self.reduce()
             self.learn()
 
-        if self.plotting:
-            self.displayer.show()
+        self.displayer.save(self.title)
 
     def generate_data(self):
         np.random.seed(0)
@@ -32,8 +31,7 @@ class KExperiment(ReductionExperiment, LearningExperiment):
         self.original_data = self.data = preprocessing.scale(self.data)
         self.target = self.data.sum(axis=1).astype(int)
 
-        if self.plotting:
-            self.displayer.load(self.data, self.target)
+        self.displayer.load(self.data, self.target)
 
         print('Correlation of K')
         print(np.corrcoef(self.data, rowvar=0))
