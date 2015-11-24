@@ -11,7 +11,7 @@ class KExperiment(ReductionExperiment, LearningExperiment):
         self.generate_data()
 
         # Learn, through GridSearch, the data set K.
-        self.learn()
+        # self.learn()
 
         # Reduce dimensions of K.
         self.reduction_method = 'pca'
@@ -19,7 +19,7 @@ class KExperiment(ReductionExperiment, LearningExperiment):
         for dimension in (2, 1):
             self.reduction_params = {'n_components': dimension}
             self.reduce()
-            self.learn()
+            # self.learn()
 
         self.displayer.save(self.title)
 

@@ -5,7 +5,7 @@ from experiments.base import ReductionExperiment, LearningExperiment
 
 
 class SwissRollExperiment(ReductionExperiment, LearningExperiment):
-    title = '5.2.1. Swiss-roll Experiment'
+    title = 'Swiss-roll Isomap'
     plotting = True
 
     samples = 1000
@@ -28,7 +28,7 @@ class SwissRollExperiment(ReductionExperiment, LearningExperiment):
             self.reduce()
             self.learn()
 
-        self.displayer.show()
+        self.displayer.save(self.title)
 
     def load_data(self):
         self.data, self.target = datasets.make_swiss_roll(n_samples=self.samples, random_state=0)
@@ -37,6 +37,7 @@ class SwissRollExperiment(ReductionExperiment, LearningExperiment):
         self.displayer.load(self.data, self.target, title='Swiss-roll')
 
         print('Data set size: %.2f KB' % (self.data.nbytes / 1024))
+        print('Shape: %s' % str(self.data.shape))
         print('Correlation matrix:')
         print(np.corrcoef(self.data, rowvar=0))
 
