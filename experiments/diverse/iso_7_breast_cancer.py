@@ -4,19 +4,19 @@ from manifold.infrastructure import Retriever
 
 
 class BreastCancerExperiment(LearningExperiment, ReductionExperiment):
-    title = '5.2.6 Breast-cancer Isomap Experiment'
+    title = 'Breast-cancer Isomap'
     plotting = True
 
     reduction_method = 'isomap'
 
     def _run(self):
         self.load_data()
-        self.learn()
+        # self.learn()
 
-        for d in (20, 10, 3, 2):
+        for d in (3, 2, 1):
             self.reduction_params['n_components'] = d
             self.reduce()
-            self.learn()
+            # self.learn()
 
         self.displayer.save(self.title)
 
@@ -33,9 +33,9 @@ class BreastCancerExperiment(LearningExperiment, ReductionExperiment):
         self.original_data = self.data = self.data.astype(float)
 
         self.displayer \
-            .load(self.data, self.target) \
-            .save('datasets/breast_cancer') \
-            .dispose()
+            .load(self.data, self.target)
+            # .save('datasets/breast_cancer') \
+            # .dispose()
 
         print('Shape: %s' % str(self.data.shape))
         print('Correlation matrix:')

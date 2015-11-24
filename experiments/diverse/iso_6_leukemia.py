@@ -3,7 +3,7 @@ from experiments.base import ReductionExperiment, LearningExperiment
 
 
 class LeukemiaExperiment(ReductionExperiment, LearningExperiment):
-    title = '5.2.5. Leukemia Isomap Experiment'
+    title = 'Leukemia Isomap'
     plotting = True
 
     reduction_method = 'isomap'

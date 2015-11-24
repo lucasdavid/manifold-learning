@@ -4,7 +4,7 @@ from experiments.base import ReductionExperiment, LearningExperiment
 
 
 class DigitsIsomapExperiment(ReductionExperiment, LearningExperiment):
-    title = '5.1. Timing the Isomap Algorithm Experiment'
+    title = 'Digits Isomap'
     plotting = True
 
     reduction_method = 'isomap'

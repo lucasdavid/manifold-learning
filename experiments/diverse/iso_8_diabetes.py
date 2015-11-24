@@ -5,7 +5,7 @@ from manifold.infrastructure import Retriever
 
 
 class DiabetesIsomapExperiment(ReductionExperiment, LearningExperiment):
-    title = '5.2.8. Diabetes Isomap Experiment'
+    title = 'Diabetes Isomap'
     plotting = True
 
     file = '../../datasets/diabetes/pima-indians-diabetes.data'
@@ -21,12 +21,12 @@ class DiabetesIsomapExperiment(ReductionExperiment, LearningExperiment):
 
     def _run(self):
         self.load_data()
-        self.learn()
+        # self.learn()
 
-        for d in (6, 4, 2, 1):
+        for d in (3, 2, 1):
             self.reduction_params['n_components'] = d
             self.reduce()
-            self.learn()
+            # self.learn()
 
         self.displayer.save(self.title)
 
@@ -36,9 +36,9 @@ class DiabetesIsomapExperiment(ReductionExperiment, LearningExperiment):
         self.original_data = self.data
 
         self.displayer \
-            .load(self.data, self.target) \
-            .save('datasets/diabetes') \
-            .dispose()
+            .load(self.data, self.target)
+            # .save('datasets/diabetes') \
+            # .dispose()
 
         print('Data set size: %.2f KB' % (self.data.nbytes / 1024))
         print('Shape: %s' % str(self.data.shape))

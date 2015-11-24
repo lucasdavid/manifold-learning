@@ -5,7 +5,7 @@ from manifold.infrastructure import Retriever
 
 
 class GlassIsomapExperiment(ReductionExperiment, LearningExperiment):
-    title = '5.2.4. Glass Isomap Experiment'
+    title = 'Glass Isomap'
     plotting = True
 
     file = '../../datasets/glass/glass.data'

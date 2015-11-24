@@ -34,7 +34,7 @@ class SwissRollExperiment(ReductionExperiment, LearningExperiment):
         self.data, self.target = datasets.make_swiss_roll(n_samples=self.samples, random_state=0)
         self.original_data = self.data
 
-        self.displayer.load(self.data, self.target, title='Swiss-roll')
+        self.displayer.load(self.data, self.target)
 
         print('Data set size: %.2f KB' % (self.data.nbytes / 1024))
         print('Shape: %s' % str(self.data.shape))

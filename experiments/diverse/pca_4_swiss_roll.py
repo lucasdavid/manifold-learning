@@ -4,7 +4,7 @@ from experiments.base import ReductionExperiment, LearningExperiment
 
 
 class SwissRollPCAExperiment(ReductionExperiment, LearningExperiment):
-    title = '5.0. Reducing Swiss-roll with PCA Experiment'
+    title = 'Swiss-roll PCA'
     plotting = True
 
     samples = 1000

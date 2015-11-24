@@ -6,7 +6,7 @@ from manifold.infrastructure import Retriever
 
 
 class DermatologyIsomapExperiment(ReductionExperiment, LearningExperiment):
-    title = '5.2.7. Dermatology Isomap Experiment'
+    title = 'Dermatology Isomap'
     plotting = True
 
     file = '../../datasets/dermatology/dermatology.data'
