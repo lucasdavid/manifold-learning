@@ -68,6 +68,8 @@ class Displayer(object):
         columns = self.columns or math.ceil(math.sqrt(count))
         rows = self.rows or math.ceil(count / columns)
 
+        color_map = random.choice(self.colors)
+
         for i, item in enumerate(self.items):
             data, color, title = item
             samples, dimension = data.shape
@@ -91,7 +93,7 @@ class Displayer(object):
             ax.scatter(*components, **{
                 'c': color,
                 's': 50,
-                'cmap': random.choice(self.colors)
+                'cmap': color_map
             })
 
             if title:
