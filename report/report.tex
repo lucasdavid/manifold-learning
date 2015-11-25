@@ -81,11 +81,11 @@ Dr. Alexandre M. \textsc{Levada}
 
 \section{Abstract}
 
-This project aims to study the foundations of nonlinear dimensionality reduction through manifold learning with the algorithm known as Isometric Mapping (or simply Isomap) and observe the application of the algorithm in practical experiments.
+This project aims to study the foundations of nonlinear dimensionality reduction through manifold learning with the algorithm known as Isometric Mapping (or simply Isomap) and observe the application of the algorithm in practical experiments. 
 
-The report is structured in the following way: it will first present and demonstrate important concepts related to dimensionality reduction. It will then study and demonstrate linear dimensionality reduction methods, as they are closely related to Isomap. Finally, Isomap will be covered, from its concept to limitations and extensions.
+Firstly, the relevant background will be presented in order to contextualize the reader and provide concepts that are closely related to dimensionality reduction, manifold learning and, of course, the Isomap algorithm. We will then proceed to study linear dimensionality reduction: algorithms, applications and limitations. Finally, manifold learning with Isomap will be covered, from the algorithm's concept to its limitations and extensions.
 
-The experiments here presented were developed in a linux Ubuntu 15.10 64 bits, Intel Core i7-4700MQ CPU 2.40GHz $\times$ 8, 16 GB of RAM computational environment. All the artifacts, (e.g., source-code, docs, experiments) can be found in the repository \url{https://github.com/lucasdavid/manifold-learning}.
+In chapters 4 and 5, experiments created during the project are presented for both observation and comparison between the methods. The experiments were developed and executed in the following computational environment: linux Ubuntu 15.10 64 bits, Intel Core i7-4700MQ CPU 2.40GHz $\times$ 8, 16 GB of RAM computational environment. All the artifacts, (e.g., source-code, docs, experiments) can be found in the repository \url{https://github.com/lucasdavid/manifold-learning}.
 
 \newpage
 
@@ -97,10 +97,9 @@ Machine learning can help us to understand large amount of data and take decisio
 
 Many different machine learning algorithms have been developed during the this and the last century. Between those, many could successfully generalize low dimensional data. \cite{wang2012geometric} In the other hand, problems of our world are often too complex and may be represented by high dimensional data. For example, images, sounds or text documents can be expressed as vectors of the $\mathbb{R}^n$, where each element corresponds to a pixel, wave signal or character, respectively. When analyzing these problems, we observed that many of the algorithms would often become unstable. \textbf{Dimensionality reduction} (or DR) then quickly became a key concept for minimizing the data size while maintaining its meaning.
 
-Finally, dimensionality reduction has evolved into an extensive area. Nowadays, DR is not only applied to data reduction, specifically, but often employed in data visualization, noise reduction and for many other purposes.
+Finally, dimensionality reduction has evolved into an extensive area. Nowadays, DR is not only applied to reduce the data size, specifically, but often employed in data visualization, noise reduction and for many other purposes.
 
 \newpage
-
 \section{Relevant Background}
 \subsection{Data set}
 
@@ -1004,14 +1003,13 @@ The figure bellow illustrates the results of PCA algorithm application over the 
 	\centering
 	\begin{tabular}{|c|c|c|c|}
 		\hline
-		& \textbf{Original data} & \textbf{Reduced data ($\mathbb{R}^2$)} & \textbf{Reduced data ($\mathbb{R}$)} \\\hline
+		& \textbf{Original $\mathbb{R^2}$} & \textbf{$\mathbb{R}^2$} & \textbf{$\mathbb{R}$} \\\hline
 		\textbf{Pred. accuracy} & .98 & .98 & .99 \\\hline
 		\textbf{GridSearch time} & 1.15 s & .84 s & 1.26 s \\\hline
 		\textbf{Reduction time} & - & 0.995 ms & 1.118 ms \\\hline
 		\textbf{Stress} & - & 0 & .0399 \\\hline
 		\textbf{Data size} & 15.62 KB & 15.62 KB & 7.81 KB \\\hline
 	\end{tabular}
-
 	\caption{Description of predictions and reduction performance for $K$.}
 \end{table}
 
@@ -1019,16 +1017,18 @@ From the table above, one can also observe how Kruskal's stress might not be an 
 
 \subsubsection{The Iris Flower Data Set}
 
-The Iris flower being reduced from 4 to 2 features. Although the data set became non-linearly separable, classes are still somewhat organized in different clusters.
+The Iris flower \ref{irisdataset}, containing 150 samples and 5 features.
 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
 
 	\includegraphics[width=\linewidth]{experiments/1_2_iris_pca}
-	\caption{The PCA algorithm reducing the Iris flower to 2 and 1 dimension, respectively.}
+	\caption{The Iris Flower data set and its reductions to 3, 2, and 1 dimensions, respectively.}
 	\label{fig:dsirispca}
 \end{figure}
+
+Although the data set became nonlinearly separable, classes are still somewhat organized in different clusters.
 
 \begin{table}[H]
 	\centering
@@ -1275,7 +1275,7 @@ Let $X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $Y_{n \t
 
 \subsubsection{Applicability and Limitations}
 
-The experiments in the previous section made it quite clear that Isomap outperforms PCA on the selected data sets. Unfortunately, this trend cannot be projected for a generic case considering our experiments were strictly controlled. In real-world data sets, the application of Isomap may lead to poor low-dimensional embeddings. \cite{herik2009} Bellow are listed some the issues that have great influence over Isomap's results:
+It is quite clear that Isomap outperforms PCA on the data set $S$. Unfortunately, this cannot be projected for a generic case considering the strict and artificial nature of $S$. In real-world data sets, the application of Isomap may lead to poor low-dimensional embeddings. \cite{herik2009} Bellow are listed some the issues that have great influence over Isomap's results:
 \begin{description}
 	\item[Manifold Assumption] It refers to the initial assumption that the data lies on a low-dimensional manifold. Although wildly exploited by many authors, it is difficult to assert whether such assumption holds or not in real-world data sets. \cite{lin2008riemannian} Furthermore, even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations would be produced.
 	
@@ -1349,7 +1349,7 @@ Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, clas
 	\centering
 	\includegraphics[width=\linewidth]{experiments/2_2_swiss_isomap}
 	\captionsetup{justification=centering}
-	\caption{The Swiss Roll data set and its reductions to two and one dimensions, respectively.}
+	\caption{The Swiss Roll data set and its reductions to 2 and 1 dimensions, respectively.}
 \end{figure}
 
 \begin{table}[H]
@@ -1366,7 +1366,9 @@ Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, clas
 	\caption{Description of predictions and reduction performance for Swiss Roll.}
 \end{table}
 
-\subsubsection{The Iris Data Set}
+\subsubsection{The Iris Flower Data Set}
+
+Once again, the Iris flower data set, containing 150 samples and 5 features.
 
 \begin{figure}[H]
 	\centering
@@ -1418,39 +1420,6 @@ The Glass data set contains 214 samples and 11 features, were the first one is t
 \end{table}
 
 \newpage
-\subsubsection{The Dermatology Data Set}
-
-With 366 samples, 35 features, the Dermatology data set is illustrated by the following figure:
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=.5\linewidth]{datasets/dermatology}
-	\captionsetup{justification=centering}
-	\caption{The Dermatology data set.}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{experiments/2_5_dermatology_isomap}
-	\captionsetup{justification=centering}
-	\caption{The Dermatology data set reduced to 20, 10, 3 and 2 dimensions, respectively.}
-\end{figure}
-
-\begin{table}[H]
-	\centering
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		& \textbf{Orig. d.} & \textbf{$\mathbb{R}^{20}$} & \textbf{$\mathbb{R}^{10}$} & \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} \\\hline
-		\textbf{Prediction accuracy}  & .953552 & .915301 & .907104 & .827869 & .784153 \\\hline
-		\textbf{GridSearch time} & .67 s & .76 s & 2.06 s & 27 s & 44.1 s  \\\hline
-		\textbf{Reduction time}  & -         & 5.1 s & 4.89 s & 4.91 s & 4.96 s    \\\hline
-		\textbf{Stress} & - & .771817 & .597724 & .465458 & .416376 \\\hline
-		\textbf{Data size}          & 97.22 KB & 57.19 KB & 28.59 KB  & 8.59 KB & 5.72 KB  \\\hline
-	\end{tabular}
-	
-	\caption{Description of predictions and reduction performance for Dermatology.}
-\end{table}
-
-\newpage
 \subsubsection{The Digits Data Set}
 
 \begin{figure}[H]
@@ -1471,11 +1440,38 @@ With 366 samples, 35 features, the Dermatology data set is illustrated by the fo
 		\textbf{Reduction time}  & - & 5.43 s & 2.72 s & 2.71 s & 2.04 s \\\hline
 		\textbf{Data size} & 898.50 KB & 140.39 KB & 42.12 KB & 28.08 KB & 14.04 KB \\\hline
 	\end{tabular}
-
+	
 	\caption{Description of predictions and reduction performance for Digits.}
 \end{table}
 
-Notice that we managed to reduce the data set to only 3 dimensions while maintaining 91\% of accuracy (remember that dimensionality reduction with PCA would reduce accuracy to 74\%). Accuracy loss is still observable when reducing it to two or one dimensions, although it is less intense than losses caused by linear reduction.
+Notice that the data set was reduced to only 3 dimensions, while maintaining 91\% of accuracy (remember that dimensionality reduction with PCA would reduce accuracy to 74\%). Accuracy loss is still observable when reducing it to two or one dimensions, although it is less intense than losses caused by linear reduction.
+
+\newpage
+\subsubsection{The Dermatology Data Set}
+
+The Dermatology data set, composed by 366 samples and 35 features. Here, the target is to correctly diagnosticate the erythemato-squamous diseases.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{experiments/2_5_dermatology_isomap}
+	\captionsetup{justification=centering}
+	\caption{The Dermatology data set and its reductions to 3, 2 an 1 dimensions, respectively.}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		& \textbf{Orig. d.} & \textbf{$\mathbb{R}^{20}$} & \textbf{$\mathbb{R}^{10}$} & \textbf{$\mathbb{R}^3$} & \textbf{$\mathbb{R}^2$} \\\hline
+		\textbf{Prediction accuracy}  & .953552 & .915301 & .907104 & .827869 & .784153 \\\hline
+		\textbf{GridSearch time} & .67 s & .76 s & 2.06 s & 27 s & 44.1 s  \\\hline
+		\textbf{Reduction time}  & -         & 5.1 s & 4.89 s & 4.91 s & 4.96 s    \\\hline
+		\textbf{Stress} & - & .771817 & .597724 & .465458 & .416376 \\\hline
+		\textbf{Data size}          & 97.22 KB & 57.19 KB & 28.59 KB  & 8.59 KB & 5.72 KB  \\\hline
+	\end{tabular}
+	
+	\caption{Description of predictions and reduction performance for Dermatology.}
+\end{table}
 
 \newpage
 \subsubsection{The Leukemia Data Set}
@@ -1486,7 +1482,7 @@ Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 
 	\centering
 	\includegraphics[width=\linewidth]{img/experiments/2_7_leukemia_isomap}
 	\captionsetup{justification=centering}
-	\caption{The Leukemia data set and its reduction to 30, 20 and 10 dimensions, respectively.}
+	\caption{The Leukemia data set and its reduction to 3, 2 and 1 dimensions, respectively.}
 	\label{fig:leukemiads}
 \end{figure}
 
@@ -1505,6 +1501,62 @@ Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 
 \end{table}
 
 The Results in the table above are quite impressive: although visualization has barely improved, a 7129-dimensional space was reduced to a 10-dimensional one with only 10\% of accuracy loss.
+
+\subsubsection{The WDBC Data Set}
+
+The Wisconsin Diagnostic Breast Cancer (WDBC) data set, containing 596 samples and 32 features computed from a breast mass. WDBC has benign 357 samples and 212 malignant. During this experiment, the first feature was disconsidered, as it represents the identification numbers of the samples.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{img/experiments/iso_wdbc}
+	\captionsetup{justification=centering}
+	\caption{The WDBC data set and its reduction to 3, 2 and 1 dimensions, respectively.}
+	\label{fig:iso_wdbc}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		& \textbf{$\mathbb{R}^{30}$} & \textbf{$\mathbb{R}^{20}$} & \textbf{$\mathbb{R}^{10}$} & \textbf{$\mathbb{R}^{3}$} & \textbf{$\mathbb{R}^{2}$} \\\hline
+		\textbf{Pred. accuracy}    & .63 & .89 & .8963 & .8998  & .8998 \\\hline
+		\textbf{GridSearch time}   & 0.58 s & 0.46 s & 0.36 s & 0.36 s & 0.36 s \\\hline
+		\textbf{Reduction time}    & - & 3.31 s & 3.25 s & 3.26 s & 3.31 s \\\hline
+		\textbf{Stress} & - & .53 & .465460 & .378905 & .352277 \\\hline
+		\textbf{Data size}  & 133.36 KB & 88.91 KB & 44.45 KB & 13.34 KB & 8.89 KB \\\hline
+	\end{tabular}
+	\captionsetup{justification=centering}	
+	\caption{Description of predictions and reduction performance for Leukemia data set.}
+\end{table}
+
+Observe how prediction accuracy consistently increased when the data set was reduced.
+
+\subsubsection{Diabetes Data Set}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{img/experiments/iso_diabetes}
+	\captionsetup{justification=centering}
+	\caption{The Diabetes data set and its reduction to 3, 2 and 1 dimensions, respectively.}
+	\label{fig:iso_diabetes}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		& \textbf{Original data ($\mathbb{R}^{8}$}) & \textbf{$\mathbb{R}^{6}$} & \textbf{$\mathbb{R}^{4}$} & \textbf{$\mathbb{R}^{2}$} & \textbf{$\mathbb{R}$} \\\hline
+		\textbf{Pred. accuracy}   & .7239 & .7174 & .7252 & .7148 & .6588 \\\hline
+		\textbf{GridSearch time}   & .79 s & .94 s & .58 s & .99 s & 7.4 s \\\hline
+		\textbf{Reduction time}    & - & 23.55 s & 24.38 s & 26.5 s & 23.44 s \\\hline
+		\textbf{Stress} & - & .2875 & .2362 & .3001 & .4462 \\\hline
+		\textbf{Data size}  & 48 KB & 36 KB & 24 KB & 12 KB & 6 KB \\\hline
+	\end{tabular}
+	\captionsetup{justification=centering}	
+	\caption{Description of predictions and reduction performance for Diabetes data set.}
+\end{table}
+
+In this experiment, Diabetes was compressed to one forth of its original size (48 KB to 12 KB), and no significant prediction accuracy was lost.
 
 \newpage
 \section{Final Considerations}
