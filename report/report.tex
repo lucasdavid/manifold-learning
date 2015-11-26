@@ -44,7 +44,7 @@
 
 \HRule \\[0.4cm]
 
-{ \huge \bfseries A Study of the Isomap Algorithm and Its Applications in Machine Learning}\\[0.4cm]
+{ \huge \bfseries A Study of the ISOMAP Algorithm and Its Applications in Machine Learning}\\[0.4cm]
 
 \HRule \\[1.5cm]
 
@@ -81,9 +81,9 @@ Dr. Alexandre M. \textsc{Levada}
 
 \section{Abstract}
 
-This project aims to study the foundations of nonlinear dimensionality reduction through manifold learning with the algorithm known as Isometric Feature Mapping (or simply Isomap) and observe the application of the algorithm in practical experiments.
+This project aims to study the foundations of nonlinear dimensionality reduction through manifold learning with the algorithm known as Isometric Feature Mapping (or simply ISOMAP) and observe the application of the algorithm in practical experiments.
 
-Firstly, the relevant background will be presented in order to contextualize the reader and provide concepts that are closely related to dimensionality reduction, manifold learning and, of course, the Isomap algorithm. We will then proceed to study linear dimensionality reduction: algorithms, applications and limitations. Finally, manifold learning with Isomap will be covered, from the algorithm's concept to its limitations and extensions.
+Firstly, the relevant background will be presented in order to contextualize the reader and provide concepts that are closely related to dimensionality reduction, manifold learning and, of course, the ISOMAP algorithm. We will then proceed to study linear dimensionality reduction: algorithms, applications and limitations. Finally, manifold learning with ISOMAP will be covered, from the algorithm's concept to its limitations and extensions.
 
 In chapters 4 and 5, experiments created during the project are presented for both observation and comparison between the methods. The experiments were developed and executed in the following computational environment: linux Ubuntu 15.10 64 bits, Intel Core i7-4700MQ CPU 2.40GHz $\times$ 8, 16 GB of RAM computational environment. All the artifacts, (e.g., source-code, docs, experiments) can be found in the repository \url{https://github.com/lucasdavid/manifold-learning}.
 
@@ -1047,7 +1047,7 @@ Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sa
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	\includegraphics[width=\linewidth]{experiments/1_3_digits_pca}
+	\includegraphics[width=\linewidth]{experiments/pca_digits}
 	\caption{Digits data set reduced to 10, 3, 2 and 1 dimension, respectively.}
 	\label{fig:dsdigitspca}
 \end{figure}
@@ -1078,7 +1078,7 @@ Although PCA has presented promising results in the previous section, hence its 
 	\centering
 	\captionsetup{justification=centering}
 
-	\includegraphics[width=\linewidth]{experiments/2_1_swiss_pca}
+	\includegraphics[width=\linewidth]{experiments/pca_swiss}
 	\caption{The \textbf{Swiss-roll manifold} and its reductions to 3, 2 and 1 dimensions, respectively, using the PCA algorithm.}
 	\label{fig:swiss_pca}
 \end{figure}
@@ -1105,14 +1105,14 @@ The table bellow describes a regression attempt over the data sets illustrated i
 
 Clearly, linear dimensionality reduction techniques are not adequate to reduce the Swiss-roll. In fact, it is not adequate to reduce any data set lying on a nonlinear manifold.
 
-\subsection{The Isomap Algorithm}
+\subsection{The ISOMAP Algorithm}
 
-Firstly suggested by Tenenbaum, de Silva and Langfor, \textbf{Isometric Feature Mapping} (or Isomap) assumes that the data lies near a smooth manifold. If the assumption is reasonable, it is be possible to explore concepts such as neighborhood and local linearity to map the manifold to a linear structure before reducing it with a linear algorithm.
+Firstly suggested by Tenenbaum, de Silva and Langfor, \textbf{Isometric Feature Mapping} (or ISOMAP) assumes that the data lies near a smooth manifold. If the assumption is reasonable, it is be possible to explore concepts such as neighborhood and local linearity to map the manifold to a linear structure before reducing it with a linear algorithm.
 
-In this section we will discuss the Isomap algorithm and its inner workings. We will then proceed to formalize it. Finally, empirical tests results achieved during the project will be shown.
+In this section we will discuss the ISOMAP algorithm and its inner workings. We will then proceed to formalize it. Finally, empirical tests results achieved during the project will be shown.
 
-\subsubsection{Study of the Isomap Algorithm}
-\label{sec:studying_isomap}
+\subsubsection{Study of the ISOMAP Algorithm}
+\label{sec:studying_ISOMAP}
 
 As the original data set might be folded, twisted or curved, \cite{ten2000} we must first find a suitable linear representation for it.
 
@@ -1161,7 +1161,7 @@ Finally, $M$ is a euclidean graph which roughly lies on a linear subspace. Furth
 \end{figure}
 
 \newpage
-\subsubsection{Formalization of the Isomap Algorithm}
+\subsubsection{Formalization of the ISOMAP Algorithm}
 
 Let $X$ be the original data set and $p \in \mathbb{R}$ the number of dimensions desired for the reduced data set, \cite{ten2000}
 
@@ -1188,10 +1188,10 @@ If $n$ is the number of training samples, $f \in \mathbb{R}$ the number of featu
 	\item Taking $O(n^3)$ time steps to calculate the spectral decomposition, MDS clearly is the bottleneck of the entire algorithm. \cite{cay2005} \cite{silva2002global} As for space complexity, $O(f^2 + nf)$ is required for storing the matrices $\Sigma$ and $U$.
 \end{enumerate}
 
-The time complexity of the Isomap algorithm (when using Dijkstra's) is, therefore, $O[n^2 + n^2(k + \log n) + n^3]$, and the space complexity is $O(n^2 + f^2 + nf)$.
+The time complexity of the ISOMAP algorithm (when using Dijkstra's) is, therefore, $O[n^2 + n^2(k + \log n) + n^3]$, and the space complexity is $O(n^2 + f^2 + nf)$.
 
-\begin{experiment}[Timing the Isomap Algorithm]
-	Consider the data set \textbf{Digits} with 1797 samples and 64 features. The following table indicates the time duration for each step of the Isomap algorithm when reducing Digits to 3 dimensions:
+\begin{experiment}[Timing the ISOMAP Algorithm]
+	Consider the data set \textbf{Digits} with 1797 samples and 64 features. The following table indicates the time duration for each step of the ISOMAP algorithm when reducing Digits to 3 dimensions:
 
 	\begin{table}[H]
 		\centering
@@ -1204,59 +1204,59 @@ The time complexity of the Isomap algorithm (when using Dijkstra's) is, therefor
 			\textbf{Total Time} & 172.69 s \\\hline
 		\end{tabular}
 
-		\caption{Listing of time spent on each step of the Isomap algorithm.}
+		\caption{Listing of time spent on each step of the ISOMAP algorithm.}
 	\end{table}
 
 	As expected, most of the time (68.81\%) was spent executing MDS.
 \end{experiment}
 
-In practice, Isomap's time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ makes it unsuitable for data sets with high number of samples. This is illustrated in Shi and Gu's experiments: Isomap could not reduce data sets with more than 6000 samples in reasonable time. \cite{shi2012fast}
+In practice, ISOMAP's time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ makes it unsuitable for data sets with high number of samples. This is illustrated in Shi and Gu's experiments: ISOMAP could not reduce data sets with more than 6000 samples in reasonable time. \cite{shi2012fast}
 
 \begin{experiment}
-	Let \textbf{Spam} be a data set with 4601 samples and 57 features. The table bellow describes the time necessary for the implemented Isomap and sk-Isomap (the algorithm from the \href{http://scikit-learn.org}{scikit-learn} library) to reduce Spam to 3 dimensions:
+	Let \textbf{Spam} be a data set with 4601 samples and 57 features. The table bellow describes the time necessary for the implemented ISOMAP and sk-ISOMAP (the algorithm from the \href{http://scikit-learn.org}{scikit-learn} library) to reduce Spam to 3 dimensions:
 
 	\begin{table}[H]
 		\centering
 		\begin{tabular}{|c|c|}
 			\hline
 			\textbf{Algorithm} & Time \\\hline
-			\textbf{Isomap} & 29.9 m \\\hline
-			\textbf{sk-Isomap} & 10.76 s \\\hline
+			\textbf{ISOMAP} & 29.9 m \\\hline
+			\textbf{sk-ISOMAP} & 10.76 s \\\hline
 		\end{tabular}
 
-		\caption{Timing the implemented Isomap and scikit-learn's implementation.}
+		\caption{Timing the implemented ISOMAP and scikit-learn's implementation.}
 	\end{table}
 
-	The implemented Isomap required almost 30 minutes to reduce Spam.
+	The implemented ISOMAP required almost 30 minutes to reduce Spam.
 	Surprisingly, scikit-learn's implementation executed incredibly fast. A set of factors contribute for this result:
 
 	\begin{itemize}
 		\item \textbf{Ball Tree} is used for efficient neighbor search (requiring only $O(f n \log k \log n)$ time steps).
 		\item Many components in scikit-learn have python signatures, but are actually implemented in C, considerably increasing performance.
-		\item Isomap is implemented as a kernel for the \textbf{KernelPCA} method. Further investigation is done in section \ref{sec:isomap_extensions}.
+		\item ISOMAP is implemented as a kernel for the \textbf{KernelPCA} method. Further investigation is done in section \ref{sec:ISOMAP_extensions}.
 	\end{itemize}
 
 \end{experiment}
 
 \subsubsection{Extensions}
-\label{sec:isomap_extensions}
+\label{sec:ISOMAP_extensions}
 
-\paragraph{Isomap as a variation of Kernel PCA}
+\paragraph{ISOMAP as a variation of Kernel PCA}
 
 % TODO This description needs extensive refactoring.
 While ``classic" PCA aims to find the principal components of the covariance matrix $\Sigma = \frac{1}{n} X^T X = \frac{1}{n} \sum_k x_{ik} \cdot x_{kj}, \forall (i, j) \in [0, |S|]^2$ of a centered data set $X$, it can be easily modified to attempt to do the same, but over the matrix $\Sigma' = \frac{1}{n} \sum_i \phi(x)_i \cdot \phi(y)_i$, where $\phi \colon \mathbb{R}^f \to \mathbb{R}^p$ is a kernel function that projects points in the original $f$-space to a different $p$-space. Such modification is named Kernel PCA.
 
-In his paper, Ghodsi describes how MDS (and therefore, Isomap) is equivalent to Kernel PCA, given it is using the following kernel: \cite{gho2006}
+In his paper, Ghodsi describes how MDS (and therefore, ISOMAP) is equivalent to Kernel PCA, given it is using the following kernel: \cite{gho2006}
 
 \begin{align*}
-K_{Isomap} = -\frac{1}{2}H \delta^2 H
+K_{ISOMAP} = -\frac{1}{2}H \delta^2 H
 \end{align*}
 
 Where $H \delta H$ is the double centered dissimilarity matrix, i.e, the double centered geodesic distances between samples found from the shortest-path graph.
 
 The advantage of substituting the MDS algorithm by Kernel PCA is that the former will provides us with an embedding, i.e., a transformation matrix from the original space to the reduced one; whereas only embeds the data set, requiring its complete re-execution for new data points. \cite{ham2004kernel}
 
-The figure bellow displays the reduction of the Swiss-roll data set done by the original implementation of Isomap (using MDS) and scikit-learn's implementation (using Kernel PCA). Clearly, they are identical.
+The figure bellow displays the reduction of the Swiss-roll data set done by the original implementation of ISOMAP (using MDS) and scikit-learn's implementation (using Kernel PCA). Clearly, they are identical.
 
 \begin{figure}[H]
 	\centering
@@ -1265,33 +1265,48 @@ The figure bellow displays the reduction of the Swiss-roll data set done by the 
 	\caption{The embedded swiss-roll data set by the original and scikit-learn's implementation.}
 \end{figure}
 
-\paragraph{Landmark Isomap}
+\paragraph{Landmark ISOMAP}
 
 % TODO Fill this paragraph.
 ...
 
-\paragraph{p-Isomap}
+\paragraph{p-ISOMAP}
 
-...
+The embedding found by ISOMAP is strongly depentend of the parameters $k$ or $\epsilon$. When these parameters are too small, the neighborhood graph extracted might be disconnected, causing the dissimilarity between some some vertices to be infinite. On the other hand, when the parameters are too big, vertices from different neighborhoods are prone to stay connected, preventing the manifold to be ``unfolded". Hence the importance of choosing appropriate parameters. However, in many cases, these ``appropriate" paramaters might not be not evident. Hence the interest of developing a parameterless ISOMAP.
+
+p-ISOMAP is an extension that automatically selects the parameters $k$ or $\epsilon$. \cite{choo2010p} Assuming an result of ISOMAP for a particular parameter value is available, a new parameter will be considered and p-ISOMAP will iteratively update the soluton by:
+\begin{itemize}
+	\item Adding/removing neighbors for every vertex in the neighborhood graph regarding the new parameter. This operation has time complexity $O(n \max_i |\Delta e_i|)$, where $|\Delta e_i|$ is the number of inserted/removed edges associated with sample $x_i$.
+	
+	\item Update the shortest-paths described by the pairs of vertices in $F \subset Q$, where $Q$ is the set of all pairs of vertices and $F$ is the set of pairs associated with the updated edges in the previous step.
+	\begin{itemize}
+		\item	If the parameter value increased in comparison to the previous one, edges might have been added. Updating the shortest-path tree consists in simply relaxing edges associated with any of the vertices in the pairs of $F$. The time complexity is loosely bounded by $O(|A|q|F|)$, where $|A|$ is the number of inserted edges and $q$ is the maximum degree of vertices in G.
+		
+		\item If the parameter was decreased, then edges might have been removed and all pairs of vertices whose shortest-paths contain those edges are added to $F$. Identifying $F$ can be done in $O(n^2)$ times steps to execute, given some optimzation (see \cite{choo2010p}). Now, Dijkstra's can be selectively performed, requiring $O(n \max_i (|E_i'| \log |V_d(i)| + |E_i''|)$, where, given a vertex $x_i$, $V_d(i)=\{x_j | (x_i, x_j) \in F\}$, $E_i'$ is the set of edges connecting whichever pair of vertices in $V_d(i)$ and $E_i''$ is the set of edges connecting the vertices $x_a$ and $x_b$ such that $x_a$ is in $V_d(i)$ and $x_b$ is not.
+	\end{itemize}
+
+	% TODO review this.
+	\item Finally, the last step is to update the eigenvectors and eigenvalues associated with the inner product matrix $B$. They can be approximated using the Lanczos algorithm, an iterative refining method that takes an initial solution candiadate. Officially, the time complexity of Lanczoz algorithm is $O(n^2)$. \cite{chen2004machine} Yet, its timeframe for convergence also strongly depends on the solution candidate given. Assuming the previous inner matrix and the current one are similar, one might use the previous eigenvalues/vectors found as candidate. In this scenario, Lanczoz's will likely finish much before.
+\end{itemize}
 
 \subsubsection{Evaluating Reductions}
 
-Isomap's aim to ``unfold" the data set and, of course, it might distort dissimilarities between samples in the process. Hence drastically increasing Kruskal's stress. Clearly, this measure is unsuitable for evaluating Isomap. As proposed by L. Shi and J. Gu, Kruskal's stress can be easily updated to match Isomap nature. That is, to preserve dissimilarities within neighborhoods: \cite{shi2012fast}
+ISOMAP's aim to ``unfold" the data set and, of course, it might distort dissimilarities between samples in the process. Hence drastically increasing Kruskal's stress. Clearly, this measure is unsuitable for evaluating ISOMAP. As proposed by L. Shi and J. Gu, Kruskal's stress can be easily updated to match ISOMAP nature. That is, to preserve dissimilarities within neighborhoods: \cite{shi2012fast}
 
 Let $X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $Y_{n \times p}$ its reduction to $p$ dimensions, and $\delta_{ij}$ and $\hat{\delta}_{ij}$ the dissimilarity measurements defined for all samples $i$ and $j$ in both $X$ and $Y$. Furthermore, given a sample $i$ and $\beta \in \mathbb{N} \mid \beta \le n$, take $\Omega=K \bigcup \Theta$, where $K$ is the set containing the nearest neighbors of $i$ and $\Theta$ is a set of random samples such that $|\Theta| \le \beta \le n$:
 \begin{align*}
-	Stress_{Isomap} &= [\frac{\sum_i \sum_{j \in \Omega} (\delta_{ij} - \hat{\delta}_{ij})^2}{\sum_i \sum_{j \in \Omega} \delta_{ij}^2}]^{\frac{1}{2}}
+	Stress_{ISOMAP} &= [\frac{\sum_i \sum_{j \in \Omega} (\delta_{ij} - \hat{\delta}_{ij})^2}{\sum_i \sum_{j \in \Omega} \delta_{ij}^2}]^{\frac{1}{2}}
 \end{align*}
 
 \subsubsection{Applicability and Limitations}
 
-It is quite clear that Isomap outperforms PCA on the data set $S$. Unfortunately, this cannot be projected for a generic case considering the strict and artificial nature of $S$. In real-world data sets, the application of Isomap may lead to poor low-dimensional embeddings. \cite{herik2009} Bellow are listed some the issues that have great influence over Isomap's results:
+It is quite clear that ISOMAP outperforms PCA on the data set $S$. Unfortunately, this cannot be projected for a generic case considering the strict and artificial nature of $S$. In real-world data sets, the application of ISOMAP may lead to poor low-dimensional embeddings. \cite{herik2009} Bellow are listed some the issues that have great influence over ISOMAP's results:
 \begin{description}
 	\item[Manifold Assumption] It refers to the initial assumption that the data lies on a low-dimensional manifold. Although wildly exploited by many authors, it is difficult to assert whether such assumption holds or not in real-world data sets. \cite{lin2008riemannian} Furthermore, even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations would be produced.
 
 	\newpage
 
-	\item[Manifold Convexity] "Isomap relies on the data being geodesically convex." \cite{donoho2002does} This issue becomes clear when dealing with data sets with ``holes" in it that occupy sufficiently large areas, resulting in a neighborhood graph with great disconnected areas that require paths with great curvature to get around. Lerman demonstrated how reducing non-convex data sets with Isomap can easily yield distorted results: \cite{lerman2005}
+	\item[Manifold Convexity] "ISOMAP relies on the data being geodesically convex." \cite{donoho2002does} This issue becomes clear when dealing with data sets with ``holes" in it that occupy sufficiently large areas, resulting in a neighborhood graph with great disconnected areas that require paths with great curvature to get around. Lerman demonstrated how reducing non-convex data sets with ISOMAP can easily yield distorted results: \cite{lerman2005}
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[H]{.45\linewidth}
@@ -1317,7 +1332,7 @@ It is quite clear that Isomap outperforms PCA on the data set $S$. Unfortunately
 	\newpage
 	\item[Noise] Noise in data is expressed by samples that somehow diverge from their neighborhood (outliers). As these samples become farthest from its original neighborhood, the chances of being linked to samples from other neighborhood increase, possibly decreasing the quality of the solution. A possible solution is to remove these samples during the pre-processing stage \cite{herik2009}.
 
-	The image bellow illustrates an attempt to use Isomap to reduce the $M_{n=.4}$, which is the Swiss-roll data set subjected to a noise factor of $.8$:
+	The image bellow illustrates an attempt to use ISOMAP to reduce the $M_{n=.4}$, which is the Swiss-roll data set subjected to a noise factor of $.8$:
 
 	\begin{figure}[H]
 		\centering
@@ -1343,14 +1358,14 @@ It is quite clear that Isomap outperforms PCA on the data set $S$. Unfortunately
 			\label{fig:noise_2}
 		\end{subfigure}
 		\captionsetup{justification=centering}
-		\caption{The Isomap applied on a noisy data set.}
+		\caption{The ISOMAP applied on a noisy data set.}
 	\end{figure}
 
 	Observe how some outliers were sufficiently far from their original neighborhood in the graph \ref{fig:noise_3}, to the point that Nearest-Neighbor Search maintained the edge between them and samples of completely different colors. MDS then attempted to maintain this dissimilarity, resulting in a deformed reduction (figure \ref{fig:noise_2}).
 \end{description}
 
 \newpage
-\subsection{Classification and Regression Over Data Sets Reduced with Isomap}
+\subsection{Classification and Regression Over Data Sets Reduced with ISOMAP}
 
 Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, classification and regression experiments made in common data sets, following the same format as before.
 
@@ -1358,7 +1373,7 @@ Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, clas
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{experiments/2_2_swiss_isomap}
+	\includegraphics[width=\linewidth]{experiments/iso_swiss}
 	\captionsetup{justification=centering}
 	\caption{The Swiss Roll data set and its reductions to 2 and 1 dimensions, respectively.}
 \end{figure}
@@ -1383,7 +1398,7 @@ Once again, the Iris flower data set, containing 150 samples and 5 features.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{experiments/2_3_iris_isomap}
+	\includegraphics[width=\linewidth]{experiments/iso_iris}
 	\captionsetup{justification=centering}
 	\caption{The Iris data set and its reductions to 3, 2 an 1 dimensions, respectively.}
 \end{figure}
@@ -1410,7 +1425,7 @@ The Glass data set contains 214 samples and 11 features, were the first one is t
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{experiments/2_4_glass_isomap}
+	\includegraphics[width=\linewidth]{experiments/iso_glass}
 	\captionsetup{justification=centering}
 	\caption{The Glass data set and its reductions to 3, 2 an 1 dimensions, respectively.}
 \end{figure}
@@ -1435,7 +1450,7 @@ The Glass data set contains 214 samples and 11 features, were the first one is t
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{experiments/2_6_digits_isomap}
+	\includegraphics[width=\linewidth]{experiments/iso_digits}
 	\captionsetup{justification=centering}
 	\caption{Digits data set and its reductions to 3, 2 and 1 dimension, respectively.}
 	\label{fig:dsdigitsiso}
@@ -1464,7 +1479,7 @@ The Dermatology data set, composed by 366 samples and 35 features. Here, the tar
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{experiments/2_5_dermatology_isomap}
+	\includegraphics[width=\linewidth]{experiments/iso_dermatology}
 	\captionsetup{justification=centering}
 	\caption{The Dermatology data set and its reductions to 3, 2 an 1 dimensions, respectively.}
 \end{figure}
@@ -1491,7 +1506,7 @@ Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.9\linewidth]{img/experiments/2_7_leukemia_isomap}
+	\includegraphics[width=.9\linewidth]{img/experiments/iso_leukemia}
 	\captionsetup{justification=centering}
 	\caption{The Leukemia data set and its reduction to 3, 2 and 1 dimensions, respectively.}
 	\label{fig:leukemiads}
@@ -1577,11 +1592,11 @@ In this experiment, Diabetes was compressed to one forth of its original size (4
 
 % TODO Review this.
 
-In this report, the subject of dimensionality reduction was approached. First, focusing on linear methods and their capacity of extract features that maximize variance in a data set, we successfully reduced, visualized and learned well known data sets. We then followed to demonstrate how these methods would fail to reduce data sets that followed a nonlinear distribution.
+In this report, the subject of dimensionality reduction was approached. First, focusing on linear methods and their capacity of extract features that maximize variance in a data set, we successfully reduced, visualized and learned well known data sets. Furthermore, we demonstrated how these methods would fail to reduce data sets that followed a nonlinear distribution.
 
-In order to reduce nonlinear data sets, we introduced the Isomap algorithm, which takes advantage of properties commonly present in manifolds (e.g., linear locality, neighborhood) to map the data set of interest to an intermediate representation that only preserves dissimilarities of restrictive neighborhoods, ``unfolding" the data set before applying a linear reduction method. We then proceeded to formally define Isomap's implementation, to analyze its complexity and present some of its limitations, variations and applications. Finally, we demonstrated that Isomap can successfully reduce data sets that roughly lie on nonlinear manifolds, but it also strongly dependents on many conditions, such as the manifold assumption, manifold convexity and controlled data noise, severely affecting the number of problems to which it might be applied.
+In order to reduce nonlinear data sets, we introduced the ISOMAP algorithm, which takes advantage of properties commonly present in manifolds (e.g., linear locality, neighborhood) to map the data set of interest to an intermediate representation that only preserves dissimilarities of restrictive neighborhoods, ``unfolding" the data set before applying a linear reduction method. We then proceeded to formally define ISOMAP's implementation, to analyze its complexity and present some of its limitations, variations and applications. Finally, we demonstrated that ISOMAP can successfully reduce data sets that roughly lie on nonlinear manifolds, but it also strongly dependents on many conditions, such as the manifold assumption, manifold convexity and controlled data noise, severely affecting the number of problems to which it might be applied.
 
-In conclusion, we have observed that although its limitations, Isomap is, indeed, a very regarded method in manifold learning, being cited by many authors since its first presentation and being implemented in many different machine learning libraries, languages and computational environments. Additionally, we can also infer its popularity by the high load of work done trying to improve and extend Isomap.
+In conclusion, we have observed that although its limitations, ISOMAP is, indeed, a very regarded method in manifold learning, being cited by many authors since its first presentation and being implemented in many different machine learning libraries, languages and computational environments. Additionally, we can also infer its popularity by the high load of work done trying to improve and extend ISOMAP.
 
 \newpage
 
