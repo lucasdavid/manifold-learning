@@ -83,9 +83,9 @@ Dr. Alexandre M. \textsc{Levada}
 
 This project aims to study the foundations of nonlinear dimensionality reduction through manifold learning with the algorithm known as Isometric Feature Mapping (or simply ISOMAP) and observe the application of the algorithm in practical experiments.
 
-Firstly, the relevant background will be presented in order to contextualize the reader and provide concepts that are closely related to dimensionality reduction, manifold learning and, of course, the ISOMAP algorithm. We will then proceed to study linear dimensionality reduction: algorithms, applications and limitations. Finally, manifold learning with ISOMAP will be covered, from the algorithm's concept to its limitations and extensions.
+Firstly, the relevant background will be presented in order to contextualize the reader and provide concepts that are closely related to dimensionality reduction, manifold learning and, of course, the ISOMAP algorithm. We will then proceed to study linear dimensionality reduction: algorithms, applications and limitations. Finally, manifold learning with ISOMAP will be covered, from the algorithm's concept to its extensions and limitations.
 
-In chapters 4 and 5, experiments created during the project are presented for both observation and comparison between the methods. The experiments were developed and executed in the following computational environment: linux Ubuntu 15.10 64 bits, Intel Core i7-4700MQ CPU 2.40GHz $\times$ 8, 16 GB of RAM computational environment. All the artifacts, (e.g., source-code, docs, experiments) can be found in the repository \url{https://github.com/lucasdavid/manifold-learning}.
+In chapters 4 and 5, experiments created during the project are presented for both observation and comparison between the methods. The experiments were developed and executed in the following computational environment: linux Ubuntu 15.10 64 bits, Intel Core i7-4700MQ CPU 2.40GHz $\times$ 8, 16 GB of RAM computational environment. All the artifacts, (e.g., source-code, docs, experiments) can be found in the repository \url{https://github.com/lucasdavid/manifold-learning} and are licensed under the MIT License.
 
 \newpage
 
@@ -1285,8 +1285,7 @@ p-ISOMAP is an extension that automatically selects the parameters $k$ or $\epsi
 		\item If the parameter was decreased, then edges might have been removed and all pairs of vertices whose shortest-paths contain those edges are added to $F$. Identifying $F$ can be done in $O(n^2)$ times steps to execute, given some optimzation (see \cite{choo2010p}). Now, Dijkstra's can be selectively performed, requiring $O(n \max_i (|E_i'| \log |V_d(i)| + |E_i''|)$, where, given a vertex $x_i$, $V_d(i)=\{x_j | (x_i, x_j) \in F\}$, $E_i'$ is the set of edges connecting whichever pair of vertices in $V_d(i)$ and $E_i''$ is the set of edges connecting the vertices $x_a$ and $x_b$ such that $x_a$ is in $V_d(i)$ and $x_b$ is not.
 	\end{itemize}
 
-	% TODO review this.
-	\item Finally, the last step is to update the eigenvectors and eigenvalues associated with the inner product matrix $B$. They can be approximated using the Lanczos algorithm, an iterative refining method that takes an initial solution candiadate. Officially, the time complexity of Lanczoz algorithm is $O(n^2)$. \cite{chen2004machine} Yet, its timeframe for convergence also strongly depends on the solution candidate given. Assuming the previous inner matrix and the current one are similar, one might use the previous eigenvalues/vectors found as candidate. In this scenario, Lanczoz's will likely finish much before.
+	\item Finally, the last step is to update the eigenvectors and eigenvalues associated with the inner product matrix $B$. They can be approximated using the Lanczos algorithm, an iterative refining method that takes an initial solution candiadate. Officially, the time complexity of Lanczoz algorithm is $O(n^2)$. \cite{chen2004machine} Yet, its timeframe for convergence also strongly depends on the solution candidate given. Assuming the previous inner matrix and the current one are similar, one might use the previous eigenvalues/vectors found as candidate. In this scenario, Lanczoz's will likely finish much faster than other algorithms.
 \end{itemize}
 
 \subsubsection{Evaluating Reductions}
@@ -1596,7 +1595,7 @@ In this report, the subject of dimensionality reduction was approached. First, f
 
 In order to reduce nonlinear data sets, we introduced the ISOMAP algorithm, which takes advantage of properties commonly present in manifolds (e.g., linear locality, neighborhood) to map the data set of interest to an intermediate representation that only preserves dissimilarities of restrictive neighborhoods, ``unfolding" the data set before applying a linear reduction method. We then proceeded to formally define ISOMAP's implementation, to analyze its complexity and present some of its limitations, variations and applications. Finally, we demonstrated that ISOMAP can successfully reduce data sets that roughly lie on nonlinear manifolds, but it also strongly dependents on many conditions, such as the manifold assumption, manifold convexity and controlled data noise, severely affecting the number of problems to which it might be applied.
 
-In conclusion, we have observed that although its limitations, ISOMAP is, indeed, a very regarded method in manifold learning, being cited by many authors since its first presentation and being implemented in many different machine learning libraries, languages and computational environments. Additionally, we can also infer its popularity by the high load of work done trying to improve and extend ISOMAP.
+In conclusion, we have observed that although its limitations, ISOMAP represented an advance in manifold learning, being a highly regarded method in dimensionality reduction nowdays. In practice, its importance is clearly observed when considering the great number of machine learning libraries, languages and computational environments which implement it, as well as the great load of study done by many authors trying to apply, improve or extend ISOMAP.
 
 \newpage
 
