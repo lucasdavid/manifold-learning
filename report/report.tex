@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[12pt]{report}
 
 \usepackage{titlesec}
 \usepackage{geometry}
@@ -31,65 +31,98 @@
 \graphicspath{{img/}}
 
 \begin{document}
+	
+\title{A Study of the ISOMAP Algorithm and Its Applications in Machine Learning}
+\author{Lucas Oliveira David\\[2cm]
+	Department of Computing\\
+	Universidade Federal de São Carlos\\[2cm]
+	Supervisor: Dr. Alexandre Luis Magalhães Levada}
+\date{\vfill December 2015}
+\maketitle
 
-\begin{titlepage}
+\pagenumbering{roman}
 
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\begin{center}
+	\textbf{Declaration}
+\end{center}
 
-\center
-
-\textsc{\LARGE Universidade Federal de São Carlos}\\[1.5cm]
-\textsc{\Large Computer Science}\\[0.5cm]
-\textsc{\large Final Report}\\[0.5cm]
-
-\HRule \\[0.4cm]
-
-{ \huge \bfseries A Study of the ISOMAP Algorithm and Its Applications in Machine Learning}\\[0.4cm]
-
-\HRule \\[1.5cm]
-
-\begin{minipage}{0.4\textwidth}
-\begin{flushleft} \large
-\emph{Author:}\\
-Lucas O. \textsc{David}
-\end{flushleft}
-\end{minipage}
-~
-\begin{minipage}{0.4\textwidth}
-\begin{flushright} \large
-\emph{Supervisor:} \\
-Dr. Alexandre M. \textsc{Levada}
-\end{flushright}
-\end{minipage}\\[4cm]
+I hereby declare that I carried out the work entitled ``A Study of the ISOMAP Algorithm and Its Applications in Machine Learning", which is being submitted to Universidade Federal de São Carlos, under the supervision of Dr. Alexandre Luis Magalhães Levada, as the partial fulfillment of the requirements for the award of the Degree of Bachelor  in Computer Science in the Department of Computing.
+I solemnly declare that to the best of my knowledge, no part of this report has been submitted here or elsewhere in a previous application for award of a degree. All sources of knowledge used have been duly acknowledged.
 
 \vfill
 
-{\large \today}\\[3cm]
+\begin{center}
+	............................................................\\
+	Lucas Oliveira David\\
+	407917	
+\end{center}
 
-\end{titlepage}
-
-\tableofcontents
 \newpage
+\begin{center}
+	\textbf{Approval}
+\end{center}
 
-\thispagestyle{empty}
-\listoffigures
+“A Study of the ISOMAP Algorithm and Its Applications in Machine Learning,” written by Lucas Oliveira David as the partial fulfillment of the requirements for the award of the Degree of Bachelor  in Computer Science in the Department of Computing, has been approved and accepted by the following:
+
+\vfill
+
+\begin{minipage}{.7\linewidth}
+	....................................................................................\\
+	Dr. Alexandre Luis Magalhães Levada
+\end{minipage}%
+\begin{minipage}{.3\linewidth}
+	\begin{flushright}
+		............................\\
+		Date
+	\end{flushright}
+\end{minipage}\\[1.5cm]
+
+\begin{minipage}{.7\linewidth}
+	....................................................................................\\
+	Dr. ...
+\end{minipage}%
+\begin{minipage}{.3\linewidth}
+	\begin{flushright}
+		............................\\
+		Date
+	\end{flushright}
+\end{minipage}\\[1.5cm]
+
+\begin{minipage}{.7\linewidth}
+	....................................................................................\\
+	Dr. ...
+\end{minipage}%
+\begin{minipage}{.3\linewidth}
+	\begin{flushright}
+		............................\\
+		Date
+	\end{flushright}
+\end{minipage}\\[3cm]
+
 \newpage
+\begin{center}
+	\textbf{Abstract}
+\end{center}
 
-\thispagestyle{empty}
-\listoftables
-\newpage
-
-\section{Abstract}
-
-This project aims to study the foundations of nonlinear dimensionality reduction through manifold learning with the algorithm known as Isometric Feature Mapping (or simply ISOMAP) and observe the application of the algorithm in practical experiments.
+This project aims to study the foundations of nonlinear dimensionality reduction through manifold learning with the algorithm known as Isometric Feature Mapping (ISOMAP) and observe the application of the algorithm in practical experiments.
 
 Firstly, the relevant background will be presented in order to contextualize the reader and provide concepts that are closely related to dimensionality reduction, manifold learning and, of course, the ISOMAP algorithm. We will then proceed to study linear dimensionality reduction: algorithms, applications and limitations. Finally, manifold learning with ISOMAP will be covered, from the algorithm's concept to its extensions and limitations.
 
 In chapters 4 and 5, experiments created during the project are presented for both observation and comparison between the methods. The experiments were developed and executed in the following computational environment: linux Ubuntu 15.10 64 bits, Intel Core i7-4700MQ CPU 2.40GHz $\times$ 8, 16 GB of RAM computational environment. All the artifacts, (e.g., source-code, docs, experiments) can be found in the repository \url{https://github.com/lucasdavid/manifold-learning} and are licensed under the MIT License.
 
 \newpage
+\tableofcontents
 
-\section{Introduction}
+\newpage
+\listoffigures
+\newpage
+
+\listoftables
+
+\newpage
+\pagenumbering{arabic} 
+
+\chapter{Introduction}
 
 Throughout the years, machine learning techniques have grown popular between both academical and the corporative sectors. Their vast applications and promising results \cite{brownlee} indubitably contributed to our current scenario where not only computer scientists or mathematicians, but engineers, psychologists and many other groups have taken interest \cite{baldi2001bioinformatics} on how to adapt and apply these studies to their own problems.
 
@@ -100,8 +133,9 @@ Many different machine learning algorithms have been developed during the this a
 Finally, dimensionality reduction has evolved into an extensive area. Nowadays, DR is not only applied to reduce the data size, specifically, but often employed in data visualization, noise reduction and for many other purposes.
 
 \newpage
-\section{Relevant Background}
-\subsection{Data set}
+
+\chapter{Relevant Background}
+\section{Data set}
 
 In the context of Computer Science, very often our goal is to develop machines that can assist or automate the process of solving real-world problems. Firstly, however, we must find ways to express these problems numerically.
 
@@ -130,7 +164,7 @@ The table bellow illustrates an examples of data set, where each row represents 
 
 Iris flower is an example of data set broadly used in the machine learning demonstrations, being usually interpreted as a classification problem where the feature {\em Species} will be learned from its adjacent features. In that scenario, {\em Species} is denominated \textbf{target feature}.
 
-\subsubsection{Data set as a collection of vectors in the $\mathbb{R}^n$}
+\subsection{Data set as a collection of vectors in the $\mathbb{R}^n$}
 
 A data set can have each one of its nominal features enumerated. I.e., mapped to an element of $\mathbb{N}$. Such set could then be expressed as a collections of vectors in $\mathbb{R}^n$.
 Consider the data set bellow:
@@ -171,7 +205,7 @@ Composed by 583 samples and 11 features, the data set ILPD has a nominal feature
 
 Considering the many graphs required to display the data set, it is quite difficult to identify a plausible distribution for ILPD. We define here our first encouragement towards the study of dimensionality reduction: the identification of the most significant features and plotting of those might result on simpler and more intuitive representations.
 
-\subsubsection{Modern Problems and Applications}
+\subsection{Modern Problems and Applications}
 
 Differently from Iris flower or ILPD data set, data sets associated with modern problems are often very dense, i.e., data sets containing many samples and/or features. Although the high number of samples is essentially benefic, a high number of features might be irrelevant or even unconstructive to the learning process. \cite{cay2005}
 
@@ -189,8 +223,8 @@ Differently from Iris flower or ILPD data set, data sets associated with modern 
 
 In many cases, there are indicatives that the data set lie near a lower-dimensional manifold embedded in the $\mathbb{R}^n$. \cite{gho2006} For the data set above, in special, the $\mathbb{R}^{100}$. A second encouragement can then be set: it is possible that the data set might be shrunk by combining similar (linearly dependent) features or eliminating the ones that poorly contribute towards the learning process. In order to do this, one must be able to qualify the “contribution” of each feature or even identify dependencies between features.
 
-\subsection{Probability Theory}
-\subsubsection{Feature Standardization}
+\section{Probability Theory}
+\subsection{Feature Standardization}
 Many of the methods ahead will require the data set to be centered in the origin. To center a data set $X$, we build a data set $X'$ s.t. each column has zero mean and it is contracted by its standard deviation:
 $$X'_{.j} = \frac{X_{.j} - \mu}{\sigma} \textnormal{, where}$$
 \begin{enumerate}
@@ -199,7 +233,7 @@ $$X'_{.j} = \frac{X_{.j} - \mu}{\sigma} \textnormal{, where}$$
 	\item $\sigma$ is the standard deviation of $X_{.j}$.
 \end{enumerate}
 
-\subsubsection{Centering Matrix}
+\subsection{Centering Matrix}
 The symmetric matrix $H$ is named the \textbf{centering matrix} when the multiplication of it by a vector $X$ produces the same effect of subtracting the mean of the components from each component of $X$. $H$ is defined as:
 $$
 H = I_n - \frac{1}{n}\textbf{11}^T \textnormal{, where:}
@@ -209,7 +243,7 @@ $$
 	\item $\textbf{1}$ is the column vector of 1's.
 \end{enumerate}
 
-\subsubsection{Variance}
+\subsection{Variance}
 Variance is the measure which describes how far the samples in a given set X vary. For the scope of this project, only discrete probabilities will be considered. That is, if $X$ represents a variate with known distribution $P(x)$, where $P(x) = k \in \mathbb{R}^{+}, \forall x \in X$ and $\sum_{x \in X} P(x) = 1$, and $\mu$ is the population mean of $X$, then: \cite{ross2010introductory}
 \begin{align*}
 	Var(X) = \frac{1}{n} (X-\mu) \cdot (X-\mu) = \frac{1}{n} \sum_{x \in X} (x - \mu)^2
@@ -237,7 +271,7 @@ Variance is the measure which describes how far the samples in a given set X var
 	\end{align*}
 \end{example}
 
-\subsubsection{Covariance}
+\subsection{Covariance}
 
 The covariance measures the variance of two random variates in respect to each other. Formally, if $X$ and $Y$ are two given random variates with known mean population distribution $\mu_X$ and $\mu_Y$, respectively, then
 $$\sigma(X, Y) = \frac{1}{n} (X - \mu_X) \cdot (Y - \mu_Y) $$
@@ -273,7 +307,7 @@ Let $D$ be a data set, $H$ the centering matrix and $HD_{\_i}$ the {\em i-th} fe
 
 Where $H$ is the \textbf{centering matrix}.
 
-\subsubsection{Correlation}
+\subsection{Correlation}
 
 The correlation is a measure of the direction and strength of a linear relationship among variables. Let $X$ and $Y$ be two random variables, $r(X, Y)$, i.e., the correlation between $X$ and $Y$ is defined as: \cite{ross2010introductory}
 \begin{align*}
@@ -286,7 +320,7 @@ where $\sigma_X$ and $\sigma_Y$ are the standard deviations of the variables $X$
 	If $X$ and $Y$ are two random variables and $\sigma(X, Y) = 1$, $X=Y$.
 \end{remark}
 
-\paragraph{Correlation Matrix of Features in a Centered Data Set}
+\subsubsection{Correlation Matrix of Features in a Centered Data Set}
 
 Let $D$ be a data set, $H$ the centering matrix and $HD_{\_i}$ the {\em i-th} feature column of the centered data set $HD$. The correlation between each one of its features can be represented by the matrix:
 \begin{align*}
@@ -298,14 +332,14 @@ Let $D$ be a data set, $H$ the centering matrix and $HD_{\_i}$ the {\em i-th} fe
 	\end{bmatrix}
 \end{align*}
 
-\subsection{Numerical Analysis}
-\subsubsection{Eigenvalues and Eigenvectors of a Matrix}
+\section{Numerical Analysis}
+\subsection{Eigenvalues and Eigenvectors of a Matrix}
 
 Given a matrix $A \ne 0 \in \mathbb{R}^{2n}$, a vector $v \in \mathbb{R}^n$ is said to be an \textbf{eigenvector} of $A$ if the multiplication $Av$ does not change the direction of $v$; that is:
 $$\exists \lambda \in \mathbb{R} \mid Av = \lambda v \textnormal{, where}$$
 $\lambda$ is the \textbf{eigenvalue} associated to the eigenvector $v$.
 
-\subsubsection{Spectral Decomposition of a Matrix}
+\subsection{Spectral Decomposition of a Matrix}
 
 If $[M]_{n\times n}$ is a symmetric matrix of rank $n$ and admits $n$ pairs of eigenvalues $\lambda$ and eigenvectors $[V]_{n\times n} = [v_0, v_1, v_2, ..., v_{n-1}]$, such that $V^TV = 1$, then
 $$MV = V \lambda$$
@@ -317,7 +351,7 @@ $\lambda = diag(\sigma_0, \sigma_1, ..., \sigma_{n-1})$ is the diagonal matrix, 
 	M &= V \lambda V^T
 \end{align*}
 
-\subsubsection{Singular Value Decomposition}
+\subsection{Singular Value Decomposition}
 \label{sec:svd}
 If $M \in \mathbb{R}^{m \times n}$, then $\exists U \in \mathbb{R}^{m \times m}, V \in \mathbb{R}^{n \times n}$ and $\Sigma =  diag(\sigma_0, \dots, \sigma_{n-1})$ conditioned to $\sigma_i \ge \sigma_{i+1} \ge 0, \forall \sigma \in [0, n)$ s.t. \cite{gan2008}
 $$M = U\Sigma V^T$$
@@ -336,8 +370,8 @@ $$M = U\Sigma V^T$$
 
 Proving $AA^T = U \Sigma^2 U^T$ is analogous to the above.
 
-\subsection{Topology}
-\subsubsection{Manifolds}
+\section{Topology}
+\subsection{Manifolds}
 
 Intuitively, n-dimensional topological manifolds are sets that are ``locally Euclidean". \cite{lee2009} In other words, they can be decomposed into sub sets that can be mapped to the $\mathbb{R}^n$.
 
@@ -345,10 +379,10 @@ Formally, a set $M$ is said to be a \textbf{n-dimensional topological manifold} 
 
 From here, we will use the word manifold to refer to the n-dimensional topological manifold.
 
-\paragraph{Charts}
+\subsubsection{Charts}
 The pair $(U_i, \phi_i)$ is called a \textbf{coordinate chart} or \textbf{chart} on $M$ if $U \in M$ and $\phi_i$ is a \textbf{homeomorphism} such that $\phi_i(U_i) = V_i \subseteq \mathbb{R}^n$ \cite{lee2012}.
 
-\paragraph{Atlas}
+\subsubsection{Atlas}
 
 A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a manifold $M$ if $\cup_{i \in A} U_i = M$ \cite{lee2012}.
 
@@ -369,8 +403,8 @@ A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a man
 	\end{figure}
 \end{example}
 
-\subsection{Graph Theory}
-\subsubsection{Graphs}
+\section{Graph Theory}
+\subsection{Graphs}
 
 Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph}, \cite{berge1973} where
 \begin{enumerate}
@@ -378,7 +412,7 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph}, \cite{berge197
 	\item $U$ is a family of elements $u_i \in X\times X$ called arcs.
 \end{enumerate}
 
-\paragraph{Basic Concepts \cite{berge1973}}
+\subsubsection{Basic Concepts \cite{berge1973}}
 \begin{description}
 	\item[Multiplicity] If $G=(X, U)$ and $(x, y) \in X\times X$, the multiplicity $m_g^+(x, y)$ of $x, y$ is defined to be the number of arcs with initial endpoint $x$ and terminal endpoint $y$. Furthermore:
 	\begin{enumerate}
@@ -392,7 +426,7 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph}, \cite{berge197
 	\item[Adjacency Matrix] If $G=(X, U), X=\{x_1, x_2, \dots, x_n \}$, define the adjacency matrix $A=[a_{ij}]_{n\times n}$ associated with graph $G$, where $a_{ij} = m_G^+(x_i, x_j)$.
 \end{description}
 
-\paragraph{Further Specifications}
+\subsubsection{Further Specifications}
 
 \begin{description}
 	\item[Undirected graph] ``All graphs are directed, but sometimes the direction need not be specified \cite{berge1973}".
@@ -431,13 +465,13 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph}, \cite{berge197
 	\end{figure}
 \end{description}
 
-\subsubsection{Related Problems}
+\subsection{Related Problems}
 
-\paragraph{Nearest-Neighbor Search}
+\subsubsection{Nearest-Neighbor Search}
 
 Let $G = (X, U)$ be a weighted graph, where $ \forall u \in U, \exists w_u \in \mathbb{R}$, i.e., the weight or \textbf{length} of the arc $u$, and $n\colon U \to \{0, 1\}$ a definition of \textbf{nearness} in $G$. The nearest-neighbor search is a optimization problem that consists of finding a subgraph $H = (X, F \subseteq U) \mid f \in F \iff n(f) = 1$.
 
-\subparagraph{A Generic Algorithm for NN Search}
+\paragraph{A Generic Algorithm for NN Search}
 \begin{enumerate}
 	\item $F_x \coloneqq \emptyset, \forall x \in X$
 	\item $F_x \coloneqq F_x \bigcup_{\forall p \in U_x} \begin{cases}
@@ -492,7 +526,7 @@ Let's consider two (between many)  specifications of this algorithm:
 	\end{figure}
 \end{example}
 
-\paragraph{Shortest-path Problem \cite{cor2011}}
+\subsubsection{Shortest-path Problem \cite{cor2011}}
 
 Let $G=(X, U)$ be a weighted graph, a path $p(x, y)=(u_0, u_1, u_2, \dots, u_{p-2}, u_{p-1}, u_{p}) \mid u_0 = (x, \_), u_p = (\_, y), u_i \in U, \forall i \in [0, p]$, and the weight of $p$ be given by $w(p) = \sum_i^p w(u_i)$. The shortest-path weight between two vertices $x$ and $y$ is defined as:
 \begin{align*}
@@ -506,7 +540,7 @@ while $p(x, y)$ is the \textbf{shortest path} from $x$ to $y$.
 
 The shortest-path between a vertex $x_0 \in X$ and all other vertices can be expressed by the tree $S=(X, F), F \subseteq U$, denominated \textbf{shortest-path tree}.
 
-\subparagraph{Dijkstra's Algorithm \cite{cor2011}}
+\paragraph{Dijkstra's Algorithm \cite{cor2011}}
 
 \begin{example}
 	Let G be the weighted graph as defined in figure \ref{fig:spa-graph}. The shortest-path between $A$ and all other vertices is described by the tree $S$ illustrated in figure \ref{fig:spa-tree}.
@@ -528,12 +562,12 @@ The shortest-path between a vertex $x_0 \in X$ and all other vertices can be exp
 	\end{figure}
 \end{example}
 
-\subsection{Machine Learning}
+\section{Machine Learning}
 “Learning is the improvement of performance is some environment through the acquisition of knowledge resulting from experience in that environment." \cite{pat1996}
 
 “Machine learning is the area in Computer Science that has as goal the projection and implementation of machines that have the ability to learn autonomously”. \cite{hot2009} In other words, the creation of machines that are able to recognize patterns in an environment and interpret those using concepts related to artificial intelligence. Such interpretation can create a model which might eventually be used to predict new patterns, take actions and/or solve domain problems.
 
-\subsubsection{Machine Learning Algorithms}
+\subsection{Machine Learning Algorithms}
 
 Based on how the learning phase of a problem is, most of the ML algorithms may be divided into one of the following categories:
 
@@ -547,7 +581,7 @@ Based on how the learning phase of a problem is, most of the ML algorithms may b
 	\item[Reinforcement] Through iterative exploration, the learner is positively or negatively reinforced for its actions. The learner's goal is, ultimately, maximize the cumulative reward gained. \cite{awa2015}
 \end{description}
 
-\paragraph{Support Vector Machine: An Example of Supervised Learning}
+\subsection{Support Vector Machine: An Example of Supervised Learning}
 
 The Support Vector Machine algorithm (i.e., SVM) is a is a powerful tool, often used in classification problems.
 
@@ -591,7 +625,7 @@ As the goal is to maximize the width, while still respecting the constraint (\re
 
 Which can be solved using standard quadratic programming.
 
-\paragraph{SVM for non-separable data sets (soft margins)}
+\subsubsection{SVM for non-separable data sets (soft margins)}
 
 To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$, \cite{wessvmdef} which represent a trade-off between maximum margin/distance of the misclassified samples from the decision boundary.
 $$\min \frac{1}{2} \|w\|^2 + C \sum_{1}^{m}\xi_i \text{, constrained to:}$$
@@ -599,7 +633,7 @@ $$y_i(w \cdot x_i +b) \geq 1- \xi_i, \xi_i \geq 0$$
 
 Such trade-off can be adjusted through the parameter $C$. Notice that small values for $C$ might result in misclassification, whereas high values can produce overfitting.
 
-\paragraph{Dependency over the dot product}
+\subsubsection{Dependency over the dot product}
 
 Equation \ref{eq:svmminw} does not explicitly illustrates how the model generated depents on the dot product between the training samples. The implications of such fact will be discussed in the next section. For now, let us convert \ref{eq:svmminw} to its dual form. By the Lagrange multipliers method: \cite{mitsvm}
 \begin{align} \label{eq:svmlag1}
@@ -627,7 +661,7 @@ $$\text{\textbf{decision rule}} \begin{cases}
 	\sum\alpha_i y_i x_i \cdot u +b < 0 \implies y_u=-1\\
 \end{cases}$$
 
-\paragraph{Kernel functions}
+\subsubsection{Kernel functions}
 
 "The kernel function represent the dot product of both vectors projected onto the new space". \cite{mitsvm}
 
@@ -663,7 +697,7 @@ The figure bellow illustrates a non-linearly separable data set defined in the $
 
 Between many different kernels, two often used are the RBF: $\exp(-\frac{\|x -x'\|^2}{2\sigma^2})$ and the Polynomial: $(u^T v + c)^{d}$. \cite{svmkernels}
 
-\subsubsection{Multi-class Classification}
+\subsection{Multi-class Classification}
 
 Not all problems are binary. In classification, this reflects data sets that have their samples separated into more than two classes. The Iris flower data set is an example of this, when predicting the samples' {\em species}.
 
@@ -683,13 +717,13 @@ There are many different approaches for multi-class classification. \cite{rif200
 	$$ f(x) = \argmax_i{\sum_{j=1}^{n} \frac{j-i}{|j-i|} c_{\min(i, j) \max(i, j)}(x)} $$
 \end{description}
 
-\subsubsection{Evaluating learners}
+\subsection{Evaluating learners}
 
 Machine Learning algorithms might be susceptible to data noise, incorrect configuration or even random factors, which would eventually decrease the generated model's accuracy. In order to evaluate this same accuracy, models are quite often tested after trained.
 
 Considering that testing with the same data used for training will most likely produce unreliable results, a simple way to test a learner is to separate the labeled data set into two chunks, where the first is used for training. The second chunk is then be given to the learner, which attempts to predict the samples. Finally, the predictions made by the learner would be compared with the actual labels.
 
-\paragraph{Confusion Matrix}
+\subsubsection{Confusion Matrix}
 
 When testing classification models, one way to visualize the wrong predictions made by the learner is a confusion matrix, where the item $a_{ij}$ is the number of times that a sample of the class $i$ was classified as being of the class $j$.
 
@@ -709,21 +743,21 @@ When testing classification models, one way to visualize the wrong predictions m
 
 Naturally, a diagonal matrix represents that all samples of the class $i$ were classified as $i$, which is the best possible outcome (no errors).
 
-\paragraph{Cross Validation}
+\subsubsection{Cross Validation}
 
 Sometimes (for example, when the data set does not have too many samples), partitioning of the data set into subsets might be benign to the learning process, as the model will be constructed only considering a small, random portion of the samples. This event is known as \textbf{underfitting}.
 
 When $k$-fold cross-validating, \cite{crossvalid} the data set can be partitioned into $k$ folds. For each fold $k_i$, a model is trained with all folds, except for $k_i$. The model is then tested over $k_i$. Finally, the score reported by the cross-validation method is the average accuracy when testing over all folds.
 
-\paragraph{Grid Search}
+\subsubsection{Grid Search}
 
 Machine Learning algorithms may require specific parameters to run. For instance, SVM requires $C$ and which $kernel$ it should use. Additionally, kernels might require their own parameters. As these parameters strongly affect how the generated model will be, one cannot choose them arbitrarily.
 
 Grid Search is a traditional method used to find the parameters that optimize the generalization of learning model over a specific data set. \cite{gridsearch} Given a set of possible parameters, it will exhaustively search for the combination of those that generate the best outcome, which might be evaluated by a validation method such as cross-validation.
 
-\subsubsection{Examples of Learning}
+\subsection{Examples of Learning}
 
-\paragraph{Coffee Selling Rate}
+\subsubsection{Coffee Selling Rate}
 
 The figure bellow illustrates the distribution of coffee sales per time of the day in a particular coffee-shop. \cite{roh2015} Clearly being a regression problem, a machine learning algorithm must create a model that appropriately generalizes the distribution observed. Such model will eventually be used to predict the selling rate in the following days.
 
@@ -738,7 +772,7 @@ The figure bellow illustrates the distribution of coffee sales per time of the d
 
 The orange line and the green arc represent two different models. The orange line, which represents the linear model, clearly does not generalize the data set appropriately, once it induces an error much larger than necessary. \cite{roh2015} The nonlinear model, i.e., the green arc, was capable of generalize the data inducing a smaller error.
 
-\paragraph{Iris Flower}
+\subsubsection{Iris Flower}
 
 Consider the Iris flower data set as defined in \ref{irisdataset}. In order to predict the feature {\em Species} of a given sample, one could train a Support Vector Machine classifier.
 
@@ -753,7 +787,7 @@ Through GridSearch, it was found that the SVM algorithm with $C=100$, $gamma=.01
 	\label{fig:cmsvmiris}
 \end{figure}
 
-\section{Linear Dimensionality Reduction}
+\chapter{Linear Dimensionality Reduction}
 
 As presented in the previous sections, data sets with many features may present a series of issues: difficult visualization, high performance requirements, noise etc. In this section, it will be discussed methods related with linear dimensionality reduction, i.e., the shrinking of data sets by transformation and/or removal of features, while minimizing information loss.
 
@@ -781,7 +815,7 @@ Additionally, something interesting can be observed when analyzing the covarianc
 	\caption{Covariance between the components of $K$.}
 \end{table}
 
-\subsection{Principal Component Analysis}
+\section{Principal Component Analysis}
 
 As in $K$, some data sets follow certain distributions that are majorly contained in a few orthogonal components, where a component is the result of a linear combination of the original features.
 
@@ -795,7 +829,7 @@ Principal Component Analysis (PCA) is a statistical technique that attempts to t
 	\label{fig:datasetrpc}
 \end{figure}
 
-\subsubsection{Study of the PCA Algorithm}
+\subsection{Study of the PCA Algorithm}
 
 Let $D$ be a dataset with $n$ samples and $f$ features and $X=HD$, where $H$ is the centering matrix. Our goal is to find which are the principal components of the covariance matrix $\Sigma_X$.
 \begin{align}
@@ -833,7 +867,7 @@ In the other hand, $V$ is orthogonal, hence $V^{-1}$ exists and it is equal to $
       &= xV
 \end{align*}
 
-\subsubsection{Formalization of the PCA Algorithm}
+\subsection{Formalization of the PCA Algorithm}
 
 Let $D$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the number of dimensions desired for the reduced data set. \cite{pca2002} \cite{pcapy}
 
@@ -847,13 +881,13 @@ Let $D$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 	\item Sort the eigenvalues by their absolute value in descending order and select the first $m$ ones and their respective eigenvectors.
 \end{enumerate}
 
-\subsection{Multidimensional Scaling}
+\section{Multidimensional Scaling}
 
 Alternatively to PCA, Multidimensional Scaling (or simply MDS) can be used to reduce the dimensionality of a data set. The method has, however, an extensive application domain and often appears in the literature in different contexts. An example of this is the problem of, given a set of objects $O$ and a dissimilarity measurement $\delta_{rs}, \forall (r, s) \in O\times O$, finding a suitable representation in the $\mathbb{R}^n$ for the objects in $O$. \cite{cox2001}
 
 For this project, we study the \textbf{classic MDS}. That is, when the dissimilarities considered are the euclidean distances between coordinates in the $\mathbb{R}^n$.
 
-\subsubsection{Study of the MDS}
+\subsection{Study of the MDS}
 
 If $\delta = [\delta_{rs}]_{n\times n}$ is the dissimilarity matrix, where $\delta_{rs}$ represents the euclidean distances between two samples $x_r, x_s\in \mathbb{R}^m$ from the data set $[X]_{n\times m}$ induced by the $L2$-norm. In other words,
 \begin{align}
@@ -867,7 +901,7 @@ If $\delta = [\delta_{rs}]_{n\times n}$ is the dissimilarity matrix, where $\del
 \end{split}
 \end{align}
 
-Now consider the inner product matrix $B=XX^T$, where $b_{rs}=x_{.r}\cdot x_{.s}$. Given that $B$ can be decomposed as $U\Sigma U^T=U\Sigma^\frac{1}{2} \Sigma^\frac{1}{2} U^T=U\Sigma^\frac{1}{2} (U\Sigma^\frac{1}{2})^T = XX^T\iff X=U\Sigma^\frac{1}{2}$, if we can derive $B$ from \ref{eq:basemds}, it will be possible to apply the same decomposition considered in PCA to find a new data set $Y$ which is a reduction of $X$. \cite{cox2001}
+Now consider the matrix $B=XX^T$, where $b_{rs}=x_{.r}\cdot x_{.s}$. $B$ can be decomposed as $U\Sigma U^T=U\Sigma^\frac{1}{2} \Sigma^\frac{1}{2} U^T=U\Sigma^\frac{1}{2} (U\Sigma^\frac{1}{2})^T = XX^T\iff X=U\Sigma^\frac{1}{2}$. If $B$ can be derived from \ref{eq:basemds}, the problem is reduced to simply decompose $B$ and using its eigenvalues and eigenvectors (similarly to what was done in PCA) to construct the data set $Y$. \cite{cox2001}
 
 Firstly, we will assume that $Y$ is centered in the origin (i.e., $Y$ has its features' means equal to zero):
 \begin{align}
@@ -888,7 +922,7 @@ x_s\cdot x_s &= \frac{1}{n} (\sum_r \delta_{rs}^2 - \sum_r x_r\cdot x_r)
 \end{split}
 \end{align}
 
-Similarly to \ref{eq:xsderivation},
+Similarly, to \ref{eq:xsderivation}:
 \begin{align}
 \label{eq:xrderivation}
 \begin{split}
@@ -930,13 +964,13 @@ B_{rs} = x_r\cdot x_s = -\frac{1}{2} (\delta_{rs}^2 - \frac{1}{n} [\sum_s \delta
 
 From \ref{eq:mds-defb}, it becomes clear that $B$ is, in fact, the double centering of the matrix $A=-\frac{1}{2}\delta^2$. I.e., $B=HAH$. Spectral decomposition can now be performed onto $B$, resulting in the matrices $\Sigma$ and $U$.
 
-Finally, we can sort the eigenvalues (and their respective eigenvectors, the columns of $U$) in decrease order and keep only the ones that offer greater variance.
+Finally, in order to reduce the dimensionality of the embedding, we can sort the eigenvalues (and their respective eigenvectors, the columns of $U$) in decrease order and keep only the ones that offer greater variance.
 
 \begin{remark}
 	As euclidean distances were used to build the dissimilarity matrix $\delta$, $B$ is indubitably positive semidefinite, hence $\Sigma_i \ge 0, \forall i\in [0, n)$. However, negative eigenvalues might appear if other dissimilarity measurement were to be used. In these cases, one might consider to simply ignore such components.
 \end{remark}
 
-\subsubsection{Formalization of the Multidimensional Scaling Method}
+\subsection{Formalization of the Multidimensional Scaling Method}
 
 Let $X$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the number of dimensions desired for the reduced data set. \cite{cox2001}
 
@@ -948,10 +982,10 @@ Let $X$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 
 	\item Select the $m$ greatest eigenvalues in $\Sigma$. From these, create the matrices $\Sigma'=[\sigma'_{m\times m}]$ and $U'=[u'_{n\times m}]$, where each column $i$ contains the eigenvector associated with $\sigma'_i$.
 
-	\item Construct the $m$-dimensional embedding $Y=U'\Sigma'$
+	\item Construct the $m$-dimensional embedding $Y=U'\Sigma'^{\frac{1}{2}}$
 \end{enumerate}
 
-\subsection{Evaluating Reductions}
+\section{Evaluating Reductions}
 
 ``Often it is the researcher's past experience with MDS and his or her judgment that
 ultimately determine whether the fit of a particular MDS solution is acceptable or not." \cite{naes1996multivariate}
@@ -965,7 +999,7 @@ Intuitively, Kruskal's stress \cite{naes1996multivariate} considers reductions t
 
 From the formula above, {\em Stress} is visibly contained in the interval $[0, 1]$, where 0 represents the best possible fit (all dissimilarities are the same), while 1 represents the worse.
 
-\subsection{Classification and Regression Over Linearly Reduced Data Sets}
+\section{Classification and Regression Over Linearly Reduced Data Sets}
 \label{sec:experiments_linear_ds}
 
 This section reports the performance of classifiers and regressors over determined data sets and their reduced forms. All experiments followed the format bellow:
@@ -980,7 +1014,7 @@ This section reports the performance of classifiers and regressors over determin
 	\end{enumerate}
 \end{enumerate}
 
-\subsubsection{$K$ Data Set}
+\subsection{$K$ Data Set}
 
 The figure bellow illustrates the results of PCA algorithm application over the artificial $K$ data set. Notice that, for the second application, it correctly chose to discard the vertical dimension, as the samples offer less variability in this component.
 
@@ -1009,7 +1043,7 @@ The figure bellow illustrates the results of PCA algorithm application over the 
 
 From the table above, one can also observe how Kruskal's stress might not be an appropriate quality measurement, given a specific domain. Indeed, for data set $K$, stress increase resulted from the removal of one of the components did not imply on prediction accuracy decrease.
 
-\subsubsection{The Iris Flower Data Set}
+\subsection{The Iris Flower Data Set}
 
 The Iris flower \ref{irisdataset}, containing 150 samples and 5 features.
 
@@ -1040,7 +1074,7 @@ Although the data set became nonlinearly separable, classes are still somewhat o
 	\caption{Description of predictions and reduction performance for Iris flower.}
 \end{table}
 
-\subsubsection{The Digits Data Set}
+\subsection{The Digits Data Set}
 
 Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sample is a 8x8 image of a hand-written digit from 0 to 9.
 
@@ -1070,7 +1104,7 @@ Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sa
 Notice that it was possible to eliminate 54 dimensions, consistently reducing the data set size, and only suffering 3\% of prediction accuracy loss. The score drastically decreased, however, when more dimensions were removed. Furthermore, accuracy decrease was followed by stress increase.
 
 \newpage
-\section{Nonlinear Dimensionality Reduction}
+\chapter{Nonlinear Dimensionality Reduction}
 
 Although PCA has presented promising results in the previous section, hence its great popularity in dimensionality reduction problems, there are many examples in which PCA will fail in its task. Consider the example bellow:
 
@@ -1105,13 +1139,13 @@ The table bellow describes a regression attempt over the data sets illustrated i
 
 Clearly, linear dimensionality reduction techniques are not adequate to reduce the Swiss-roll. In fact, it is not adequate to reduce any data set lying on a nonlinear manifold.
 
-\subsection{The ISOMAP Algorithm}
+\section{The ISOMAP Algorithm}
 
 Firstly suggested by Tenenbaum, de Silva and Langfor, \textbf{Isometric Feature Mapping} (or ISOMAP) assumes that the data lies near a smooth manifold. If the assumption is reasonable, it is be possible to explore concepts such as neighborhood and local linearity to map the manifold to a linear structure before reducing it with a linear algorithm.
 
 In this section we will discuss the ISOMAP algorithm and its inner workings. We will then proceed to formalize it. Finally, empirical tests results achieved during the project will be shown.
 
-\subsubsection{Study of the ISOMAP Algorithm}
+\subsection{Study of the ISOMAP Algorithm}
 \label{sec:studying_ISOMAP}
 
 As the original data set might be folded, twisted or curved, \cite{ten2000} we must first find a suitable linear representation for it.
@@ -1161,7 +1195,7 @@ Finally, $M$ is a euclidean graph which roughly lies on a linear subspace. Furth
 \end{figure}
 
 \newpage
-\subsubsection{Formalization of the ISOMAP Algorithm}
+\subsection{Formalization of the ISOMAP Algorithm}
 
 Let $X$ be the original data set and $p \in \mathbb{R}$ the number of dimensions desired for the reduced data set, \cite{ten2000}
 
@@ -1173,7 +1207,7 @@ Let $X$ be the original data set and $p \in \mathbb{R}$ the number of dimensions
 	\item Use $M$ to construct the $p$-dimensional embedding using the \textbf{MDS} algorithm.
 \end{enumerate}
 
-\subsubsection{Computational Complexity}
+\subsection{Computational Complexity}
 \label{sec:isocomplexity}
 
 If $n$ is the number of training samples, $f \in \mathbb{R}$ the number of features and $k \in \mathbb{R}$ the number of nearest neighbors:
@@ -1238,10 +1272,10 @@ In practice, ISOMAP's time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ makes 
 
 \end{experiment}
 
-\subsubsection{Extensions}
+\subsection{Extensions}
 \label{sec:ISOMAP_extensions}
 
-\paragraph{ISOMAP as a variation of Kernel PCA}
+\subsubsection{ISOMAP as a variation of Kernel PCA}
 
 % TODO This description needs extensive refactoring.
 While ``classic" PCA aims to find the principal components of the covariance matrix $\Sigma = \frac{1}{n} X^T X = \frac{1}{n} \sum_k x_{ik} \cdot x_{kj}, \forall (i, j) \in [0, |S|]^2$ of a centered data set $X$, it can be easily modified to attempt to do the same, but over the matrix $\Sigma' = \frac{1}{n} \sum_i \phi(x)_i \cdot \phi(y)_i$, where $\phi \colon \mathbb{R}^f \to \mathbb{R}^p$ is a kernel function that projects points in the original $f$-space to a different $p$-space. Such modification is named Kernel PCA.
@@ -1265,12 +1299,12 @@ The figure bellow displays the reduction of the Swiss-roll data set done by the 
 	\caption{The embedded swiss-roll data set by the original and scikit-learn's implementation.}
 \end{figure}
 
-\paragraph{Landmark ISOMAP}
+\subsubsection{Landmark ISOMAP}
 
 % TODO Fill this paragraph.
 ...
 
-\paragraph{p-ISOMAP}
+\subsubsection{p-ISOMAP}
 
 The embedding found by ISOMAP is strongly depentend of the parameters $k$ or $\epsilon$. When these parameters are too small, the neighborhood graph extracted might be disconnected, causing the dissimilarity between some some vertices to be infinite. On the other hand, when the parameters are too big, vertices from different neighborhoods are prone to stay connected, preventing the manifold to be ``unfolded". Hence the importance of choosing appropriate parameters. However, in many cases, these ``appropriate" paramaters might not be not evident. Hence the interest of developing a parameterless ISOMAP.
 
@@ -1285,10 +1319,10 @@ p-ISOMAP is an extension that automatically selects the parameters $k$ or $\epsi
 		\item If the parameter was decreased, then edges might have been removed and all pairs of vertices whose shortest-paths contain those edges are added to $F$. Identifying $F$ can be done in $O(n^2)$ times steps to execute, given some optimzation (see \cite{choo2010p}). Now, Dijkstra's can be selectively performed, requiring $O(n \max_i (|E_i'| \log |V_d(i)| + |E_i''|)$, where, given a vertex $x_i$, $V_d(i)=\{x_j | (x_i, x_j) \in F\}$, $E_i'$ is the set of edges connecting whichever pair of vertices in $V_d(i)$ and $E_i''$ is the set of edges connecting the vertices $x_a$ and $x_b$ such that $x_a$ is in $V_d(i)$ and $x_b$ is not.
 	\end{itemize}
 
-	\item Finally, the last step is to update the eigenvectors and eigenvalues associated with the inner product matrix $B$. They can be approximated using the Lanczos algorithm, an iterative refining method that takes an initial solution candiadate. Officially, the time complexity of Lanczoz algorithm is $O(n^2)$. \cite{chen2004machine} Yet, its timeframe for convergence also strongly depends on the solution candidate given. Assuming the previous inner matrix and the current one are similar, one might use the previous eigenvalues/vectors found as candidate. In this scenario, Lanczoz's will likely finish much faster than other algorithms.
+	\item Finally, the last step is to update the eigenvectors and eigenvalues associated with the matrix $B$. They can be approximated using the Lanczos algorithm, an iterative refining method that takes an initial solution candiadate. Officially, the time complexity of Lanczoz algorithm is $O(n^2)$. \cite{chen2004machine} Yet, its timeframe for convergence also strongly depends on the solution candidate given. Assuming the previous inner matrix and the current one are similar, one might use the previous eigenvalues/vectors found as candidate. In this scenario, Lanczoz's will likely finish much faster than other algorithms.
 \end{itemize}
 
-\subsubsection{Evaluating Reductions}
+\subsection{Evaluating Reductions}
 
 ISOMAP's aim to ``unfold" the data set and, of course, it might distort dissimilarities between samples in the process. Hence drastically increasing Kruskal's stress. Clearly, this measure is unsuitable for evaluating ISOMAP. As proposed by L. Shi and J. Gu, Kruskal's stress can be easily updated to match ISOMAP nature. That is, to preserve dissimilarities within neighborhoods: \cite{shi2012fast}
 
@@ -1297,7 +1331,7 @@ Let $X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $Y_{n \t
 	Stress_{ISOMAP} &= [\frac{\sum_i \sum_{j \in \Omega} (\delta_{ij} - \hat{\delta}_{ij})^2}{\sum_i \sum_{j \in \Omega} \delta_{ij}^2}]^{\frac{1}{2}}
 \end{align*}
 
-\subsubsection{Applicability and Limitations}
+\subsection{Applicability and Limitations}
 
 It is quite clear that ISOMAP outperforms PCA on the data set $S$. Unfortunately, this cannot be projected for a generic case considering the strict and artificial nature of $S$. In real-world data sets, the application of ISOMAP may lead to poor low-dimensional embeddings. \cite{herik2009} Bellow are listed some the issues that have great influence over ISOMAP's results:
 \begin{description}
@@ -1364,11 +1398,11 @@ It is quite clear that ISOMAP outperforms PCA on the data set $S$. Unfortunately
 \end{description}
 
 \newpage
-\subsection{Classification and Regression Over Data Sets Reduced with ISOMAP}
+\section{Classification and Regression Over Data Sets Reduced with ISOMAP}
 
 Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, classification and regression experiments made in common data sets, following the same format as before.
 
-\subsubsection{The Swiss Roll Data Set}
+\subsection{The Swiss Roll Data Set}
 
 \begin{figure}[H]
 	\centering
@@ -1391,7 +1425,7 @@ Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, clas
 	\caption{Description of predictions and reduction performance for Swiss Roll.}
 \end{table}
 
-\subsubsection{The Iris Flower Data Set}
+\subsection{The Iris Flower Data Set}
 
 Once again, the Iris flower data set, containing 150 samples and 5 features.
 
@@ -1418,7 +1452,7 @@ Once again, the Iris flower data set, containing 150 samples and 5 features.
 \end{table}
 
 \newpage
-\subsubsection{The Glass Data Set}
+\subsection{The Glass Data Set}
 
 The Glass data set contains 214 samples and 11 features, were the first one is the identification number of a given sample and the last one is the class to which that sample belongs.
 
@@ -1445,7 +1479,7 @@ The Glass data set contains 214 samples and 11 features, were the first one is t
 \end{table}
 
 \newpage
-\subsubsection{The Digits Data Set}
+\subsection{The Digits Data Set}
 
 \begin{figure}[H]
 	\centering
@@ -1472,7 +1506,7 @@ The Glass data set contains 214 samples and 11 features, were the first one is t
 Notice that the data set was reduced to only 3 dimensions, while maintaining 91\% of accuracy (remember that dimensionality reduction with PCA would reduce accuracy to 74\%). Accuracy loss is still observable when reducing it to two or one dimensions, although it is less intense than losses caused by linear reduction.
 
 \newpage
-\subsubsection{The Dermatology Data Set}
+\subsection{The Dermatology Data Set}
 
 The Dermatology data set, composed by 366 samples and 35 features. Here, the target is to correctly diagnose the erythemato-squamous diseases.
 
@@ -1499,7 +1533,7 @@ The Dermatology data set, composed by 366 samples and 35 features. Here, the tar
 \end{table}
 
 \newpage
-\subsubsection{The Leukemia Data Set}
+\subsection{The Leukemia Data Set}
 
 Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 72 samples and 7130 features. The first 7129 features are expression levels of the genes in a given patient. The 7130th feature $t \in \{-1, 1\}$ indicate which of two variants of leukemia is present in the sample (AML, 25 samples, or ALL, 47 samples). \cite{on:duc_ds}
 
@@ -1527,7 +1561,7 @@ Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 
 
 The Results in the table above are quite impressive: although visualization has barely changed from 7129 to 3 dimensions, a 7129-dimensional space was reduced to a 10-dimensional one with only 10\% of accuracy loss.
 
-\subsubsection{The WDBC Data Set}
+\subsection{The WDBC Data Set}
 
 The Wisconsin Diagnostic Breast Cancer (WDBC) data set, containing 596 samples and 32 features computed from a breast mass. WDBC has benign 357 samples and 212 malignant. During this experiment, the first feature was disregarded, as it represents the identification numbers of the samples.
 
@@ -1557,7 +1591,7 @@ The Wisconsin Diagnostic Breast Cancer (WDBC) data set, containing 596 samples a
 Observe how prediction accuracy consistently increased when the data set was reduced.
 
 \newpage
-\subsubsection{Diabetes Data Set}
+\subsection{Diabetes Data Set}
 
 With 9 features observed from 768 samples collected from residents of Arizona, USA, the Diabetes data set seeks to diagnose whether a patient (sample) shows signs of diabetes (class 1) according to World Health Organization criteria or not (class 0). Is is also important to mention that only 268 samples belong, in fact, to class 1.
 
@@ -1587,9 +1621,8 @@ With 9 features observed from 768 samples collected from residents of Arizona, U
 In this experiment, Diabetes was compressed to one forth of its original size (48 KB to 12 KB), and no significant prediction accuracy was lost.
 
 \newpage
-\section{Final Considerations}
-
-% TODO Review this.
+\setcounter{secnumdepth}{-1}
+\chapter{Final Considerations}
 
 In this report, the subject of dimensionality reduction was approached. First, focusing on linear methods and their capacity of extract features that maximize variance in a data set, we successfully reduced, visualized and learned well known data sets. Furthermore, we demonstrated how these methods would fail to reduce data sets that followed a nonlinear distribution.
 
