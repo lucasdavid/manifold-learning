@@ -6,11 +6,12 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{mathtools}
-	\usepackage{amsfonts}
+\usepackage{amsfonts}
 \usepackage{hyperref}
 \usepackage{float}
 \usepackage{wrapfig}
 \usepackage{cite}
+\usepackage{listings}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 
@@ -526,7 +527,7 @@ Let's consider two (between many)  specifications of this algorithm:
 	\end{figure}
 \end{example}
 
-\subsubsection{Shortest-path Problem \cite{cor2011}}
+\subsubsection{Single-pair Shortest-path Problem \cite{cor2011}}
 
 Let $G=(X, U)$ be a weighted graph, a path $p(x, y)=(u_0, u_1, u_2, \dots, u_{p-2}, u_{p-1}, u_{p}) \mid u_0 = (x, \_), u_p = (\_, y), u_i \in U, \forall i \in [0, p]$, and the weight of $p$ be given by $w(p) = \sum_i^p w(u_i)$. The shortest-path weight between two vertices $x$ and $y$ is defined as:
 \begin{align*}
@@ -538,9 +539,31 @@ Let $G=(X, U)$ be a weighted graph, a path $p(x, y)=(u_0, u_1, u_2, \dots, u_{p-
 
 while $p(x, y)$ is the \textbf{shortest path} from $x$ to $y$.
 
-The shortest-path between a vertex $x_0 \in X$ and all other vertices can be expressed by the tree $S=(X, F), F \subseteq U$, denominated \textbf{shortest-path tree}.
+The shortest-path between a vertex $x_0 \in X$ and all other vertices can be expressed by the tree $S=(X, F), F \subseteq U$ named \textbf{shortest-path tree}.
 
 \paragraph{Dijkstra's Algorithm \cite{cor2011}}
+
+Let $G=(V, E)$ be a directed weighted graph and $v_0 \in V$ the initial vertex, the shortest-path from $v_0$ to all other vertices can be found through Dijkstra's algorithm:
+
+\begin{lstlisting}[mathescape]
+    $Dijkstra(V, E, w)$:
+        for $v \in $ V
+            $predecessor(v_i) \leftarrow None$
+            $d(v_i) \leftarrow \infty$
+        $d(v_0) \leftarrow 0$
+        S $\leftarrow \emptyset$
+        Q $\leftarrow $ priority_queue(V, d)
+        while Q $\ne \emptyset$
+            u $\leftarrow$ pop_min(Q)
+            for each $v \in V \mid (u, v) \in E$
+                if $d(v) > d(u) + w(u, v)$
+                    $d(v) \leftarrow d(u) + w(u, v)$
+                    $predecessor(v) = u$
+\end{lstlisting}
+
+\begin{remark}
+	Dijkstra's algorithm is based on two strategies: greedy, when extracting the vertex $u$ such that $d(u)$ is minimum, and dynamic programming, during edge relaxation (comparison and update of the $d(v)$ and $predecessor(v)$ values).
+\end{remark}
 
 \begin{example}
 	Let G be the weighted graph as defined in figure \ref{fig:spa-graph}. The shortest-path between $A$ and all other vertices is described by the tree $S$ illustrated in figure \ref{fig:spa-tree}.
@@ -561,6 +584,39 @@ The shortest-path between a vertex $x_0 \in X$ and all other vertices can be exp
 		\end{subfigure}
 	\end{figure}
 \end{example}
+
+\subsubsection{All-pairs Shortest-path Problem}
+
+Similarly from the previous problem, all-pairs shortest-path is also a search problem that aims to find the predecessors of each vertex $v_i \in V$. The difference is that there is no constraint regarding the initial vertex, i.e., one is interested in finding the shortest routes from every vertex to every other vertex in the graph.
+
+Clearly, all-pairs shortest-path can be solved by executing the Dijkstra's Algorithm $|V|$ times, using every $v_i \in V$ as initial vertex.
+
+\paragraph{Floyd-Warshall Algorithm \cite{golin2003floydwarshall}}
+
+Another solution for the all-pairs shortest-path problem is Floyd-Warshall algorithm, which is entirely based on dynamic programming:
+
+\begin{lstlisting}[mathescape]
+    $Floyd-Warshall(w, n)$:
+        for $i \in V$
+            for $j  \in [1, n]$
+                $d(i, j) = w(i, j)$
+                $predecessor(i, j) \leftarrow None$
+
+        for $k  \in [1, n]$
+            for $j \in [1, n]$
+                for $i \in [1, n]$
+                    if $d(i, j) > d(i, k) + d(k, j)$
+                        $d(i, j) \leftarrow d(i, k) + d(k, j)$
+                        $predecessor(i, j) \leftarrow k$
+\end{lstlisting}
+
+Now, matrix $d$ contains  the weights sum for the paths between all vertices of the graph. These paths can be constructed by:
+\begin{lstlisting}[mathescape]
+    $Path(i, j)$:
+        if $predecessor(i, j) = None$
+            return $[i, j]$
+        return $Path(i, pred[i, j]) \bigcup Path(pred[i, j], j)$
+\end{lstlisting}
 
 \section{Machine Learning}
 “Learning is the improvement of performance is some environment through the acquisition of knowledge resulting from experience in that environment." \cite{pat1996}
@@ -1280,7 +1336,7 @@ In practice, ISOMAP's time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ makes 
 % TODO This description needs extensive refactoring.
 While ``classic" PCA aims to find the principal components of the covariance matrix $\Sigma = \frac{1}{n} X^T X = \frac{1}{n} \sum_k x_{ik} \cdot x_{kj}, \forall (i, j) \in [0, |S|]^2$ of a centered data set $X$, it can be easily modified to attempt to do the same, but over the matrix $\Sigma' = \frac{1}{n} \sum_i \phi(x)_i \cdot \phi(y)_i$, where $\phi \colon \mathbb{R}^f \to \mathbb{R}^p$ is a kernel function that projects points in the original $f$-space to a different $p$-space. Such modification is named Kernel PCA.
 
-In his paper, Ghodsi describes how MDS (and therefore, ISOMAP) is equivalent to Kernel PCA, given it is using the following kernel: \cite{gho2006}
+In his paper, Ghodsi describes how MDS (and therefore, ISOMAP) is equivalent to Kernel PCA, given it is using the following kernel function: \cite{gho2006}
 
 \begin{align*}
 K_{ISOMAP} = -\frac{1}{2}H \delta^2 H
@@ -1298,6 +1354,20 @@ The figure bellow displays the reduction of the Swiss-roll data set done by the 
 	\captionsetup{justification=centering}
 	\caption{The embedded swiss-roll data set by the original and scikit-learn's implementation.}
 \end{figure}
+
+\subsubsection{Incremental ISOMAP}
+
+The original ISOMAP algorithm reduces the data set in a single execution. Even its implementation with Kernel PCA will not update the reduction model if new data points are given, only reduce these points using the eigenvectors previously found. Therefore, updating ISOMAP reduction model requires recalculating it at every new data ``batch", which is very costly.
+
+In order to allow ISOMAP to continuously learn from a stream of data, Incremental ISOMAP was proposed. \cite{law2006incremental} Relying on the fact that new data points will unlikely afect a large subsets of vertices, it selectively updates the structures kept by ISOMAP. The update is performed as it follows.
+
+Let $\delta_{ab}$ be the dissimilarity measure between two samples $a$ and $b$, $x_i$ be a sample in the nearest neighbor graph, $x_j$ a neighbor of $x_i$ such that their dissimilarity is higher among all $x_i$'s neighbors. Finally, consider $x_{n+1}$ a new sample to increment in the reduction model.
+
+\begin{itemize}
+	\item The new sample $x_{n+1}$ will replace $x_j$ as a neighbor of $x_i$ if $\delta_{x_ix_{n+1}} < \delta_{x_ix_j}$. A list of added or removed edges should be stored.
+	
+	\item 
+\end{itemize}
 
 \subsubsection{Landmark ISOMAP}
 
