@@ -7,6 +7,8 @@ class KExperiment(ReductionExperiment, LearningExperiment):
     title = 'K PCA'
     plotting = True
 
+    reduction_method = 'pca'
+
     def _run(self):
         self.generate_data()
 
@@ -14,8 +16,6 @@ class KExperiment(ReductionExperiment, LearningExperiment):
         # self.learn()
 
         # Reduce dimensions of K.
-        self.reduction_method = 'pca'
-
         for dimension in (2, 1):
             self.reduction_params = {'n_components': dimension}
             self.reduce()
