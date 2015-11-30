@@ -1,3 +1,10 @@
+\title{A Study of the ISOMAP Algorithm and Its Applications in Machine Learning}
+\author{Lucas Oliveira David\\[2cm]
+	Department of Computing\\
+	Universidade Federal de São Carlos\\[2cm]
+	Supervisor: Dr. Alexandre Luis Magalhães Levada}
+\date{\vfill December 2015}
+
 \documentclass[12pt]{report}
 
 \usepackage{titlesec}
@@ -52,12 +59,6 @@
 
 \begin{document}
 	
-\title{A Study of the ISOMAP Algorithm and Its Applications in Machine Learning}
-\author{Lucas Oliveira David\\[2cm]
-	Department of Computing\\
-	Universidade Federal de São Carlos\\[2cm]
-	Supervisor: Dr. Alexandre Luis Magalhães Levada}
-\date{\vfill December 2015}
 \maketitle
 
 \pagenumbering{roman}
@@ -1380,20 +1381,39 @@ The original ISOMAP algorithm reduces the data set in a single execution. Even i
 
 In order to allow ISOMAP to continuously learn from a stream of data, Incremental ISOMAP was proposed. \cite{law2006incremental} Relying on the fact that new data points will unlikely afect a large subsets of vertices, it selectively updates the structures kept by ISOMAP. The update is performed as it follows.
 
-Let $\delta_{ab}$ be the dissimilarity measure between two samples $a$ and $b$, $x_i$ be a sample in the nearest neighbor graph, $x_j$ a neighbor of $x_i$ such that their dissimilarity is higher among all $x_i$'s neighbors. Finally, consider $x_{n+1}$ a new sample to increment in the reduction model.
+Let $[X]_{n \times f}$ be a data set with $n$ samples and $f$ features, $\delta_{ab}$ be the dissimilarity measure between two samples $a$ and $b$, $x_i$ be a sample in the nearest neighbor graph, $x_j$ a neighbor of $x_i$ such that their dissimilarity is higher among all $x_i$'s neighbors. Additionally, let $[Y]_{n \times d}$ be the embedding of $X$ in the $d$-dimensional space. Finally, consider $x_{n+1}$ a new sample to increment in the reduction model.
 
 \begin{enumerate}
 	\item The new sample $x_{n+1}$ will replace $x_j$ as a neighbor of $x_i$ if $\delta_{x_ix_{n+1}} < \delta_{x_ix_j}$. A list of added or removed edges should be stored.
 	
 	\item The update of the shorest-path graph:
 	\begin{enumerate}
-		\item For removed edges: nodes that were reached through a path that contains the removed edge must have their precedessor set to $None$ and $d$ to infinit. Dijkstra's should be executed in order to find the path for the vertex.
-		\item For added edges: adding edges can improve existing paths, all vertices must be updated.
-		\item Finally, a path must be found from every vertex to the adding sample.
+		\item For every edge $(x_i, x_j)$ removed, the shortest-path between any two points $(x_a, x_b)$ that contains $(x_i, x_j)$ must be updated. That involves applying a slightly modified Dijsktra's algorithm, which will focus on finding the paths from a given source $u$ and its unreached destination vertices (i.e., vertices $C(u)=\{c_i\}$ whose  shortest-paths $(u, c_i)$ contained a removed edge.
+		
+		\item The geodesic distances between all vertices and $x_{n+1}$ must then be calculated. Let $A$ be the set of added edges:
+		\begin{align*}
+			g[n+1, i] = g[i, n+1] = \min_{j \mid (n+1, j) \in A} (g[i, j]+w(j, n+1)),\forall i.
+		\end{align*}
+		
+		All the added edges are incident on vertex $x_{n+1}$, naturally.  Calculating the shorest-path consists on considering two whichever edges $(a, x_{n+1}), (x_{n+1}, b)$ and relaxing the edge $(a, b)$ by considering the path $a \to x_{n+1} \to b$.
 	\end{enumerate}
 	
-	\item The update of the coordinate matrix can be done thorugh Laczos iterative method.
+	\item Finally, the eigenvectors/eigenvalues of the inner product matrix $B_{new}$ (which contains the recently added sample $x_{n+1}$) can be found through an iterative scheme, where ``a good initial guess for the subspace of dominant eigenvectors is the column space of $Y$" \cite{law2006incremental} (the embedding before the $x_{n+1}$ increment).
+	A better eigen-space for $B_{new}$, and thus $Y_{new}$ can be found by Subspace iteration together with Rayleigh-Ritz acceleration: \cite{law2006incremental} 
+	\begin{enumerate}
+		\item Let $Z = B_{new}Y$. Perform QR-decomposition on $Z$: $Z = B_{new}Y = QR$.
+		
+		\item Take $V=Q$ (remember that Q is intrinsically an orthogonal matrix) and $Z^*=V^TB_{new}V$. Perform spectral-decomposition of $[Z^*]_{d \times d}$ to find $\Lambda = diag(\lambda_i)$ and $V = [v_i]_{d \times d}$. This is significantly faster than directly decomposing $B_{new}$, considering the dimensions of both matrices. 
+
+		\item $Y_{new} = [Y, y_{n+1}]^T$, where $y_{n+1}$ is the $d$-dimensional embedding of $x_{n+1}$:
+		\begin{align*}
+			y_{n+1} &= (\frac{1}{\sqrt{\lambda_1}} v_1 \cdot f, \dots, \frac{1}{\sqrt{\lambda_d}} v_d \cdot f) \\
+			2f_i &\approx \frac{1}{n}[\sum_j g_{ij}^2 - \sum_{lj} g_{lj}^2 + \sum_l g_{l, n+1}^2] -g_{i, n+1}^2
+		\end{align*}
+	\end{enumerate}
 \end{enumerate}
+
+In regard to time complexity, considering $q$ the maximum degree of the vertices in the graph, $F$ is the set of pairs whose shortest path contained a removed edge and $H$ is the set of vertex pairs whose geodesic distances were modified, Incremental ISOMAP will require $O[q(|F|+|H|)]$ time steps in phase 1; $O[n^2(\log n + q)]$ in 2; and $O(n^2)$ in 3. The time complexity of the algorithm is, therefore, $O[q(|F|+|H|) + n^2(\log n + q + 1)]$.
 
 \subsubsection{L-ISOMAP}
 \label{sec:lisomap}
