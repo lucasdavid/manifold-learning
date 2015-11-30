@@ -33,7 +33,7 @@ class SpamExperiment(ReductionExperiment):
                 self.reduce()
 
             except KeyboardInterrupt:
-                print('%.2f s spent in this last iteration. ' % (time.time() - start()))
+                print('%.2f s spent in this last iteration. ' % (time.time() - start))
 
         if self.plotting:
             self.displayer.show()
