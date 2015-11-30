@@ -24,6 +24,25 @@
 \linespread{1.2}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcount\colveccount
+\newcommand*\colvec[1]{
+	\global\colveccount#1
+	\begin{pmatrix}
+		\colvecnext
+	}
+	\def\colvecnext#1{
+		#1
+		\global\advance\colveccount-1
+		\ifnum\colveccount>0
+		\\
+		\expandafter\colvecnext
+		\else
+	\end{pmatrix}
+	\fi
+}
+
+
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{remark}{Remark}[section]
 \newtheorem{example}{Example}[section]
@@ -1344,7 +1363,7 @@ K_{ISOMAP} = -\frac{1}{2}H \delta^2 H
 
 Where $H \delta H$ is the double centered dissimilarity matrix, i.e, the double centered geodesic distances between samples found from the shortest-path graph.
 
-The advantage of substituting the MDS algorithm by Kernel PCA is that the former will provides us with an embedding, i.e., a transformation matrix from the original space to the reduced one; whereas only embeds the data set, requiring its complete re-execution for new data points. \cite{ham2004kernel}
+An advantage of substituting the MDS algorithm by Kernel PCA is that the latter provides an embedding, i.e., a transformation matrix from the original space to the reduced one; whereas MDS only embeds the data set. \cite{ham2004kernel} However, Silva and Tenenbaum have shown that MDS's result can be used to reduce new samples (Landmark-MDS). \cite{silva2002global} More will be discussed in \ref{sec:lisomap}.
 
 The figure bellow displays the reduction of the Swiss-roll data set done by the original implementation of ISOMAP (using MDS) and scikit-learn's implementation (using Kernel PCA). Clearly, they are identical.
 
@@ -1369,28 +1388,48 @@ Let $\delta_{ab}$ be the dissimilarity measure between two samples $a$ and $b$, 
 	\item 
 \end{itemize}
 
-\subsubsection{Landmark ISOMAP}
+\subsubsection{L-ISOMAP}
+\label{sec:lisomap}
 
-% TODO Fill this paragraph.
-...
+ISOMAP's time complexity dependents mainly on the number of samples. Remember: for $N$ samples, ISOMAP will require $O[n^2(\log n + k)]$ and $O[n^3]$ time operations to compute the shortest-paths and eigenvectors/values, respectively.
+
+Landmark ISOMAP aims to reduce the complexity of the algorithm by finding the dissimilarities between $n$ landmarks (a small subset of samples) and all the original samples. Its complexity can then be reduced to $O[n^2(\log N + k) + n^2N]$. If $n \ll N$, this represents a expressive performance improvement. \cite{silva2002global}
+
+Let $X$ be the initial data set of interest, $l$ be the dimensionality to which $X$ should be reduced and $\epsilon > 0 \in \mathbb{N}$ a number to ``ensure stability". \cite{silva2002global} L-ISOMAP is defined as it follows.
+
+\begin{enumerate} 
+	\item Select $n$ random samples from $X$, such that $n > l + 1 + \epsilon$.
+	\item Calculate the nearest-neighbors of each selected samples (all the original samples should be considered as neighbors).
+	\item Calculate the shortest-paths from the neighborhood graph obtained in the previous step and the dissimilarity matrix $[\delta]_{n \times N}$.
+	\item Perform Landmark MDS, an slightly modifed MDS:
+	\begin{enumerate}
+		\item Apply classical MDS to the submatrix of landmarks $[\delta]_{n \times n}$.
+		\item Embbed the remaining points through:
+		\begin{align*}
+			y &= -\frac{1}{n} L^{-1}  (\Delta_x - \bar{\Delta}_n)\\		
+			y &= -\frac{1}{n} \colvec{4}{\frac{v_1^T}{\sqrt{\lambda_1}}}{\frac{v_2^T}{\sqrt{\lambda_2}}}{\dots}{\frac{v_n^T}{\sqrt{\lambda_n}}} (\Delta_x - \bar{\Delta}_n)\\
+		\end{align*}
+		Where $\Delta_x$ is the square dissimilarity column vector from sample $x$ to all landmarks and $\bar{\Delta}_n$ the vector containing the column mean of $\Delta_n$ (the square dissimilarity matrix between landmarks).
+	\end{enumerate}
+\end{enumerate}
 
 \subsubsection{p-ISOMAP}
 
 The embedding found by ISOMAP is strongly depentend of the parameters $k$ or $\epsilon$. When these parameters are too small, the neighborhood graph extracted might be disconnected, causing the dissimilarity between some some vertices to be infinite. On the other hand, when the parameters are too big, vertices from different neighborhoods are prone to stay connected, preventing the manifold to be ``unfolded". Hence the importance of choosing appropriate parameters. However, in many cases, these ``appropriate" paramaters might not be not evident. Hence the interest of developing a parameterless ISOMAP.
 
 p-ISOMAP is an extension that automatically selects the parameters $k$ or $\epsilon$. \cite{choo2010p} Assuming an result of ISOMAP for a particular parameter value is available, a new parameter will be considered and p-ISOMAP will iteratively update the soluton by:
-\begin{itemize}
+\begin{enumerate}
 	\item Adding/removing neighbors for every vertex in the neighborhood graph regarding the new parameter. This operation has time complexity $O(n \max_i |\Delta e_i|)$, where $|\Delta e_i|$ is the number of inserted/removed edges associated with sample $x_i$.
 	
 	\item Update the shortest-paths described by the pairs of vertices in $F \subset Q$, where $Q$ is the set of all pairs of vertices and $F$ is the set of pairs associated with the updated edges in the previous step.
-	\begin{itemize}
+	\begin{enumerate}
 		\item	If the parameter value increased in comparison to the previous one, edges might have been added. Updating the shortest-path tree consists in simply relaxing edges associated with any of the vertices in the pairs of $F$. The time complexity is loosely bounded by $O(|A|q|F|)$, where $|A|$ is the number of inserted edges and $q$ is the maximum degree of vertices in G.
 		
 		\item If the parameter was decreased, then edges might have been removed and all pairs of vertices whose shortest-paths contain those edges are added to $F$. Identifying $F$ can be done in $O(n^2)$ times steps to execute, given some optimzation (see \cite{choo2010p}). Now, Dijkstra's can be selectively performed, requiring $O(n \max_i (|E_i'| \log |V_d(i)| + |E_i''|)$, where, given a vertex $x_i$, $V_d(i)=\{x_j | (x_i, x_j) \in F\}$, $E_i'$ is the set of edges connecting whichever pair of vertices in $V_d(i)$ and $E_i''$ is the set of edges connecting the vertices $x_a$ and $x_b$ such that $x_a$ is in $V_d(i)$ and $x_b$ is not.
-	\end{itemize}
+	\end{enumerate}
 
 	\item Finally, the last step is to update the eigenvectors and eigenvalues associated with the matrix $B$. They can be approximated using the Lanczos algorithm, an iterative refining method that takes an initial solution candiadate. Officially, the time complexity of Lanczoz algorithm is $O(n^2)$. \cite{chen2004machine} Yet, its timeframe for convergence also strongly depends on the solution candidate given. Assuming the previous inner matrix and the current one are similar, one might use the previous eigenvalues/vectors found as candidate. In this scenario, Lanczoz's will likely finish much faster than other algorithms.
-\end{itemize}
+\end{enumerate}
 
 \subsection{Evaluating Reductions}
 
@@ -1401,11 +1440,12 @@ Let $X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $Y_{n \t
 	Stress_{ISOMAP} &= [\frac{\sum_i \sum_{j \in \Omega} (\delta_{ij} - \hat{\delta}_{ij})^2}{\sum_i \sum_{j \in \Omega} \delta_{ij}^2}]^{\frac{1}{2}}
 \end{align*}
 
+\newpage
 \subsection{Applicability and Limitations}
 
 It is quite clear that ISOMAP outperforms PCA on the data set $S$. Unfortunately, this cannot be projected for a generic case considering the strict and artificial nature of $S$. In real-world data sets, the application of ISOMAP may lead to poor low-dimensional embeddings. \cite{herik2009} Bellow are listed some the issues that have great influence over ISOMAP's results:
 \begin{description}
-	\item[Manifold Assumption] It refers to the initial assumption that the data lies on a low-dimensional manifold. Although wildly exploited by many authors, it is difficult to assert whether such assumption holds or not in real-world data sets. \cite{lin2008riemannian} Furthermore, even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations would be produced.
+	\item[Manifold Assumption] It refers to the initial assumption that the data lies on a low-dimensional manifold. Although wildly exploited by many authors, it is difficult to assert whether such assumption holds or not in real-world data sets. \cite{lin2008riemannian} Furthermore, even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations are likely to be produced.
 
 	\newpage
 
@@ -1439,13 +1479,13 @@ It is quite clear that ISOMAP outperforms PCA on the data set $S$. Unfortunately
 
 	\begin{figure}[H]
 		\centering
-		\begin{subfigure}{.55\linewidth}
+		\begin{subfigure}{.45\linewidth}
 			\centering
 			\includegraphics[width=\linewidth]{img/noise/sr/1}
 			\captionsetup{justification=centering}
 			\caption{The data set $M_{n=.8}$.}
 		\end{subfigure}~
-		\begin{subfigure}{.45\linewidth}
+		\begin{subfigure}{.40\linewidth}
 			\centering
 			\includegraphics[width=\linewidth]{img/noise/sr/3}
 			\captionsetup{justification=centering}
@@ -1453,7 +1493,7 @@ It is quite clear that ISOMAP outperforms PCA on the data set $S$. Unfortunately
 			\label{fig:noise_3}
 		\end{subfigure}
 		\newline\newline\newline
-		\begin{subfigure}{.6\linewidth}
+		\begin{subfigure}{.45\linewidth}
 			\centering
 			\includegraphics[width=\linewidth]{img/noise/sr/2}
 			\captionsetup{justification=centering}
@@ -1476,7 +1516,7 @@ Just as in \ref{sec:experiments_linear_ds}, this section reports reduction, clas
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{experiments/iso_swiss}
+	\includegraphics[width=.95\linewidth]{experiments/iso_swiss}
 	\captionsetup{justification=centering}
 	\caption{The Swiss Roll data set and its reductions to 2 and 1 dimensions, respectively.}
 \end{figure}
@@ -1607,6 +1647,8 @@ The Dermatology data set, composed by 366 samples and 35 features. Here, the tar
 
 Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 72 samples and 7130 features. The first 7129 features are expression levels of the genes in a given patient. The 7130th feature $t \in \{-1, 1\}$ indicate which of two variants of leukemia is present in the sample (AML, 25 samples, or ALL, 47 samples). \cite{on:duc_ds}
 
+The Results in this experiment are quite impressive: although visualization has barely changed from 7129 to 3 dimensions, a 7129-dimensional space was reduced to a 10-dimensional one with only 10\% of accuracy loss.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.9\linewidth]{img/experiments/iso_leukemia}
@@ -1629,11 +1671,11 @@ Extracted from \href{http://mldata.com}{mldata}, the Leukemia data set contains 
 	\caption{Description of predictions and reduction performance for Leukemia data set.}
 \end{table}
 
-The Results in the table above are quite impressive: although visualization has barely changed from 7129 to 3 dimensions, a 7129-dimensional space was reduced to a 10-dimensional one with only 10\% of accuracy loss.
-
 \subsection{The WDBC Data Set}
 
 The Wisconsin Diagnostic Breast Cancer (WDBC) data set, containing 596 samples and 32 features computed from a breast mass. WDBC has benign 357 samples and 212 malignant. During this experiment, the first feature was disregarded, as it represents the identification numbers of the samples.
+
+Regarding the experiment, observe how prediction accuracy consistently increased when the data set was reduced.
 
 \begin{figure}[H]
 	\centering
@@ -1658,12 +1700,12 @@ The Wisconsin Diagnostic Breast Cancer (WDBC) data set, containing 596 samples a
 	\caption{Description of predictions and reduction performance for Leukemia data set.}
 \end{table}
 
-Observe how prediction accuracy consistently increased when the data set was reduced.
-
 \newpage
 \subsection{Diabetes Data Set}
 
 With 9 features observed from 768 samples collected from residents of Arizona, USA, the Diabetes data set seeks to diagnose whether a patient (sample) shows signs of diabetes (class 1) according to World Health Organization criteria or not (class 0). Is is also important to mention that only 268 samples belong, in fact, to class 1.
+
+In this experiment, Diabetes was compressed to one forth of its original size (48 KB to 12 KB), and no significant prediction accuracy was lost.
 
 \begin{figure}[H]
 	\centering
@@ -1687,8 +1729,6 @@ With 9 features observed from 768 samples collected from residents of Arizona, U
 	\captionsetup{justification=centering}
 	\caption{Description of predictions and reduction performance for Diabetes data set.}
 \end{table}
-
-In this experiment, Diabetes was compressed to one forth of its original size (48 KB to 12 KB), and no significant prediction accuracy was lost.
 
 \newpage
 \setcounter{secnumdepth}{-1}
