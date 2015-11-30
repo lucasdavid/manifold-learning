@@ -1382,11 +1382,18 @@ In order to allow ISOMAP to continuously learn from a stream of data, Incrementa
 
 Let $\delta_{ab}$ be the dissimilarity measure between two samples $a$ and $b$, $x_i$ be a sample in the nearest neighbor graph, $x_j$ a neighbor of $x_i$ such that their dissimilarity is higher among all $x_i$'s neighbors. Finally, consider $x_{n+1}$ a new sample to increment in the reduction model.
 
-\begin{itemize}
+\begin{enumerate}
 	\item The new sample $x_{n+1}$ will replace $x_j$ as a neighbor of $x_i$ if $\delta_{x_ix_{n+1}} < \delta_{x_ix_j}$. A list of added or removed edges should be stored.
 	
-	\item 
-\end{itemize}
+	\item The update of the shorest-path graph:
+	\begin{enumerate}
+		\item For removed edges: nodes that were reached through a path that contains the removed edge must have their precedessor set to $None$ and $d$ to infinit. Dijkstra's should be executed in order to find the path for the vertex.
+		\item For added edges: adding edges can improve existing paths, all vertices must be updated.
+		\item Finally, a path must be found from every vertex to the adding sample.
+	\end{enumerate}
+	
+	\item The update of the coordinate matrix can be done thorugh Laczos iterative method.
+\end{enumerate}
 
 \subsubsection{L-ISOMAP}
 \label{sec:lisomap}
@@ -1406,8 +1413,8 @@ Let $X$ be the initial data set of interest, $l$ be the dimensionality to which 
 		\item Apply classical MDS to the submatrix of landmarks $[\delta]_{n \times n}$.
 		\item Embbed the remaining points through:
 		\begin{align*}
-			y &= -\frac{1}{n} L^{-1}  (\Delta_x - \bar{\Delta}_n)\\		
-			y &= -\frac{1}{n} \colvec{4}{\frac{v_1^T}{\sqrt{\lambda_1}}}{\frac{v_2^T}{\sqrt{\lambda_2}}}{\dots}{\frac{v_n^T}{\sqrt{\lambda_n}}} (\Delta_x - \bar{\Delta}_n)\\
+			y &= -\frac{1}{2} L^{-1}  (\Delta_x - \bar{\Delta}_n)\\		
+			y &= -\frac{1}{2} \colvec{4}{\frac{v_1^T}{\sqrt{\lambda_1}}}{\frac{v_2^T}{\sqrt{\lambda_2}}}{\dots}{\frac{v_n^T}{\sqrt{\lambda_n}}} (\Delta_x - \bar{\Delta}_n)\\
 		\end{align*}
 		Where $\Delta_x$ is the square dissimilarity column vector from sample $x$ to all landmarks and $\bar{\Delta}_n$ the vector containing the column mean of $\Delta_n$ (the square dissimilarity matrix between landmarks).
 	\end{enumerate}
