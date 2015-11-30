@@ -134,6 +134,8 @@ class MDS(Reducer):
 
         super().__init__(n_components=n_components, verbose=verbose, copying=False)
 
+        self.eigenvalues_ = self.eigenvectors_ = None
+
     def run(self):
         start = time.time()
 
@@ -151,6 +153,7 @@ class MDS(Reducer):
 
         # Find the eigenvalues (w) and eigenvectors (v) of J*P*J.
         w, v = np.linalg.eig(np.dot(np.dot(j, p), j))
+        w, v = np.real(w), np.real(v)
 
         del p, j
 
@@ -159,20 +162,18 @@ class MDS(Reducer):
         permutations = w.argsort()[::-1]
 
         # Nullify all negative eigenvalues.
-        w = w.clip(min=0)
+        w[w < 0] = 0
 
         # Sort arrays and select only the first n_components values,
         # as only they are necessary to instantiate a space S such that dim(S) is :n_components.
-        w = w[permutations][:n_components]
-        v = v[:, permutations][:, :n_components]
+        self.eigenvalues_ = np.sqrt(w[permutations][:n_components])
+        self.eigenvectors_ = v[:, permutations][:, :n_components]
 
-        del permutations
+        del w, v, permutations
 
         # Return v * w ^ (1/2), the list of components (x, y, ...),
         # len = :n_components, corresponding to each sample in the data set.
-        self.embedding = np.real(np.dot(v, np.sqrt(np.diag(w))))
-
-        del w, v
+        self.embedding = self.eigenvectors_ * self.eigenvalues_
 
         if self.verbose:
             print('MDS took %.2f s.' % (time.time() - start))
