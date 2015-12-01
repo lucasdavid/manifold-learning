@@ -172,7 +172,7 @@ In practice, ISOMAP's time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ makes 
 \subsubsection{ISOMAP as a variation of Kernel PCA}
 
 % TODO This description needs extensive refactoring.
-While ``classic" PCA aims to find the principal components of the covariance matrix $\Sigma = \frac{1}{n} X^T X = \frac{1}{n} \sum_k x_{ik} \cdot x_{kj}, \forall (i, j) \in [0, |S|]^2$ of a centered data set $X$, it can be easily modified to attempt to do the same, but over the matrix $\Sigma' = \frac{1}{n} \sum_i \phi(x)_i \cdot \phi(y)_i$, where $\phi \colon \mathbb{R}^f \to \mathbb{R}^p$ is a kernel function that projects points in the original $f$-space to a different $p$-space. Such modification is named Kernel PCA.
+While ``classic" PCA aims to find the principal components of the covariance matrix $\Sigma = \frac{1}{n} X^T X = \frac{1}{n} \sum_k x_{ik} \cdot x_{kj}, \forall (i, j) \in [0, |S|]^2$ of a centered data set $X$, it can be easily modified to attempt to do the same, but over the matrix $\Sigma' = \frac{1}{n} \sum_i \phi(x)_i \cdot \phi(y)_i = \frac{1}{n} \sum_i K(x, y)$, where $\phi \colon \mathbb{R}^f \to \mathbb{R}^p$ is a function that projects vectors in the original $f$-space to a different $p$-space and $K \colon \mathbb{R}^f \times \mathbb{R}^f \to \mathbb{R}$ is a kernel function. Such modification is named Kernel PCA.
 
 In his paper, Ghodsi describes how MDS (and therefore, ISOMAP) is equivalent to Kernel PCA, given it is using the following kernel function: \cite{gho2006}
 
@@ -206,7 +206,7 @@ Let $[X]_{n \times f}$ be a data set with $n$ samples and $f$ features, $\delta_
 	
 	\item The update of the shorest-path graph:
 	\begin{enumerate}
-		\item For every edge $(x_i, x_j)$ removed, the shortest-path between any two points $(x_a, x_b)$ that contains $(x_i, x_j)$ must be updated. That involves applying a slightly modified Dijsktra's algorithm, which will focus on finding the paths from a given source $u$ and its unreached destination vertices (i.e., vertices $C(u)=\{c_i\}$ whose  shortest-paths $(u, c_i)$ contained a removed edge.
+		\item For every edge $(x_i, x_j)$ removed, the shortest-path between any two points $(x_a, x_b)$ that contains $(x_i, x_j)$ must be updated. That involves applying a slightly modified Dijsktra's algorithm, which will focus on finding the paths from a given source $u$ and its unreached destination vertices, i.e., vertices $C(u)=\{c_i\}$ whose  shortest-paths $(u, c_i)$ contained a removed edge.
 		
 		\item The geodesic distances between all vertices and $x_{n+1}$ must then be calculated. Let $A$ be the set of added edges:
 		\begin{align*}
@@ -275,6 +275,9 @@ p-ISOMAP is an extension that automatically selects the parameters $k$ or $\epsi
 
 	\item Finally, the last step is to update the eigenvectors and eigenvalues associated with the matrix $B$. They can be approximated using the Lanczos algorithm, an iterative refining method that takes an initial solution candiadate. Officially, the time complexity of Lanczoz algorithm is $O(n^2)$. \cite{chen2004machine} Yet, its timeframe for convergence also strongly depends on the solution candidate given. Assuming the previous inner matrix and the current one are similar, one might use the previous eigenvalues/vectors found as candidate. In this scenario, Lanczoz's will likely finish much faster than other algorithms.
 \end{enumerate}
+
+The experiments presented in \cite{choo2010p} have shown p-ISOMAP consistently maintaining a better performance than regular ISOMAP for data sets with a samples count varying between 500 and 3500.
+Additionally, the experiments have also demonstrated how p-ISOMAP performance is sensible to high variances of $K$ and $\epsilon$ values.
 
 \subsection{Evaluating Reductions}
 
