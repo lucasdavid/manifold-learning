@@ -84,11 +84,7 @@ class Displayer(object):
                 color = np.zeros(samples)
 
             kwargs = {'projection': '3d', 'alpha': .2} if dimension > 2 else {}
-
-            ax = figure.add_subplot(
-                rows * 100 +
-                columns * 10 +
-                1 + i, **kwargs)
+            ax = figure.add_subplot(rows, columns, 1 + i, **kwargs)
 
             ax.scatter(*components, **{
                 'c': color,

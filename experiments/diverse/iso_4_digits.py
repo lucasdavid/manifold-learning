@@ -7,7 +7,7 @@ class DigitsIsomapExperiment(ReductionExperiment, LearningExperiment):
     title = 'Digits Isomap'
     plotting = True
 
-    reduction_method = 'isomap'
+    reduction_method = 'skisomap'
     reduction_params = {'n_neighbors': 7}
 
     def _run(self):

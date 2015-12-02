@@ -1,72 +1,48 @@
 from sklearn import svm
-
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.datasets import load_svmlight_file
 from sklearn.preprocessing import Imputer
 from experiments.base import ReductionExperiment, LearningExperiment
+from manifold.infrastructure import Retriever
 
 
-class BrazilExperiment(ReductionExperiment, LearningExperiment):
-    title = '7. Brazil Example'
-    data_file = '../../datasets/brazil/bra_Country_en_csv_v2.csv'
+class UnknownExperiment(ReductionExperiment, LearningExperiment):
+    title = 'Unknown Example'
+    data_file = '../../datasets/unknown/dt3.%s.svm'
 
-    headers, labels = None, None
-
-    learner = svm.SVR
-
-    target_code = 'NY.GDP.PCAP.CD'
     reduction_method = 'pca'
     reduction_params = {'n_components': 3}
+
     plotting = True
 
-    def read_data(self):
-        self.labels = np.genfromtxt(self.data_file, dtype=str, delimiter='","', skip_header=5, usecols=range(2, 4))
-        data = np.genfromtxt(self.data_file, dtype=float, delimiter='","',
-                             skip_header=5, usecols=range(4, 60))
+    learning_parameters = [
+        {'C': (1, 10, 100, 1000), 'kernel': ('linear',)},
+        # {'C': (1, 10,), 'gamma': (.01, .1, 1,), 'kernel': ('rbf',)},
+    ]
 
-        # Convert to our format.
-        data = data.transpose()
-
-        # Remove sample 2015, as it is empty.
-        data = data[:-1, :]
-
-        # Extract feature desired.
-        target_column = np.where(self.labels == self.target_code)[0][0]
-
-        target = data[:, target_column]
-        data = np.delete(data, target_column, axis=1)
-
-        # Imput missing data.
-        self.original_data = self.data = Imputer(copy=False).fit_transform(data)
-        self.target = Imputer(copy=False).fit_transform(target.reshape(-1, 1)).flatten()
+    def load_data(self):
+        self.data, self.target = load_svmlight_file(self.data_file % 'trn', zero_based=True)
+        self.original_data = self.data = self.data.toarray()
+        self.data_tst, self.target_tst = load_svmlight_file(self.data_file % 'tst', zero_based=True)
 
         self.displayer.load(self.data, self.target)
 
         print('Shape: %s' % str(self.data.shape))
-        print('Data size: (%s), %.2f KB.' % (self.data.shape, (self.data.nbytes / 1024)))
-        print('Target code: %s' % self.target_code)
-
-    def plot_target(self):
-        plt.subplot(111)
-        plt.plot([1960 + i for i in range(len(self.target))], self.target, lw=8, color='crimson')
-        plt.show()
+        print('Data size: %s, %.2f KB.' % (self.data.shape, (self.data.nbytes / 1024)))
 
     def _run(self):
-        self.read_data()
-        # self.plot_target()
+        self.load_data()
+
+        self.reduction_method = 'skisomap'
+        self.reduction_params = {
+            'n_neighbors': 10,
+            'n_components': 50,
+        }
+
+        self.reduce()
         self.learn()
-
-        for method, params in (('pca', {}), ('isomap', {'k': 4})):
-            self.reduction_method = method
-            self.reduction_params = params
-
-            for d in (3, 2, 1):
-                params['n_components'] = d
-                self.reduce()
-
-        # self.displayer.aspect = (10, 10)
-        # self.displayer.show()
 
 
 if __name__ == '__main__':
-    BrazilExperiment().start()
+    UnknownExperiment().start()
