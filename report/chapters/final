@@ -1,8 +1,0 @@
-\setcounter{secnumdepth}{-1}
-\chapter{Final Considerations}
-
-In this report, the subject of dimensionality reduction was approached. First, focusing on linear methods and their capacity of extract features that maximize variance in a data set, we successfully reduced, visualized and learned well known data sets. Furthermore, we demonstrated how these methods would fail to reduce data sets that followed a nonlinear distribution.
-
-In order to reduce nonlinear data sets, we introduced the ISOMAP algorithm, which takes advantage of properties commonly present in manifolds (e.g., linear locality, neighborhood) to map the data set of interest to an intermediate representation that only preserves dissimilarities of restrictive neighborhoods, ``unfolding" the data set before applying a linear reduction method. We then proceeded to formally define ISOMAP's implementation, to analyze its complexity and present some of its limitations, variations and applications. Finally, we demonstrated that ISOMAP can successfully reduce data sets that roughly lie on nonlinear manifolds, but it also strongly dependents on many conditions, such as the manifold assumption, manifold convexity and controlled data noise, severely affecting the number of problems to which it might be applied.
-
-In conclusion, we have observed that although its limitations, ISOMAP represented an advance in manifold learning, being a highly regarded method in dimensionality reduction until today. In practice, its importance is clearly observed when considering the great number of machine learning libraries, languages and computational environments which implement it, as well as the great load of study done by many authors trying to apply, improve or extend it.

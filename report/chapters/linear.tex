@@ -35,7 +35,7 @@ Principal Component Analysis (PCA) is a statistical technique that attempts to t
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	\includegraphics[width=.8\linewidth]{datasets/r_pcs}
+	\includegraphics[width=.7\linewidth]{datasets/r_pcs}
 	\caption{The principal components of $K$.}
 	\label{fig:datasetrpc}
 \end{figure}
@@ -126,7 +126,7 @@ Now, \ref{eq:basemds} $\implies$
 \frac{1}{n} \sum_r \delta_{rs}^2
 &= \frac{1}{n} \sum_r (x_r\cdot x_r + x_s\cdot x_s -2x_r\cdot x_s) \\
 &= \frac{1}{n} \sum_r x_r\cdot x_r + \sum_r x_s\cdot x_s -2 \sum_r x_r\cdot x_s \\
-&= \frac{1}{n} \sum_r x_r\cdot x_r + nx_s\cdot x_s -2 0\cdot x_s \\
+&= \frac{1}{n} \sum_r x_r\cdot x_r + nx_s\cdot x_s -2 (\bar{0} \cdot x_s) \\
 &= \frac{1}{n} \sum_r x_r\cdot x_r + x_s\cdot x_s \\
 &\iff \\
 x_s\cdot x_s &= \frac{1}{n} (\sum_r \delta_{rs}^2 - \sum_r x_r\cdot x_r)
@@ -225,6 +225,7 @@ This section reports the performance of classifiers and regressors over determin
 	\end{enumerate}
 \end{enumerate}
 
+\clearpage
 \subsection{$K$ Data Set}
 
 The figure bellow illustrates the results of PCA algorithm application over the artificial $K$ data set. Notice that, for the second application, it correctly chose to discard the vertical dimension, as the samples offer less variability in this component.
@@ -254,6 +255,7 @@ The figure bellow illustrates the results of PCA algorithm application over the 
 
 From the table above, one can also observe how Kruskal's stress might not be an appropriate quality measurement, given a specific domain. Indeed, for data set $K$, stress increase resulted from the removal of one of the components did not imply on prediction accuracy decrease.
 
+\clearpage
 \subsection{The Iris Flower Data Set}
 
 The Iris flower from section \ref{irisdataset}, containing 150 samples and 5 features.
@@ -285,6 +287,7 @@ Although the data set became nonlinearly separable, classes are still somewhat o
 	\caption{Description of predictions and reduction performance for Iris flower.}
 \end{table}
 
+\clearpage
 \subsection{The Digits Data Set}
 
 Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sample is a 8x8 image of a hand-written digit from 0 to 9.
