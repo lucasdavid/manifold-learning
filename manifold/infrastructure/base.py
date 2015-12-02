@@ -1,8 +1,8 @@
 import abc
 import copy
 import time
-
 import numpy as np
+from scipy.spatial import distance
 from scipy.spatial.distance import pdist
 
 
@@ -97,3 +97,49 @@ def kruskal_stress(d_x, d_y):
     """
     return np.sqrt(np.power(d_x - d_y, 2).sum()
                    / np.power(d_x, 2).sum())
+
+
+def _class_stress(X, target):
+    n_samples = X.shape[0]
+
+    coef = distance.pdist(X)
+    coef_sum = coef.sum()
+    coef_mean = coef_sum / coef.shape[0]
+    coef = 2 * coef_mean - coef
+
+    stress_X_ = 0
+    current = 0
+
+    for i in range(n_samples):
+        for j in range(i + 1, n_samples):
+            stress_X_ += (coef[current] / coef_sum) * abs(target[i] - target[j]) \
+                         / (abs(target[i]) + abs(target[j]))
+
+    return stress_X_
+
+
+def class_stress(X, Y, target, n_neighbors=5, n_jobs=1):
+    """Calculate the Class stress for a labeled data set X and its reduction Y.
+
+    Parameters
+    ----------
+    X : original data set.
+
+    Y : the reduced data set.
+
+    target : the target feature of the data set X.
+
+    n_neighbors : the number of neighbors considered when building
+        the nearest neighborhood graph.
+
+    n_jobs : the number of jobs triggered for the nearest
+        neighbors algorithm.
+    """
+    assert X.shape[0] == Y.shape[0] == target.shape[0], 'Number of samples do not match.'
+
+    target += abs(target.min()) + 1
+
+    stress_X = _class_stress(X, target)
+    stress_Y = _class_stress(Y, target)
+
+    return abs(stress_X - stress_Y)

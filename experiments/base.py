@@ -9,8 +9,8 @@ from sklearn import decomposition, svm, manifold, model_selection
 from sklearn.metrics import confusion_matrix
 
 from manifold.infrastructure import Displayer
-from manifold.infrastructure.base import kruskal_stress
-from manifold.learning.algorithms import Isomap, MDS, EuclideanDistancesFromDataSet, KNearestNeighbors
+from manifold.infrastructure.base import kruskal_stress, class_stress
+from manifold.learning import algorithms
 
 
 class Experiment(metaclass=abc.ABCMeta):
@@ -41,6 +41,8 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
     learner = svm.SVC
     data = target = labels = grid = None
 
+    verbose = False
+
     learning_parameters = [
         {'C': (1, 10, 100, 1000), 'kernel': ('linear',)},
         {'C': (1, 10, 100, 1000), 'gamma': (.001, .01, .1, 1, 10), 'kernel': ('rbf', 'sigmoid')}
@@ -58,7 +60,8 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
             if self.test_after_train \
             else (self.data, None, self.target, None)
 
-        self.grid = model_selection.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=-1)
+        self.grid = model_selection.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=-1,
+                                                 verbose=self.verbose)
         self.grid.fit(X1, y1)
 
         print('\tGrid accuracy: %.6f' % self.grid.best_score_)
@@ -93,7 +96,9 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
     verbose_reduction = True
 
     def reduce(self):
-        assert self.reduction_method in ('pca', 'mds', 'isomap', 'skisomap'), 'Error: unknown reduction method.'
+        assert self.reduction_method in (
+            'pca', 'mds', 'isomap', 'skisomap',
+            'lisomap'), 'Error: unknown reduction method.'
 
         print('Reducing...')
 
@@ -113,16 +118,20 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             self.data = self.reducer.fit_transform(data)
 
         elif self.reduction_method == 'mds':
-            self.reducer = MDS(verbose=self.verbose_reduction, **self.reduction_params)
+            self.reducer = algorithms.MDS(verbose=self.verbose_reduction, **self.reduction_params)
+            self.data = self.reducer.transform(data)
+
+        elif self.reduction_method == 'isomap':
+            self.reducer = algorithms.Isomap(verbose=self.verbose_reduction, **self.reduction_params)
             self.data = self.reducer.transform(data)
 
         elif self.reduction_method == 'skisomap':
             self.reducer = manifold.Isomap(**self.reduction_params)
             self.data = self.reducer.fit_transform(data)
 
-        else:
-            self.reducer = Isomap(verbose=self.verbose_reduction, **self.reduction_params)
-            self.data = self.reducer.transform(data)
+        elif self.reduction_method == 'lisomap':
+            self.reducer = algorithms.LandmarkIsomap(**self.reduction_params)
+            self.data = self.reducer.fit_transform(data)
 
         if self.reduction_method in ('mds', 'isomap'):
             print('\tstress: %f' % self.reducer.stress)
@@ -130,6 +139,10 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             print('\tstress: %f' % kruskal_stress(
                 distance.squareform(distance.pdist(self.original_data)),
                 distance.squareform(distance.pdist(self.data))))
+
+        # print('\tclass stress: %f' % class_stress(
+        #     self.original_data, self.data, self.target
+        # ))
 
         print('\tsize: %f KB' % (self.data.nbytes / 1024))
         print('Done. (%.6f s)\n' % (time.time() - start))
