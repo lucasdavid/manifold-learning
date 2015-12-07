@@ -9,7 +9,7 @@ Although PCA has presented promising results in the previous section, hence its 
 	\includegraphics[width=\linewidth]{experiments/pca_swiss}
 	\caption{The \textbf{Swiss-roll manifold} and its reductions to 3, 2 and 1 dimensions, respectively, using the PCA algorithm.}
 	\label{fig:swiss_pca}
-\end{figure}
+\end{figure}21
 
 Looking at figure \ref{fig:swiss_pca} (specially in the last reduction, to a single dimension), it becomes clear that PCA has a big draw back: it assumes that the data lies on a liner subspace \cite{cay2005} and, therefore, applying linear transformations to it will rotate and scale it, without distort the original data structure. When this assumption does not hold, PCA will incorrectly extract the underlying structure, possibly mixing very dissimilar samples.
 
@@ -281,7 +281,7 @@ Additionally, the experiments have also demonstrated how p-ISOMAP performance is
 
 \subsection{Evaluating Reductions}
 
-ISOMAP's aim to ``unfold" the data set and, of course, it might distort dissimilarities between samples in the process. Hence drastically increasing Kruskal's stress. Clearly, this measure is unsuitable for evaluating ISOMAP. As proposed by L. Shi and J. Gu, Kruskal's stress can be easily updated to match ISOMAP nature. That is, to preserve dissimilarities within neighborhoods: \cite{shi2012fast}
+ISOMAP's aim is to ``unfold" the data set and, of course, it might distort dissimilarities between samples in the process. Hence drastically increasing Kruskal's stress. Clearly, this measure is unsuitable for evaluating ISOMAP. As proposed by L. Shi and J. Gu, Kruskal's stress can be easily updated to match ISOMAP nature. That is, to preserve dissimilarities within neighborhoods: \cite{shi2012fast}
 
 Let $X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $Y_{n \times p}$ its reduction to $p$ dimensions, and $\delta_{ij}$ and $\hat{\delta}_{ij}$ the dissimilarity measurements defined for all samples $i$ and $j$ in both $X$ and $Y$. Furthermore, given a sample $i$ and $\beta \in \mathbb{N} \mid \beta \le n$, take $\Omega=K \bigcup \Theta$, where $K$ is the set containing the nearest neighbors of $i$ and $\Theta$ is a set of random samples such that $|\Theta| \le \beta \le n$:
 \begin{align*}
