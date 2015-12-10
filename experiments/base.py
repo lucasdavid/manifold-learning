@@ -130,7 +130,7 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             self.data = self.reducer.fit_transform(data)
 
         elif self.reduction_method == 'lisomap':
-            self.reducer = algorithms.LandmarkIsomap(**self.reduction_params)
+            self.reducer = manifold.LandmarkIsomap(**self.reduction_params)
             self.data = self.reducer.fit_transform(data)
 
         if self.reduction_method in ('mds', 'isomap'):
