@@ -2,29 +2,33 @@ import datetime
 import math
 import os
 import random
-
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
+Axes3D
+
 
 class Displayer(object):
-    colors = [plt.cm.jet, plt.cm.rainbow, plt.cm.hsv, plt.cm.CMRmap]
+    colors = [plt.cm.rainbow]
 
     def __init__(self, **kwargs):
         self.aspect = kwargs.pop('aspect', (20, -40))
         self.rows = kwargs.pop('rows', None)
         self.columns = kwargs.pop('columns', None)
         self.parent_is_plotting = kwargs.pop('plotting', True)
-        self.saving_folder = kwargs.pop('folder', '/home/ldavid/Desktop/reports')
+        self.saving_folder = kwargs.pop('folder',
+                                        '/home/ldavid/Desktop/reports')
 
-        self.parameters = ', '.join(['%s: %s' % (k, str(v)) for k, v in kwargs.items()])
+        self.parameters = ', '.join(
+            ['%s: %s' % (k, str(v)) for k, v in kwargs.items()])
         self.items = []
 
     def load(self, data, color=None, title=None):
         if self.parent_is_plotting:
-            # Always copy the data, and, of course, only the first three dimensions.
-            # Doesnt do anything if parent isn't plotting, though, as it would wasting memory.
+            # Always copy the data, and, of course, only the first three
+            # dimensions. Doesnt do anything if parent isn't plotting, though,
+            # as it would wasting memory.
             self.items.append((data[:, :3], color, title))
 
         return self
@@ -74,7 +78,8 @@ class Displayer(object):
             data, color, title = item
             samples, dimension = data.shape
 
-            # Grab data set components. It necessarily has 3 dimensions, as it was cut during load().
+            # Grab data set components. It necessarily has 3 dimensions,
+            # as it was cut during load().
             components = [data[:, i] for i in range(dimension)]
 
             if dimension == 1:
