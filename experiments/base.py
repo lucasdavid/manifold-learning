@@ -1,13 +1,11 @@
 import abc
 import time
-
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 from scipy.spatial import distance
 from sklearn import decomposition, svm, manifold, model_selection
 from sklearn.metrics import confusion_matrix
-
 from manifold.infrastructure import Displayer
 from manifold.infrastructure.base import kruskal_stress, class_stress
 from manifold.learning import algorithms
@@ -45,7 +43,8 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
 
     learning_parameters = [
         {'C': (1, 10, 100, 1000), 'kernel': ('linear',)},
-        {'C': (1, 10, 100, 1000), 'gamma': (.001, .01, .1, 1, 10), 'kernel': ('rbf', 'sigmoid')}
+        {'C': (1, 10, 100, 1000), 'gamma': (.001, .01, .1, 1, 10),
+         'kernel': ('rbf', 'sigmoid')}
     ]
 
     test_after_train = False
@@ -56,11 +55,15 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
 
         start = time.time()
 
-        X1, X2, y1, y2 = model_selection.train_test_split(self.data, self.target, test_size=self.test_size) \
+        X1, X2, y1, y2 = model_selection.train_test_split(self.data,
+                                                          self.target,
+                                                          test_size=self.test_size) \
             if self.test_after_train \
             else (self.data, None, self.target, None)
 
-        self.grid = model_selection.GridSearchCV(self.learner(), self.learning_parameters, n_jobs=-1,
+        self.grid = model_selection.GridSearchCV(self.learner(),
+                                                 self.learning_parameters,
+                                                 n_jobs=-1,
                                                  verbose=self.verbose)
         self.grid.fit(X1, y1)
 
@@ -102,8 +105,10 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
 
         print('Reducing...')
 
-        to_dimension = self.reduction_params['to_dimension'] if 'to_dimension' in self.reduction_params else \
-            self.reduction_params['n_components'] if 'n_components' in self.reduction_params else \
+        to_dimension = self.reduction_params[
+            'to_dimension'] if 'to_dimension' in self.reduction_params else \
+            self.reduction_params[
+                'n_components'] if 'n_components' in self.reduction_params else \
                 3
 
         data = self.original_data
@@ -118,11 +123,13 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             self.data = self.reducer.fit_transform(data)
 
         elif self.reduction_method == 'mds':
-            self.reducer = algorithms.MDS(verbose=self.verbose_reduction, **self.reduction_params)
+            self.reducer = algorithms.MDS(verbose=self.verbose_reduction,
+                                          **self.reduction_params)
             self.data = self.reducer.transform(data)
 
         elif self.reduction_method == 'isomap':
-            self.reducer = algorithms.Isomap(verbose=self.verbose_reduction, **self.reduction_params)
+            self.reducer = algorithms.Isomap(verbose=self.verbose_reduction,
+                                             **self.reduction_params)
             self.data = self.reducer.transform(data)
 
         elif self.reduction_method == 'skisomap':
@@ -158,21 +165,23 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             The position of the samples in the data set.
             Must be 'original' or 'reduced'.
         """
-        assert position in ('original', 'reduced'), 'Unknown position %s.' % position
+        assert position in (
+        'original', 'reduced'), 'Unknown position %s.' % position
         assert self.data is not None or position != 'reduced', \
             'Position cannot be "reduced", as reduction has not been performed yet.'
 
         print('Plotting Nearest Neighbors...')
         print('\tposition: %s' % position)
 
-        d = EuclideanDistancesFromDataSet(self.original_data).run()
-        e = KNearestNeighbors(d, alpha=10).run()
+        d = algorithms.EuclideanDistancesFromDataSet(self.original_data).run()
+        e = algorithms.KNearestNeighbors(d, alpha=10).run()
         g = nx.Graph(e)
         del d, e
 
         pos = {}
 
-        for n, location in enumerate(self.original_data if position == 'original' else self.data):
+        for n, location in enumerate(
+                self.original_data if position == 'original' else self.data):
             location = location[:2]
 
             if location.shape[0] == 1:
