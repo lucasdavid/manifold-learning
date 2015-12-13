@@ -14,20 +14,29 @@ class DisplayingILPDExperiment(Experiment):
         # the data and marking that the data is delimited by commas.
         r = Retriever(self.data_set_file, delimiter=',')
 
-        # The last column gets separated from the rest of the data and stored as target feature.
-        # Finally, retrieves feature vectors and the glass_type (i.e. target feature).
         data, glass_type = r.split_target().retrieve()
 
+        labels = [
+            '\nAge',
+            '\nGender',
+            '\nTotal Bilirubin (TB)',
+            '\nDirect Bilirubin (DB)',
+            '\nAlkaline Phosphotase (Alk.)',
+            '\nAlamine Aminotransferase (Sgpt)',
+            '\nAspartate Aminotransferase (Sgot)',
+            '\nTotal Protiens (TP)',
+            '\nAlbumin (ALB)',
+            '\nRatio Albumin and Globulin Ratio (A/G)'
+        ]
+
         for i in range(0, data.shape[1], 3):
-            self.displayer.load(
-                data[:, i:i + 3],
-                glass_type,
-                title='Glass data-set - features [%i, %i]' % (i, i + 3))
+            self.displayer.load(data[:, i:i + 3], glass_type,
+                                axis_labels=labels[i:i + 3])
 
         print('Correlation matrix:')
         print(np.corrcoef(data, rowvar=0))
 
-        self.displayer.show()
+        self.displayer.save('displaying_ilpd')
 
 
 if __name__ == '__main__':
