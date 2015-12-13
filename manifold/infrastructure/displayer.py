@@ -24,12 +24,12 @@ class Displayer(object):
             ['%s: %s' % (k, str(v)) for k, v in kwargs.items()])
         self.items = []
 
-    def load(self, data, color=None, title=None):
+    def load(self, data, color=None, title=None, axis_labels=None):
         if self.parent_is_plotting:
             # Always copy the data, and, of course, only the first three
             # dimensions. Doesnt do anything if parent isn't plotting, though,
             # as it would wasting memory.
-            self.items.append((data[:, :3], color, title))
+            self.items.append((data[:, :3], color, title, axis_labels))
 
         return self
 
@@ -56,7 +56,7 @@ class Displayer(object):
             name = os.path.join(self.saving_folder, name)
             name += '.png'
 
-            plt.savefig(name, bbox_inches='tight')
+            plt.savefig(name)
             plt.close(figure)
 
         return self
@@ -75,7 +75,7 @@ class Displayer(object):
         color_map = random.choice(self.colors)
 
         for i, item in enumerate(self.items):
-            data, color, title = item
+            data, color, title, axis_labels = item
             samples, dimension = data.shape
 
             # Grab data set components. It necessarily has 3 dimensions,
@@ -91,6 +91,14 @@ class Displayer(object):
             kwargs = {'projection': '3d', 'alpha': .2} if dimension > 2 else {}
             ax = figure.add_subplot(rows, columns, 1 + i, **kwargs)
 
+            if axis_labels:
+                if len(axis_labels) > 0:
+                    ax.set_xlabel(axis_labels[0], linespacing=2)
+                if len(axis_labels) > 1:
+                    ax.set_ylabel(axis_labels[1], linespacing=2)
+                if len(axis_labels) > 2:
+                    ax.set_zlabel(axis_labels[2], linespacing=0)
+
             ax.scatter(*components, **{
                 'c': color,
                 's': 50,
@@ -99,8 +107,6 @@ class Displayer(object):
 
             if title:
                 plt.title(title)
-
-            plt.axis('tight')
 
             if dimension > 2:
                 ax.view_init(*self.aspect)
