@@ -10,6 +10,7 @@
 \usepackage{wrapfig}
 \usepackage{cite}
 \usepackage{listings}
+\usepackage{afterpage}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 
@@ -39,6 +40,12 @@
 	\end{pmatrix}
 	\fi
 }
+
+\newcommand\blankpage{%
+	\null
+	\thispagestyle{empty}%
+	\addtocounter{page}{-1}%
+	\newpage}
 
 
 \newtheorem{theorem}{Theorem}[section]

@@ -3,7 +3,7 @@
 
 In the context of Computer Science, very often our goal is to develop machines that can assist or automate the process of solving real-world problems. Firstly, however, we must find ways to express these problems numerically. This is were ``data sets" come in.
 
-Although the recurrent usage of the term ``data set" in scientific work, there is not a clear definition established. It is possible, however, to observe the regular presence of four related features: grouping, content, relatedness e purpose. \cite{ren2010}
+Although the recurrent usage of the term ``data set" in scientific work, there is not a clear definition established. It is possible, however, to observe the regular presence of four related features: grouping, content, relatedness e purpose \cite{ren2010}.
 For the scope of this work, the term data set is invariably associated with the idea of a collection of samples. Each sample is a sequence of features, where the {\em i-th} feature of all instances belong to a same set of symbols $f_i$.
 
 Succinctly, consider $S$ a sequence of samples and
@@ -62,16 +62,16 @@ Composed by 583 samples and 11 features, the data set ILPD has a nominal feature
 	\centering
 	\captionsetup{justification=centering}
 
-	\includegraphics[scale=.3]{experiments/3_1_2_displaying_ilpd}
-	\caption{The data set ILPD's samples mapped onto the $\mathbb{R}^n$, where each of its features is an axis, except for $S \coloneqq \{1, 2\}$, which was represented by the vertices' colors.}
+	\includegraphics[scale=.4]{experiments/displaying_ilpd}
+	\caption{The data set ILPD's samples mapped onto the $\mathbb{R}^n$, where each of its features is an axis in one graph, except for $S \coloneqq \{1, 2\}$, which was represented by the vertices' colors.}
 	\label{fig:disp_ilpd}
 \end{figure}
 
-Considering the many graphs required to display the data set, it is quite difficult to identify a plausible distribution for ILPD. We define here our first encouragement towards the study of dimensionality reduction: the identification of the most significant features and plotting of those might result on simpler and more intuitive representations.
+Considering the many graphs required to display the data set, it is quite difficult to identify a plausible distribution for ILPD. We define here our first encouragement towards the study of dimensionality reduction: the identification of the most significant features (i.e., that maximize variance) and plotting of those might result on simpler and more intuitive representations. Furthermore, it would also be interesting to combine the existing features to create new ones that are even more representative.
 
 \subsection{Modern Problems and Applications}
 
-Differently from Iris flower or ILPD data set, data sets associated with modern problems are often very dense, i.e., data sets containing many samples and/or features. Although the high number of samples is essentially benefic, a high number of features might be irrelevant or even unconstructive to the learning process. \cite{cay2005}
+Differently from Iris flower or ILPD data set, data sets associated with modern problems are often very dense, i.e., data sets containing many samples and/or features. Although the high number of samples is essentially benefic, a high number of features might be irrelevant or even unconstructive to the learning process \cite{cay2005}.
 
 \begin{table}[H]
 	\begin{tabular}{ c | *{4}{|c}| }
@@ -85,7 +85,7 @@ Differently from Iris flower or ILPD data set, data sets associated with modern 
 	\caption{A data set with 8200 samples and 100 features.}
 \end{table}
 
-In many cases, there are indicatives that the data set lie near a lower-dimensional manifold embedded in the $\mathbb{R}^n$. \cite{gho2006} For the data set above, in special, the $\mathbb{R}^{100}$. A second encouragement can then be set: it is possible that the data set might be shrunk by combining similar (linearly dependent) features or eliminating the ones that poorly contribute towards the learning process. In order to do this, one must be able to qualify the “contribution” of each feature or even identify dependencies between features.
+In many cases, there are indicatives that the data set lie near a lower-dimensional manifold embedded in the $\mathbb{R}^n$ \cite{gho2006}. For the data set above, in special, the $\mathbb{R}^{100}$. A second encouragement can then be set: it is possible that the data set might be shrunk by combining similar (linearly dependent) features or eliminating the ones that poorly contribute towards the learning process. In order to do this, one must be able to qualify the “contribution” of each feature or even identify dependencies between features.
 
 \section{Probability Theory}
 \subsection{Feature Standardization}
@@ -108,7 +108,7 @@ $$
 \end{enumerate}
 
 \subsection{Variance}
-Variance is the measure which describes how far the samples in a given set X vary. For the scope of this project, only discrete probabilities will be considered. That is, if $X$ represents a variate with known distribution $P(x)$, where $P(x) = k \in \mathbb{R}^{+}, \forall x \in X$ and $\sum_{x \in X} P(x) = 1$, and $\mu$ is the population mean of $X$, then: \cite{ross2010introductory}
+Variance is the measure which describes how far the samples in a given set X vary. For the scope of this project, only discrete probabilities will be considered. That is, if $X$ represents a variate with known distribution $P(x)$, where $P(x) = k \in \mathbb{R}^{+}, \forall x \in X$ and $\sum_{x \in X} P(x) = 1$, and $\mu$ is the population mean of $X$, then \cite{ross2010introductory}:
 \begin{align*}
 	Var(X) = \frac{1}{n} (X-\mu) \cdot (X-\mu) = \frac{1}{n} \sum_{x \in X} (x - \mu)^2
 \end{align*}
@@ -173,7 +173,7 @@ Where $H$ is the \textbf{centering matrix}.
 
 \subsection{Correlation}
 
-The correlation is a measure of the direction and strength of a linear relationship among variables. Let $X$ and $Y$ be two random variables, $r(X, Y)$, i.e., the correlation between $X$ and $Y$ is defined as: \cite{ross2010introductory}
+The correlation is a measure of the direction and strength of a linear relationship among variables. Let $X$ and $Y$ be two random variables, $r(X, Y)$, i.e., the correlation between $X$ and $Y$ is defined as \cite{ross2010introductory}:
 \begin{align*}
 	r(X, Y) = \frac{\sigma(X, Y)}{\sigma_X \sigma_Y},
 \end{align*}
@@ -208,7 +208,7 @@ $\lambda$ is the \textbf{eigenvalue} associated to the eigenvector $v$.
 If $[M]_{n\times n}$ is a symmetric matrix of rank $n$ and admits $n$ pairs of eigenvalues $\lambda$ and eigenvectors $[V]_{n\times n} = [v_0, v_1, v_2, ..., v_{n-1}]$, such that $V$ is an orthogonal matrix (i.e., $V^TV=I_n$), then
 $$MV = V \lambda$$
 
-$\lambda = diag(\sigma_0, \sigma_1, ..., \sigma_{n-1})$ is the diagonal matrix, where $\sigma_i$ is the eigenvalue associated to the eigenvector $v_i$. \cite{cox2001} Furthermore, $V$'s columns are linear independent, hence $V$ is invertible.
+$\lambda = diag(\sigma_0, \sigma_1, ..., \sigma_{n-1})$ is the diagonal matrix, where $\sigma_i$ is the eigenvalue associated to the eigenvector $v_i$ \cite{cox2001}. Furthermore, $V$'s columns are linear independent, hence $V$ is invertible.
 \begin{align*}
 	MV &= V \lambda \\
 	MVV^T &= V \lambda V^T \\
@@ -237,25 +237,25 @@ Proving $AA^T = U \Sigma^2 U^T$ is analogous to the above.
 \section{Topology}
 \subsection{Manifolds}
 
-Intuitively, $n$-dimensional topological manifolds are sets that are ``locally Euclidean". \cite{lee2009} In other words, they can be decomposed into sub sets that can be mapped to the $\mathbb{R}^n$.
+Intuitively, $n$-dimensional topological manifolds are sets that are ``locally Euclidean" \cite{lee2009}. In other words, they can be decomposed into sub sets that can be mapped to the $\mathbb{R}^n$.
 
-Formally, a set $M$ is said to be a \textbf{$n$-dimensional topological manifold} $\iff M$ is a paracompact Hausdorff topological space $\mid \forall p \in M, p \in U_p$, where $U_p$ is an open set that is homeomorphic to an open set $V_p$ of the Euclidean space $\mathbb{R}^n$. \cite{lee2009}
+Formally, a set $M$ is said to be a \textbf{$n$-dimensional topological manifold} $\iff M$ is a paracompact Hausdorff topological space $\mid \forall p \in M, p \in U_p$, where $U_p$ is an open set that is homeomorphic to an open set $V_p$ of the Euclidean space $\mathbb{R}^n$ \cite{lee2009}.
 
 From now on in this report, we will use the word manifold to refer to a $n$-dimensional topological manifold.
 
 \subsubsection{Charts}
-The pair $(U_i, \phi_i)$ is called a \textbf{coordinate chart} or \textbf{chart} on $M$ if $U \in M$ and $\phi_i$ is a \textbf{homeomorphism} such that $\phi_i(U_i) = V_i \subseteq \mathbb{R}^n$. \cite{lee2002}
+The pair $(U_i, \phi_i)$ is called a \textbf{coordinate chart} or \textbf{chart} on $M$ if $U \in M$ and $\phi_i$ is a \textbf{homeomorphism} such that $\phi_i(U_i) = V_i \subseteq \mathbb{R}^n$ \cite{lee2002}.
 
 \subsubsection{Atlas}
 
-A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a manifold $M$ if $\cup_{i \in A} U_i = M$. \cite{lee2002}
+A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a manifold $M$ if $\cup_{i \in A} U_i = M$ \cite{lee2002}.
 
 \begin{example}
 	The $\mathbb{R}^n$ is, directly, a manifold.
 \end{example}
 
 \begin{example}
-	A n-dimensional sphere is a manifold. Earth, in special, is a 3-dimensional sphere and its stereographic projection is its mapping to the $\mathbb{R}^2$. \cite{stereo_proj}
+	A n-dimensional sphere is a manifold. Earth, in special, is a 3-dimensional sphere and its stereographic projection is its mapping to the $\mathbb{R}^2$ \cite{stereo_proj}.
 
 	\begin{figure}[H]
 		\centering
@@ -270,7 +270,7 @@ A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a man
 \section{Graph Theory}
 \subsection{Graphs}
 
-Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph}, \cite{berge1973} where
+Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph} \cite{berge1973}, where
 \begin{enumerate}
 	\item $X$ is a set of objects called \textbf{vertices}.
 	\item $U$ is a family of elements $u_i \in X\times X$ called arcs.
@@ -293,7 +293,7 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph}, \cite{berge197
 \subsubsection{Further Specifications}
 
 \begin{description}
-	\item[Undirected graph] ``All graphs are directed, but sometimes the direction need not be specified". \cite{berge1973}
+	\item[Undirected graph] ``All graphs are directed, but sometimes the direction need not be specified" \cite{berge1973}.
 
 	Let $G=(X, U)$ be a graph and $u_k \in U \mid u_k=(a, b)$. The element $e_i=[a, b]$ can be defined as the \textbf{edge} that links $a$ to $b$ without specifying direction. Finally, define the \textbf{undirected graph} $H$ as $(X, E)$, where $E=\{e_i\}$ is the set of edges created from $U$.
 
@@ -318,7 +318,7 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph}, \cite{berge197
 
 	\item[Euclidean graph] If $G=(X, U)$ and $W=\{w_u, \forall u\in U\}\subset \mathbb{R}$, $G$ is said to be an euclidean graph if $w_u$ corresponds to the euclidean distance between the vertices connected by $u$ in a specified embedding.
 
-	\item[Tree] Let $G$ be the graph $(V, E)$ such that $G$ is connected and admits no cycles. $G$ is  said to be a \textbf{tree}. \cite{berge1973}
+	\item[Tree] Let $G$ be the graph $(V, E)$ such that $G$ is connected and admits no cycles. $G$ is  said to be a \textbf{tree} \cite{berge1973}. 
 
 	\begin{figure}[H]
 		\centering
@@ -484,20 +484,20 @@ Now, matrix $d$ contains  the weights sum for the paths between all vertices of 
 \section{Machine Learning}
 “Learning is the improvement of performance is some environment through the acquisition of knowledge resulting from experience in that environment." \cite{pat1996}
 
-“Machine learning is the area in Computer Science that has as goal the projection and implementation of machines that have the ability to learn autonomously”. \cite{hot2009} In other words, the creation of machines that are able to recognize patterns in an environment and interpret those using concepts related to artificial intelligence. Such interpretation can create a model which might eventually be used to predict new patterns, take actions and/or solve domain problems.
+According to \cite{hot2009}, “Machine learning is the area in Computer Science that has as goal the projection and implementation of machines that have the ability to learn autonomously”. In other words, the creation of machines that are able to recognize patterns in an environment and interpret those using concepts related to artificial intelligence. Such interpretation can create a model which might eventually be used to predict new patterns, take actions and/or solve domain problems.
 
 \subsection{Machine Learning Algorithms}
 
 Based on how the learning phase of a problem is, most of the ML algorithms may be divided into one of the following categories:
 
 \begin{description}
-	\item[Supervised] A direct feedback is presented during the learning phase. \cite{pat1996} For the instances where the ME problem relies on a data set, the learning task uses the labeled training samples (i.e., samples that present the \textbf{target feature}) to synthesize the model that attempts to generalize the relationship between the feature vectors and the target variable. \cite{awa2015}
+	\item[Supervised] A direct feedback is presented during the learning phase \cite{pat1996}. For the instances where the ME problem relies on a data set, the learning task uses the labeled training samples (i.e., samples that present the \textbf{target feature}) to synthesize the model that attempts to generalize the relationship between the feature vectors and the target variable \cite{awa2015}.
 
-	\item[Unsupervised] Infer hidden structures from the data set without direct feedback, such as known labels for the samples. \cite{awa2015}
+	\item[Unsupervised] Infer hidden structures from the data set without direct feedback, such as known labels for the samples \cite{awa2015}.
 
-	\item[Semi-supervised] Most commonly, it is given by the extension of either supervised or unsupervised learning to include the other paradigm, resulting in a combination of both. \cite{zhu2009}
+	\item[Semi-supervised] Most commonly, it is given by the extension of either supervised or unsupervised learning to include the other paradigm, resulting in a combination of both \cite{zhu2009}.
 
-	\item[Reinforcement] Through iterative exploration, the learner is positively or negatively reinforced for its actions. The learner's goal is, ultimately, maximize the cumulative reward gained. \cite{awa2015}
+	\item[Reinforcement] Through iterative exploration, the learner is positively or negatively reinforced for its actions. The learner's goal is, ultimately, maximize the cumulative reward gained \cite{awa2015}.
 \end{description}
 
 \subsection{Support Vector Machine: An Example of Supervised Learning}
@@ -509,7 +509,7 @@ The Support Vector Machine algorithm (SVM) is a is a powerful tool, often used i
 	\captionsetup{justification=centering}
 
 	\includegraphics[scale=.5]{svm_margin}
-	\caption{A SVM classifier projecting a hyperplane that perfectly separates two classes of samples. \cite{sksvm}}
+	\caption{A SVM classifier projecting a hyperplane that perfectly separates two classes of samples \cite{sksvm}}.
 	\label{fig:svmmargin}
 \end{figure}
 
@@ -519,7 +519,7 @@ $$\text{\textbf{decision rule}} \begin{cases}
 	w \cdot u +b < 0 \implies y_u=-1\\
 \end{cases}$$
 
-To prevent samples from falling into the margin or being misclassified, \cite{wessvmdef} reinforce that for any positive sample $x_+$, $w \cdot x_+ +b \geq 1$. Similarly for $x_-$ samples, $w \cdot x_- +b \leq 1$. These both constraints can be expressed as
+To prevent samples from falling into the margin or being misclassified \cite{wessvmdef}, reinforce that for any positive sample $x_+$, $w \cdot x_+ +b \geq 1$. Similarly for $x_-$ samples, $w \cdot x_- +b \leq 1$. These both constraints can be expressed as
 \begin{equation} \label{svmconst}
 y_i(w \cdot x_i +b) -1 \geq 0
 \end{equation}
@@ -544,7 +544,7 @@ Which can be solved using standard quadratic programming.
 
 \subsubsection{SVM for non-separable data sets (soft margins)}
 
-To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$, \cite{wessvmdef} which represent a trade-off between maximum margin/distance of the misclassified samples from the decision boundary.
+To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$ \cite{wessvmdef}, which represent a trade-off between maximum margin/distance of the misclassified samples from the decision boundary.
 $$\min \frac{1}{2} \|w\|^2 + C \sum_{1}^{m}\xi_i \text{, constrained to:}$$
 $$y_i(w \cdot x_i +b) \geq 1- \xi_i, \xi_i \geq 0$$
 
@@ -552,7 +552,7 @@ Such trade-off can be adjusted through the parameter $C$. Notice that small valu
 
 \subsubsection{Dependency over the dot product}
 
-Equation \ref{eq:svmminw} does not explicitly illustrates how the model generated depents on the dot product between the training samples. The implications of such fact will be discussed in the next section. For now, let us convert \ref{eq:svmminw} to its dual form. By the Lagrange multipliers method: \cite{mitsvm}
+Equation \ref{eq:svmminw} does not explicitly illustrates how the model generated depents on the dot product between the training samples. The implications of such fact will be discussed in the next section. For now, let us convert \ref{eq:svmminw} to its dual form. By the Lagrange multipliers method \cite{mitsvm}:
 \begin{align} \label{eq:svmlag1}
 	L &= \frac{1}{2}\|w\|^2 - \sum \alpha_i[y_i(w \cdot x_i +b) -1] \\
 	\label{svmlag2}
@@ -571,7 +571,7 @@ L = \frac{1}{2}\sum\alpha_i y_i x_i \cdot \sum\alpha_j y_j x_j
 
 $w$ and $b$ can easily be found from (\ref{svmlag2}) and $\alpha_i[y_i(w \cdot x_i + b) - 1] = 0$ (for any $i \mid \alpha_i \ne 0$), respectively.
 
-Now, as we finally plug (\ref{svmlag2}) back into our decision rule, it becomes clear that both training and prediction phases depend only on the dot product between the sample vectors: \cite{mitsvm}
+Now, as we finally plug (\ref{svmlag2}) back into our decision rule, it becomes clear that both training and prediction phases depend only on the dot product between the sample vectors \cite{mitsvm}:
 
 $$\text{\textbf{decision rule}} \begin{cases}
 	\sum\alpha_i y_i x_i \cdot u +b \geq 0 \implies y_u=+1\\
@@ -608,17 +608,17 @@ The figure bellow illustrates a non-linearly separable data set defined in the $
 	\captionsetup{justification=centering}
 
 	\includegraphics[scale=.4]{svm_kernel}
-	\caption{Projection of samples from the $\mathbb{R}$ to the $\mathbb{R}^2$, allowing SVM to find a hyperplane that perfectly separates both classes. \cite{svmkernels}}
+	\caption{Projection of samples from the $\mathbb{R}$ to the $\mathbb{R}^2$, allowing SVM to find a hyperplane that perfectly separates both classes \cite{svmkernels}.}
 	\label{fig:svmkernel}
 \end{figure}
 
-Between many different kernels, two often used are the RBF: $\exp(-\frac{\|x -x'\|^2}{2\sigma^2})$ and the Polynomial: $(u^T v + c)^{d}$. \cite{svmkernels}
+Between many different kernels, two often used are the RBF: $\exp(-\frac{\|x -x'\|^2}{2\sigma^2})$ and the Polynomial: $(u^T v + c)^{d}$ \cite{svmkernels}.
 
 \subsection{Multi-class Classification}
 
 Not all problems are binary. In classification, this reflects data sets that have their samples separated into more than two classes. The Iris flower data set is an example of this, when predicting the samples' {\em species}.
 
-There are many different approaches for multi-class classification. \cite{rif2008} For the scope of this work, consider only the following:
+There are many different approaches for multi-class classification \cite{rif2008}. For the scope of this work, consider only the following:
 
 \begin{description}
 	\item[One-vs-All (OVA)] $n$ binary classifiers are built, where $n$ is also the number of classes in the data set. For the classifier $c^j, j \in [1, n]$, all samples of the $j$th class are taken as positive examples, at the same time that all the other samples are considered negative.
@@ -626,7 +626,7 @@ There are many different approaches for multi-class classification. \cite{rif200
 	If
 	$$c^j(x) = \sum_{i=1}^{m} y_i \alpha_i^j x \cdot x_i + b$$
 
-	Then positive values for $c^j(x)$ indicate that the sample $x$ belongs to the $j$th class. Additionally, greater $c^j(x)$ values imply on further distance from the hyperplane (i.e., $c^j(x)$ can also be interpreted as a \textbf{confidence value}) and the sample $x$ should be assigned to the class which holds greatest confidence. \cite{ovacj} Shortly, classification is given by
+	Then positive values for $c^j(x)$ indicate that the sample $x$ belongs to the $j$th class. Additionally, greater $c^j(x)$ values imply on further distance from the hyperplane (i.e., $c^j(x)$ can also be interpreted as a \textbf{confidence value}) and the sample $x$ should be assigned to the class which holds greatest confidence \cite{ovacj}. Shortly, classification is given by
 	$$ f(x) = \argmax_j{c^j(x)} $$
 	\item[All-vs-All (AVA)] Also known as all-pairs or one-vs-one, a classifier $c_{ij}$ is built for each pair of classes $(i, j)$, resulting in a total of $n(n-1)$ classifiers. $c_{ij}$ responds with positive values for samples of the $i$th class and negative values for samples of the $j$th class. Classification can be done by simply counting the class most frequently associated with $x$:
 	$$ f(x) = \argmax_i{\sum_{j=1}^{n} c_{ij}(x)} $$
@@ -664,30 +664,30 @@ Naturally, a diagonal matrix represents that all samples of the class $i$ were c
 
 Sometimes (for example, when the data set does not have too many samples), partitioning of the data set into subsets might be benign to the learning process, as the model will be constructed only considering a small, random portion of the samples. This event is known as \textbf{underfitting}.
 
-When $k$-fold cross-validating, \cite{crossvalid} the data set can be partitioned into $k$ folds. For each fold $k_i$, a model is trained with all folds, except for $k_i$. The model is then tested over $k_i$. Finally, the score reported by the cross-validation method is the average accuracy when testing over all folds.
+When $k$-fold cross-validating \cite{crossvalid}, the data set can be partitioned into $k$ folds. For each fold $k_i$, a model is trained with all folds, except for $k_i$. The model is then tested over $k_i$. Finally, the score reported by the cross-validation method is the average accuracy when testing over all folds.
 
 \subsubsection{Grid Search}
 
 Machine Learning algorithms may require specific parameters to run. For instance, SVM requires $C$ and which $kernel$ it should use. Additionally, kernels might require their own parameters. As these parameters strongly affect how the generated model will be, one cannot choose them arbitrarily.
 
-Grid Search is a traditional method used to find the parameters that optimize the generalization of learning model over a specific data set. \cite{gridsearch} Given a set of possible parameters, it will exhaustively search for the combination of those that generate the best outcome, which might be evaluated by a validation method such as cross-validation.
+Grid Search is a traditional method used to find the parameters that optimize the generalization of learning model over a specific data set \cite{gridsearch}. Given a set of possible parameters, it will exhaustively search for the combination of those that generate the best outcome, which might be evaluated by a validation method such as cross-validation.
 
 \subsection{Examples of Learning}
 
 \subsubsection{Coffee Selling Rate}
 
-The figure bellow illustrates the distribution of coffee sales per time of the day in a particular coffee-shop. \cite{roh2015} Clearly being a regression problem, a machine learning algorithm must create a model that appropriately generalizes the distribution observed. Such model will eventually be used to predict the selling rate in the following days.
+The figure bellow illustrates the distribution of coffee sales per time of the day in a particular coffee-shop \cite{roh2015}. Clearly being a regression problem, a machine learning algorithm must create a model that appropriately generalizes the distribution observed. Such model will eventually be used to predict the selling rate in the following days.
 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
 
 	\includegraphics[scale=.4]{rohrer2015}
-	\caption{graphic representation of a data set generalization by a linear (orange) and a nonlinear model (green). \cite{roh2015}}
+	\caption{graphic representation of a data set generalization by a linear (orange) and a nonlinear model (green) \cite{roh2015}.}
 	\label{fig:rohrer2015}
 \end{figure}
 
-The orange line and the green arc represent two different models. The orange line, which represents the linear model, clearly does not generalize the data set appropriately, once it induces an error much larger than necessary. \cite{roh2015} The nonlinear model, i.e., the green arc, was capable of generalize the data inducing a smaller error.
+The orange line and the green arc represent two different models. The orange line, which represents the linear model, clearly does not generalize the data set appropriately, once it induces an error much larger than necessary \cite{roh2015}. The nonlinear model, i.e., the green arc, was capable of generalize the data inducing a smaller error.
 
 \subsubsection{Iris Flower}
 
