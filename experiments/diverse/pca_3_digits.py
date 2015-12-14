@@ -3,11 +3,12 @@ from experiments.base import ReductionExperiment, LearningExperiment
 
 
 class DigitsExperiment(ReductionExperiment, LearningExperiment):
-    title = 'Digits PCA'
+    title = 'PCA Digits'
     plotting = True
 
     def _run(self):
         self.load_data()
+        self.evaluate()
         self.learn()
 
         self.reduction_method = 'pca'
@@ -26,10 +27,11 @@ class DigitsExperiment(ReductionExperiment, LearningExperiment):
         self.original_data = self.data
 
         self.displayer \
-            .load(self.data, self.target).save('datasets/digits') \
+            .load(self.data, self.target, axis_labels=['A', 'B', 'C']) \
+            .save('datasets/pca_digits') \
             .dispose()
 
-        print('Shape: %s' % str(self.data))
+        print('Shape: %s' % str(self.data.shape))
         print('Data set size: %.2f KB' % (self.data.nbytes / 1024))
 
 

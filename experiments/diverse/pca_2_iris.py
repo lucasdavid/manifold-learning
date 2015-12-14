@@ -4,7 +4,7 @@ from experiments.base import ReductionExperiment, LearningExperiment
 
 
 class IrisExperiment(ReductionExperiment, LearningExperiment):
-    title = 'Iris PCA'
+    title = 'PCA Iris'
     plotting = True
 
     reduction_method = 'pca'
@@ -12,6 +12,7 @@ class IrisExperiment(ReductionExperiment, LearningExperiment):
 
     def _run(self):
         self.load_data()
+        self.evaluate()
         self.learn()
 
         for d in (3, 2, 1):
@@ -29,7 +30,11 @@ class IrisExperiment(ReductionExperiment, LearningExperiment):
         print('Shape: %s' % str(self.data.shape))
         print('Data set size: %.2f KB' % (self.data.nbytes / 1024))
 
-        self.displayer.load(self.data, self.target)
+        self.displayer.load(self.data, self.target,
+                            axis_labels=iris.feature_names) \
+            .save('datasets/pca_iris') \
+            .dispose()
+
 
 if __name__ == '__main__':
     IrisExperiment().start()

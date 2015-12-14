@@ -102,7 +102,6 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
     verbose_reduction = True
 
     knn = neighbors.KNeighborsClassifier(n_neighbors=1, n_jobs=-1)
-    knn = neighbors.KNeighborsRegressor
     test_size = .2
 
     def reduce(self):

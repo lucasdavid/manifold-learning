@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn import preprocessing
+from sklearn import preprocessing, neighbors
 from experiments.base import ReductionExperiment, LearningExperiment
 
 
@@ -8,18 +8,20 @@ class KExperiment(ReductionExperiment, LearningExperiment):
     plotting = True
 
     reduction_method = 'pca'
+    knn = neighbors.KNeighborsRegressor(n_neighbors=1, n_jobs=-1)
 
     def _run(self):
         self.generate_data()
+        self.evaluate()
 
         # Learn, through GridSearch, the data set K.
-        # self.learn()
+        self.learn()
 
         # Reduce dimensions of K.
         for dimension in (2, 1):
             self.reduction_params = {'n_components': dimension}
             self.reduce()
-            # self.learn()
+            self.learn()
 
         self.displayer.save(self.title)
 
@@ -31,7 +33,10 @@ class KExperiment(ReductionExperiment, LearningExperiment):
         self.original_data = self.data = preprocessing.scale(self.data)
         self.target = self.data.sum(axis=1).astype(int)
 
-        self.displayer.load(self.data, self.target)
+        self.displayer \
+            .load(self.data, self.target, axis_labels=['A', 'B']) \
+            .save('datasets/pca_k') \
+            .dispose()
 
         print('Correlation of K')
         print(np.corrcoef(self.data, rowvar=0))
