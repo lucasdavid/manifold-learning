@@ -1,18 +1,17 @@
 \chapter{Relevant Background}
 \section{Data set}
 
-In the context of Computer Science, very often our goal is to develop machines that can assist or automate the process of solving real-world problems. Firstly, however, we must find ways to express these problems numerically. This is were ``data sets" come in.
+In the context of Computer Science, very often our goal is to develop machines that can assist or automate the process of solving real-world problems. Firstly, however, we must find ways to express these problems numerically. This is where ``data sets" come in.
 
-Although the recurrent usage of the term ``data set" in scientific work, there is not a clear definition established. It is possible, however, to observe the regular presence of four related features: grouping, content, relatedness e purpose \cite{ren2010}.
+Although the recurrent usage of the term ``data set" in scientific work, there is not a clear definition established. It is possible, however, to observe the regular presence of four related features: grouping, content, relatedness and purpose \cite{ren2010}.
 For the scope of this work, the term data set is invariably associated with the idea of a collection of samples. Each sample is a sequence of features, where the {\em i-th} feature of all instances belong to a same set of symbols $f_i$.
 
-Succinctly, consider $S$ a sequence of samples and
-$F \coloneqq  \{f_i \mid f_i \textnormal{ is a set of symbols}\}$. Then, the dataset $D$ is defined as:
-$$D\coloneqq [d_{ij}] \mid d_{ij} \in f_j, \forall i \in [1, |S|], \forall j \in [1, |F|]$$
+Succinctly, let $S$ be a set of samples and $F \coloneqq  \{f_i \mid f_i \textnormal{ is a set of symbols}\}$. Then, the dataset $X$ is defined as:
+$$X\coloneqq [x_{ij}] \mid x_{ij} \in f_j, \forall i \in [1, |S|], \forall j \in [1, |F|]$$
 
 \subsubsection{Example of a canonical data set} \label{irisdataset}
 
-The table bellow illustrates an examples of data set, where each row represents a \textbf{sample}, and each column a \textbf{feature}.
+The table bellow illustrates an example of data set, where each row represents a \textbf{sample}, and each column a \textbf{feature}.
 
 \begin{table}[H]
 	\begin{tabular}{ c || *{5}{c|}}
@@ -23,15 +22,16 @@ The table bellow illustrates an examples of data set, where each row represents 
 		3 & 4.7 & 3.2 & 1.3 & 0.2 & I. setosa \\
 		… & … & … & … & … & … \\
 	\end{tabular}
-	\caption{The first three samples of the Iris flower data set.}
+	\caption{The first three samples of the Iris flower data set \protect\footnotemark.}
 \end{table}
 
-Iris flower is an example of data set broadly used in the machine learning demonstrations, being usually interpreted as a classification problem where the feature {\em Species} will be learned from its adjacent features. In that scenario, {\em Species} is denominated \textbf{target feature}.
+\footnotetext{Available at: \href{https://archive.ics.uci.edu/ml/datasets/Iris}{archive.ics.uci.edu/ml/datasets/Iris}}
+
+Iris flower is an example of data set broadly used in machine learning demonstrations, being usually interpreted as a classification problem where the feature {\em Species} will be learned from its adjacent features. In that scenario, {\em Species} is denominated \textbf{target feature}.
 
 \subsection{Data set as a collection of vectors in the $\mathbb{R}^n$}
 
-A data set can have each one of its nominal features enumerated. I.e., mapped to an element of $\mathbb{N}$. Such set could then be expressed as a collections of vectors in $\mathbb{R}^n$.
-Consider the data set bellow:
+A data set can have each one of its nominal features enumerated, i.e., mapped to an element of $\mathbb{N}$. Such set could then be expressed as a collections of vectors in the $\mathbb{R}^n$. Consider the data set bellow:
 
 \begin{table}[H]
 	\begin{tabular}{ c | *{11}{|c}| }
@@ -53,8 +53,10 @@ Consider the data set bellow:
 		… & … & … & … & … & … & … & … & … & … & … & … \\
 	\end{tabular}
 
-	\caption{The first three samples of the Indian Liver Patient Dataset (ILPD)}
+	\caption{The first three samples of the Indian Liver Patient Dataset (ILPD) \protect\footnotemark}
 \end{table}
+
+\footnotetext{Available at: \href{https://archive.ics.uci.edu/ml/datasets/ILPD+(Indian+Liver+Patient+Dataset)}{archive.ics.uci.edu/ml/ILPD}}
 
 Composed by 583 samples and 11 features, the data set ILPD has a nominal feature $Gender \coloneqq \{Male, Female\}$. {\em Gender} can, of course, be mapped on $\{0, 1\}$. ILPD can finally be expressed by the figure bellow:
 
@@ -67,38 +69,42 @@ Composed by 583 samples and 11 features, the data set ILPD has a nominal feature
 	\label{fig:disp_ilpd}
 \end{figure}
 
-Considering the many graphs required to display the data set, it is quite difficult to identify a plausible distribution for ILPD. We define here our first encouragement towards the study of dimensionality reduction: the identification of the most significant features (i.e., that maximize variance) and plotting of those might result on simpler and more intuitive representations. Furthermore, it would also be interesting to combine the existing features to create new ones that are even more representative.
+As many graphs required to display the data set, it is quite difficult to identify a plausible distribution for ILPD. We define here our first encouragement towards the study of dimensionality reduction: the identification of the most significant features (i.e., that maximize variance) and plotting of those might result on simpler and more intuitive representations. Furthermore, it would also be interesting to combine the existing features to create new ones that are even more representative.
 
 \subsection{Modern Problems and Applications}
 
-Differently from Iris flower or ILPD data set, data sets associated with modern problems are often very dense, i.e., data sets containing many samples and/or features. Although the high number of samples is essentially benefic, a high number of features might be irrelevant or even unconstructive to the learning process \cite{cay2005}.
+Differently from Iris flower or ILPD data set, data sets associated with modern problems are often very dense, i.e., data sets containing many samples and/or features. Although the high number of samples is essentially benefic, a high number of features might be irrelevant or even unconstructive to the learning process \cite{cay2005}. The Leukemia data set, illustrated in the table \ref{tb:ds_leukemia}, is an example of extremelly high dimensionality data set, as it is contained in the $\mathbb{R}^{7130}$.
 
 \begin{table}[H]
-	\begin{tabular}{ c | *{4}{|c}| }
-		& A & B & … & AAAV \\ \hline
-		1 & 0.0111486888670454 & -0.01541263850539861 & … & 0.007440367302352156 \\
-		2 & 0.03016080450207878 & 0.1772161342899135 & … & 0.01309011094914101 \\
-		… & … & … & … & … \\
-		8200 & 0.02680808496910305 & -0.0320375843317954 & … & 0.1772161342899135 \\
+	\centering
+	\begin{tabular}{ c | *{5}{|c}| }
+		& F1 & F2 & … & F7129 & F7130 \\ \hline
+		1 & -1.46236  & -0.645135 & ... & -0.959575 & 1 \\
+		2 & -0.664799  & 0.206146 & ... & -0.543433 & 1\\
+		3 & -0.200487  & 0.379941 & ... & -0.896774 & 1\\
+		… & … & … & … & … & ... \\
+		72 & -0.455835 & -0.071517 & ... & -0.068667 & 1\\
 	\end{tabular}
-
-	\caption{A data set with 8200 samples and 100 features.}
+	\caption{The Leukemia data set, with 72 samples and 7130 features \protect\footnotemark.}
+	\label{tb:ds_leukemia}
 \end{table}
 
-In many cases, there are indicatives that the data set lie near a lower-dimensional manifold embedded in the $\mathbb{R}^n$ \cite{gho2006}. For the data set above, in special, the $\mathbb{R}^{100}$. A second encouragement can then be set: it is possible that the data set might be shrunk by combining similar (linearly dependent) features or eliminating the ones that poorly contribute towards the learning process. In order to do this, one must be able to qualify the “contribution” of each feature or even identify dependencies between features.
+\footnotetext{Available at: \href{http://mldata.org/repository/data/viewslug/leukemia/}{mldata.org}.}
+
+In many cases, there are indicatives that the data set lie near a lower-dimensional manifold embedded in the $\mathbb{R}^n$ \cite{gho2006}; that is, there is a smaller set of features which roughly express the information within. A second encouragement can then be set: it is possible that the data set might be shrunk by combining similar (linearly dependent) features or eliminating the ones that poorly contribute towards the learning process. In order to do this, one must be able to qualify the “contribution” of each feature or even identify dependencies between features.
 
 \section{Probability Theory}
-\subsection{Feature Standardization}
-Many of the methods ahead will require the data set to be centered in the origin. To center a data set $X$, we build a data set $X'$ s.t. each column has zero mean and it is contracted by its standard deviation:
-$$X'_{.j} = \frac{X_{.j} - \mu}{\sigma} \textnormal{, where}$$
-\begin{enumerate}
-	\item $X_{.j}$ is the j-th column of the matrix $X$.
-	\item $\mu$ is the mean of $X_{.j}$.
-	\item $\sigma$ is the standard deviation of $X_{.j}$.
-\end{enumerate}
+\subsection{Feature Normalization and Standardization}
+Many of the methods ahead will require the data set to be centered in the origin. This is equivalent to remove the mean from each one of the data set's features.
+
+Let $[X]_{n \times f}$ be a data set, $X_{.j}$ the $j$-th column of the matrix $X$ and $\mu_j$ the mean of $X_{.j}$, we build a \textbf{normalized} data set $X'$ s.t. each column has zero mean:
+$$X'_{.j} = X_{.j} - \mu_j$$
+
+If $\sigma_j$ is the standard deviation of $X_{.j}$, it is also possible to build the \textbf{standardized} $X'$, where each column has zero mean and it is contracted by its standard deviation:
+$$X'_{.j} = \frac{X_{.j} - \mu_j}{\sigma_j}$$
 
 \subsection{Centering Matrix}
-The symmetric matrix $H$ is named the \textbf{centering matrix} when the multiplication of it by a vector $X$ produces the same effect of subtracting the mean of the components from each component of $X$. $H$ is defined as:
+The symmetric matrix $H$ is named the \textbf{centering matrix} when the multiplication of it by a matrix $X$ produces the same effect of subtracting the mean of the components from each component of $X$. $H$ is defined as:
 $$
 H = I_n - \frac{1}{n}\textbf{11}^T \textnormal{, where:}
 $$
@@ -108,14 +114,10 @@ $$
 \end{enumerate}
 
 \subsection{Variance}
-Variance is the measure which describes how far the samples in a given set X vary. For the scope of this project, only discrete probabilities will be considered. That is, if $X$ represents a variate with known distribution $P(x)$, where $P(x) = k \in \mathbb{R}^{+}, \forall x \in X$ and $\sum_{x \in X} P(x) = 1$, and $\mu$ is the population mean of $X$, then \cite{ross2010introductory}:
+Variance is the measure which describes how far the samples in a given set X vary. For the scope of this project, only discrete probabilities will be considered. That is, if $X$ represents a random variable with known distribution $P(x)$, where $P(x) = k \in \mathbb{R}^{+}, \forall x \in X$ and $\sum_{x \in X} P(x) = 1$, and $\mu$ is the population mean of $X$, then \cite{ross2010introductory}:
 \begin{align*}
 	Var(X) = \frac{1}{n} (X-\mu) \cdot (X-\mu) = \frac{1}{n} \sum_{x \in X} (x - \mu)^2
 \end{align*}
-
-\begin{remark}
-	If $var(X) = 0$, then it can be easily asserted that all variables in $X$ assume the exact same value by using the elementary properties of the inner product.
-\end{remark}
 
 \begin{example}
 	If $X=\{1, 2, -2, 4\}$ and $\mu = \frac{1}{4} \sum X_i = \frac{1+2-2+4}{4} = 1.25$, then
@@ -135,9 +137,21 @@ Variance is the measure which describes how far the samples in a given set X var
 	\end{align*}
 \end{example}
 
+Let $[X]_{n \times f}$ be a data set and $\mu_j \in \mathbb{R}^n$ the column vector containing the mean of the $j$-th column of $X$ in all its position. If $var(X_{.j}) = 0, \forall j \in [0, f)$, then all samples in $X$ are the same.
+\begin{proof}
+	\begin{align*}
+	Var(X_{.j}) &= 0 \\
+	\frac{1}{n} (X_{.j} - \mu_j) \cdot (X_{.j} - \mu_j) &= 0 \\
+	X_{.j} - \mu_j &= 0  \\
+	\iff& \\
+	X_{.j} &= \mu_j
+	\end{align*}
+	But all elements in $\mu_j$ are the same. Therefore all elements in $X_{.j}$ are the same.
+\end{proof}
+
 \subsection{Covariance}
 
-The covariance measures the variance of two random variates in respect to each other. Formally, if $X$ and $Y$ are two given random variates with known mean population distribution $\mu_X$ and $\mu_Y$, respectively, then
+The covariance measures the variance of two random variables in respect to each other. Formally, if $X$ and $Y$ are two given random variables with known mean population distribution $\mu_X$ and $\mu_Y$, respectively, then
 $$\sigma(X, Y) = \frac{1}{n} (X - \mu_X) \cdot (Y - \mu_Y) $$
 
 Simply putting, the covariance of two random variables $X$ and $Y$ can be interpreted as one of the following behaviors:
@@ -150,50 +164,24 @@ $$
 $$
 
 \begin{remark}
-	For a random variate $X$, $var(X) = \sigma(X, X)$.
+	For a random variable $X$, $var(X) = \sigma(X, X)$.
 \end{remark}
 
 \paragraph{Covariance Matrix of Features in a Centered Data Set}
 
-Let $D$ be a data set, $H$ the centering matrix and $HD_{\_i}$ the {\em i-th} feature column of the centered data set $HD$, the covariance between each one of its features can be represented by the matrix:
+Let $X$ be a data set, $X'$ the data set $X$ with its features centered ($X'=HX$), and $X'_{.j}$ the {\em j-th} feature column of the centered data set $X'$, the covariance between each pair of features can be represented by the matrix:
 \begin{align*}
 \Sigma &= [\sigma_{xy}]_{n \times n} \\
 &= \begin{bmatrix}
-\sigma(HD_{\_0}, HD_{\_0}) & \sigma(HD_{\_0}, HD_{\_1}) & \cdots & \sigma(HD_{\_0}, HD_{\_n-1}) \\
-\sigma(HD_{\_1}, HD_{\_0}) & \sigma(HD_{\_1}, HD_{\_1}) & & \sigma(HD_{\_1}, HD_{\_n-1}) \\
+\sigma(X'_{.0}, X'_{.0}) & \sigma(X'_{.0}, X'_{.1}) & \cdots & \sigma(X'_{.0}, X'_{.n-1}) \\
+\sigma(X'_{.1}, X'_{.0}) & \sigma(X'_{.1}, X'_{.1}) & & \sigma(X'_{.1}, X'_{.n-1}) \\
 \vdots &&& \vdots \\
-\sigma(HD_{\_n-1}, HD_{\_0}) & \sigma(HD_{\_n-1}, HD_{\_1}) & \cdots & \sigma(HD_{\_n-1}, D_{\_n-1})
+\sigma(X'_{.n-1}, X'_{.0}) & \sigma(X'_{.n-1}, X'_{.1}) & \cdots & \sigma(X'_{.n-1}, D_{.n-1})
 \end{bmatrix} \\
-&= \frac{1}{n} (HD)^T HD \\
-&= \frac{1}{n} D^T H^T H D \\
- &= \frac{1}{n} D^T H D
-\end{align*}
-
-Where $H$ is the \textbf{centering matrix}.
-
-\subsection{Correlation}
-
-The correlation is a measure of the direction and strength of a linear relationship among variables. Let $X$ and $Y$ be two random variables, $r(X, Y)$, i.e., the correlation between $X$ and $Y$ is defined as \cite{ross2010introductory}:
-\begin{align*}
-	r(X, Y) = \frac{\sigma(X, Y)}{\sigma_X \sigma_Y},
-\end{align*}
-
-where $\sigma_X$ and $\sigma_Y$ are the standard deviations of the variables $X$ and $Y$, respectively. Of course, $r(X, Y) \in [-1, 1]$.
-
-\begin{remark}
-	If $X$ and $Y$ are two random variables and $\sigma(X, Y) = 1$, $X=Y$.
-\end{remark}
-
-\subsubsection{Correlation Matrix of Features in a Centered Data Set}
-
-Let $D$ be a data set, $H$ the centering matrix and $HD_{\_i}$ the {\em i-th} feature column of the centered data set $HD$. The correlation between each one of its features can be represented by the matrix:
-\begin{align*}
-	corr(D) &= \begin{bmatrix}
-		1 & \frac{\sigma(HD_{\_0}, HD_{\_1})}{\sigma_{HD_{\_0}} \sigma_{HD_{\_1}}} & \cdots & \frac{\sigma(HD_{\_0}, HD_{\_n-1})}{\sigma_{HD_{\_0}} \sigma_{HD_{\_n-1}}} \\
-		\frac{\sigma(HD_{\_1}, HD_{\_0})}{\sigma_{HD_{\_1}} \sigma_{HD_{\_0}}} & 1 & \cdots & \frac{\sigma(HD_{\_1}, HD_{\_n-1})}{\sigma_{HD_{\_1}} \sigma_{HD_{\_n-1}}} \\
-		\vdots & \vdots && \vdots \\
-		\frac{\sigma(HD_{\_n-1}, HD_{\_0})}{\sigma_{HD_{\_n-1}} \sigma_{HD_{\_0}}} & \frac{\sigma(HD_{\_n-1}, HD_{\_1})}{\sigma_{HD_{\_n-1}} \sigma_{HD_{\_1}}} & \cdots & 1
-	\end{bmatrix}
+&= \frac{1}{n} (X')^T X' \\
+&= \frac{1}{n} (HX)^T HX \\
+&= \frac{1}{n} X^T H^T H X \\
+ &= \frac{1}{n} X^T H X
 \end{align*}
 
 \section{Numerical Analysis}
@@ -220,17 +208,17 @@ $\lambda = diag(\sigma_0, \sigma_1, ..., \sigma_{n-1})$ is the diagonal matrix, 
 If $M \in \mathbb{R}^{m \times n}$, then $\exists U \in \mathbb{R}^{m \times m}, V \in \mathbb{R}^{n \times n}$ and $\Sigma =  diag(\sigma_0, \dots, \sigma_{n-1})$ conditioned to $\sigma_i \ge \sigma_{i+1} \ge 0, \forall \sigma \in [0, n)$ s.t. \cite{gan2008}
 $$M = U\Sigma V^T$$
 
-\begin{theorem}
+\subsubsection{Decomposition of Symmetric Matrices}
 	\label{th:svd-aat}
 	If $A = U \Sigma V^T$, $AA^T = U \Sigma^2 U$ and $A^TA = V \Sigma^2 V$.
-\end{theorem}
-\textbf{Proof}
-\begin{align*}
+\begin{proof}
+	\begin{align*}
 	A^TA &= (U\Sigma V^T)^T(U\Sigma V^T) \\
 	&= V \Sigma^T U^T U \Sigma V^T \\
 	&= V \Sigma \Sigma V^T \\
 	&= V \Sigma^2 V^T
-\end{align*}
+	\end{align*}
+\end{proof}
 
 Proving $AA^T = U \Sigma^2 U^T$ is analogous to the above.
 
@@ -243,11 +231,31 @@ Formally, a set $M$ is said to be a \textbf{$n$-dimensional topological manifold
 
 From now on in this report, we will use the word manifold to refer to a $n$-dimensional topological manifold.
 
+\begin{figure}[H]
+	\centering
+	\captionsetup{justification=centering}
+	\includegraphics[scale=.4]{manifold/torus}
+	\caption{The Torus, a manifold often studied in topology \protect\footnotemark.}
+	\label{fig:mani_torus}
+\end{figure}
+
+\footnotetext{Available at: \href{Weisstein, Eric W. "Torus." From MathWorld--A Wolfram Web Resource. http://mathworld.wolfram.com/Torus.html}{mathworld.wolfram.com/Torus}}
+
 \subsubsection{Charts}
 The pair $(U_i, \phi_i)$ is called a \textbf{coordinate chart} or \textbf{chart} on $M$ if $U \in M$ and $\phi_i$ is a \textbf{homeomorphism} such that $\phi_i(U_i) = V_i \subseteq \mathbb{R}^n$ \cite{lee2002}.
 
-\subsubsection{Atlas}
+\begin{figure}[H]
+	\centering
+	\captionsetup{justification=centering}
+	
+	\includegraphics[scale=.4]{manifold/charts}
+	\caption{Charts mapping four regions of a circle to different open sets \protect\footnotemark.}
+	\label{fig:mani_charts}
+\end{figure}
 
+\footnotetext{Available at: \href{https://en.wikipedia.org/wiki/Manifold}{wiki/Manifold/Charts}}
+
+\subsubsection{Atlas}
 A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a manifold $M$ if $\cup_{i \in A} U_i = M$ \cite{lee2002}.
 
 \begin{example}
@@ -255,13 +263,13 @@ A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a man
 \end{example}
 
 \begin{example}
-	A n-dimensional sphere is a manifold. Earth, in special, is a 3-dimensional sphere and its stereographic projection is its mapping to the $\mathbb{R}^2$ \cite{stereo_proj}.
+	A n-dimensional sphere is a manifold. Earth, in special, is a 3-dimensional sphere and its stereographic projection (figure \ref{fig:stereographic_earth}) is its mapping to the $\mathbb{R}^2$ \cite{stereo_proj}.
 
 	\begin{figure}[H]
 		\centering
 		\captionsetup{justification=centering}
 
-		\includegraphics[scale=.8]{stereo_earth}
+		\includegraphics[scale=.8]{manifold/stereo_earth}
 		\caption{Stereographic projection applied to Earth.}
 		\label{fig:stereographic_earth}
 	\end{figure}
@@ -278,14 +286,14 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph} \cite{berge1973
 
 \subsubsection{Basic Concepts \cite{berge1973}}
 \begin{description}
-	\item[Multiplicity] If $G=(X, U)$ and $(x, y) \in X\times X$, the multiplicity $m_g^+(x, y)$ of $x, y$ is defined to be the number of arcs with initial endpoint $x$ and terminal endpoint $y$. Furthermore:
+	\item[Multiplicity] If $G=(X, U)$ and $(x, y) \in X\times X$, the multiplicity $m_g^+(x, y)$ is defined to be the number of arcs with initial endpoint $x$ and terminal endpoint $y$. Furthermore:
 	\begin{enumerate}
 		\item $m_G^-(x, y) = m_G^+(y, x)$
 		\item $m_G(x, y) = m_G^+(x, y) + m_G^-(x, y)$
 	\end{enumerate}
 
-	\item[Degree] If $G=(X, U)$ is a graph and $x\in X$, the degree $d(x)$ of $x$ is defined \cite{may1972} as
-	$d(x) = 2n_s  + n_n$, where $n_s$ is the number of arcs self-incident at $x$ (i.e., $\{(x, x)\}$) and $n_n$ is the number of arcs incident at $x$.
+	\item[Degree] If $G=(X, U)$ is a graph and $x\in X$, the degree $d(x)$ of $x$ is defined as
+	$d(x) = 2n_s  + n_n$, where $n_s$ is the number of arcs self-incident at $x$ \cite{may1972} (i.e., arc with $x$ as initial endpoint and terminal endpoint) and $n_n$ is the number of arcs incident at $x$.
 
 	\item[Adjacency Matrix] If $G=(X, U), X=\{x_1, x_2, \dots, x_n \}$, define the adjacency matrix $A=[a_{ij}]_{n\times n}$ associated with graph $G$, where $a_{ij} = m_G^+(x_i, x_j)$.
 \end{description}
