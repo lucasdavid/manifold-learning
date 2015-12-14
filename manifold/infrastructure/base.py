@@ -53,11 +53,13 @@ class EuclideanDistancesFromDataSet(Task):
         distances = {}
 
         for i in range(samples - 1):
-            distances[i] = {i + n + 1: d for n, d in enumerate(d[0:samples - i - 1])}
+            distances[i] = {i + n + 1: d for n, d in
+                            enumerate(d[0:samples - i - 1])}
             d = d[samples - i - 1:]
 
         if self.verbose:
-            print('Task EuclideanDistancesFromDataSet took %.2f s.' % (time.time() - start))
+            print('Task EuclideanDistancesFromDataSet took %.2f s.' % (
+                time.time() - start))
         return distances
 
 
@@ -95,8 +97,7 @@ def kruskal_stress(d_x, d_y):
 
     Stress, float in the interval [0, 1], where 0 is the best possible fit and 1 is the worse.
     """
-    return np.sqrt(np.power(d_x - d_y, 2).sum()
-                   / np.power(d_x, 2).sum())
+    return np.sqrt(np.power(d_x - d_y, 2).sum() / np.power(d_x, 2).sum())
 
 
 def _class_stress(X, target):
@@ -112,8 +113,9 @@ def _class_stress(X, target):
 
     for i in range(n_samples):
         for j in range(i + 1, n_samples):
-            stress_X_ += (coef[current] / coef_sum) * abs(target[i] - target[j]) \
-                         / (abs(target[i]) + abs(target[j]))
+            stress_X_ += (coef[current] / coef_sum) \
+                         * abs(target[i] - target[j]) / (
+                         abs(target[i]) + abs(target[j]))
 
     return stress_X_
 
@@ -135,7 +137,8 @@ def class_stress(X, Y, target, n_neighbors=5, n_jobs=1):
     n_jobs : the number of jobs triggered for the nearest
         neighbors algorithm.
     """
-    assert X.shape[0] == Y.shape[0] == target.shape[0], 'Number of samples do not match.'
+    assert X.shape[0] == Y.shape[0] == target.shape[
+        0], 'Number of samples do not match.'
 
     target += abs(target.min()) + 1
 
