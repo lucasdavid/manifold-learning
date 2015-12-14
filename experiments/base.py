@@ -1,11 +1,14 @@
 import abc
 import time
+
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
-from scipy.spatial import distance
-from sklearn import decomposition, svm, manifold, model_selection
+from scipy.spatial.distance import pdist, squareform
+from sklearn import neighbors, decomposition, svm, manifold
 from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split, GridSearchCV
+
 from manifold.infrastructure import Displayer
 from manifold.infrastructure.base import kruskal_stress, class_stress
 from manifold.learning import algorithms
@@ -55,13 +58,13 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
 
         start = time.time()
 
-        X1, X2, y1, y2 = model_selection.train_test_split(self.data,
-                                                          self.target,
-                                                          test_size=self.test_size) \
+        X1, X2, y1, y2 = train_test_split(self.data,
+                                          self.target,
+                                          test_size=self.test_size) \
             if self.test_after_train \
             else (self.data, None, self.target, None)
 
-        self.grid = model_selection.GridSearchCV(self.learner(),
+        self.grid = GridSearchCV(self.learner(),
                                                  self.learning_parameters,
                                                  n_jobs=-1,
                                                  verbose=self.verbose)
@@ -98,10 +101,13 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
 
     verbose_reduction = True
 
+    knn = neighbors.KNeighborsClassifier(n_neighbors=1, n_jobs=-1)
+    knn = neighbors.KNeighborsRegressor
+    test_size = .2
+
     def reduce(self):
-        assert self.reduction_method in (
-            'pca', 'mds', 'isomap', 'skisomap',
-            'lisomap'), 'Error: unknown reduction method.'
+        assert self.reduction_method in ('pca', 'mds', 'isomap', 'skisomap'), \
+            'Error: unknown reduction method.'
 
         print('Reducing...')
 
@@ -136,24 +142,8 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             self.reducer = manifold.Isomap(**self.reduction_params)
             self.data = self.reducer.fit_transform(data)
 
-        elif self.reduction_method == 'lisomap':
-            self.reducer = manifold.LandmarkIsomap(**self.reduction_params)
-            self.data = self.reducer.fit_transform(data)
-
-        if self.reduction_method in ('mds', 'isomap'):
-            print('\tstress: %f' % self.reducer.stress)
-        else:
-            print('\tstress: %f' % kruskal_stress(
-                distance.squareform(distance.pdist(self.original_data)),
-                distance.squareform(distance.pdist(self.data))))
-
-        # print('\tclass stress: %f' % class_stress(
-        #     self.original_data, self.data, self.target
-        # ))
-
-        print('\tsize: %f KB' % (self.data.nbytes / 1024))
+        self.evaluate()
         print('Done. (%.6f s)\n' % (time.time() - start))
-
         self.displayer.load(self.data, self.target)
 
     def plot_nearest_neighbors_graph(self, position='reduced'):
@@ -166,7 +156,7 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             Must be 'original' or 'reduced'.
         """
         assert position in (
-        'original', 'reduced'), 'Unknown position %s.' % position
+            'original', 'reduced'), 'Unknown position %s.' % position
         assert self.data is not None or position != 'reduced', \
             'Position cannot be "reduced", as reduction has not been performed yet.'
 
@@ -194,3 +184,19 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
 
         print('Done.\n')
         plt.show()
+
+    def evaluate(self):
+        print('\tstress: %f'
+              % kruskal_stress(squareform(pdist(self.original_data)),
+                               squareform(pdist(self.data))))
+
+        print('\tclass stress: %f'
+              % class_stress(self.original_data, self.data, self.target))
+
+        X1, X2, y1, y2 = train_test_split(self.data,
+                                          self.target,
+                                          test_size=self.test_size,
+                                          random_state=0)
+
+        print('\t1-NN score: %.2f' % self.knn.fit(X1, y1).score(X2, y2))
+        print('\tsize: %f KB' % (self.data.nbytes / 1024))
