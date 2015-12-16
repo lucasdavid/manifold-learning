@@ -6,24 +6,26 @@ from manifold.infrastructure import Retriever
 
 
 class DermatologyIsomapExperiment(ReductionExperiment, LearningExperiment):
-    title = 'Dermatology Isomap'
+    title = 'iso_dermatology'
     plotting = True
 
     file = '../../datasets/dermatology/dermatology.data'
 
-    reduction_method = 'isomap'
-    reduction_params = {'k': 20, 'n_components': 2}
+    reduction_method = 'skisomap'
+    reduction_params = {'n_neighbors': 330, 'n_components': 2}
 
     def _run(self):
         self.load_data()
-        self.learn()
+        # self.learn()
 
-        for d in (20, 10, 3, 2):
+        # for d in (20, 10, 3, 2):
+        for d in (3, 2):
             self.reduction_params['n_components'] = d
             self.reduce()
-            self.learn()
+            # self.learn()
 
-        self.displayer.save(self.title)
+        # self.displayer.save(self.title)
+        self.displayer.show()
 
     def load_data(self):
         data = np.genfromtxt(self.file, missing_values='?', delimiter=',')
@@ -34,8 +36,10 @@ class DermatologyIsomapExperiment(ReductionExperiment, LearningExperiment):
         self.target = data[:, -1]
         self.original_data = self.data = data = np.delete(data, -1, axis=1)
 
+        feature_names = ['erythema', 'scaling', 'definite borders']
+
         self.displayer \
-            .load(self.data, self.target) \
+            .load(self.data, self.target, axis_labels=feature_names) \
             .save('datasets/dermatology') \
             .dispose()
 
