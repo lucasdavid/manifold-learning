@@ -193,10 +193,10 @@ $\lambda$ is the \textbf{eigenvalue} associated to the eigenvector $v$.
 
 \subsection{Spectral Decomposition of a Matrix}
 
-If $[A]_{n\times n}$ is a symmetric matrix of rank $n$ and admits $n$ pairs of eigenvalues $\lambda$ and eigenvectors $[V]_{n\times n} = [v_0, v_1, v_2, ..., v_{n-1}]$, such that $V$ is an orthogonal matrix (i.e., $V^TV=I_n$), then
+If $[A]_{n\times n}$ is a symmetric matrix of rank $n$ and admits $n$ pairs of eigenvalues $\lambda = diag(\lambda_0, \lambda_1, ... \lambda_{n-1})$ and eigenvectors $[V]_{n\times n} = [v_0, v_1, v_2, ..., v_{n-1}]$, such that $V$ is an orthogonal matrix (i.e., $V^TV=I_n$), then
 $$AV = V \lambda$$
 
-$\lambda = diag(\sigma_0, \sigma_1, ..., \sigma_{n-1})$ is the diagonal matrix, where $\sigma_i$ is the eigenvalue associated to the eigenvector $v_i$ \cite{cox2001}. Furthermore, $V$'s columns are linear independent, hence $V$ is invertible.
+$\lambda$ is a diagonal matrix, where $\lambda_{ii}$ is the eigenvalue associated to the eigenvector $v_i$ \cite{cox2001}. Furthermore, $V$'s columns are linear independent, hence $V$ is invertible.
 \begin{align*}
 	AV &= V \lambda \\
 	AVV^T &= V \lambda V^T \\
@@ -285,106 +285,116 @@ Let $A$ and $B$ be two topological objects of the same type, a function $\phi \c
 \label{sec:graphs}
 \subsection{Graphs}
 
-Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph} \cite{berge1973}, where
+Let $G$ be the pair $(V, E)$. $G$ is defined as a \textbf{graph} \cite{berge1973}, where
 \begin{enumerate}
-	\item $X$ is a set of objects called \textbf{vertices}.
-	\item $U$ is a family of elements $u_i \in X\times X$ called arcs.
+	\item $V$ is a set of objects called \textbf{vertices}.
+	\item $E$ is a family of elements $e_i \in V\times V$ called arcs.
 \end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.4\linewidth]{graphs/graph}
+	\caption{An example of a graph \protect\footnotemark.}
+\end{figure}
+
+\footnotetext{Source: \href{http://people.brunel.ac.uk/~mastjjb/jeb/or/graph.html}{brunel.ac.uk/~mastjjb}.}
 
 \subsubsection{Basic Concepts \cite{berge1973}}
 \begin{description}
-	\item[Multiplicity] If $G=(X, U)$ and $(x, y) \in X\times X$, the multiplicity $m_g^+(x, y)$ is defined to be the number of arcs with initial endpoint $x$ and terminal endpoint $y$. Furthermore:
+	\item[Multiplicity] If $G=(V, E)$ and $(x, y) \in E \subset V\times V$, the multiplicity $m_g^+(x, y)$ is defined to be the number of arcs with initial endpoint $x$ and terminal endpoint $y$. Furthermore:
 	\begin{enumerate}
 		\item $m_G^-(x, y) = m_G^+(y, x)$
 		\item $m_G(x, y) = m_G^+(x, y) + m_G^-(x, y)$
 	\end{enumerate}
 
-	\item[Degree] If $G=(X, U)$ is a graph and $x\in X$, the degree $d(x)$ of $x$ is defined as
-	$d(x) = 2n_s  + n_n$, where $n_s$ is the number of arcs self-incident at $x$ \cite{may1972} (i.e., arc with $x$ as initial endpoint and terminal endpoint) and $n_n$ is the number of arcs incident at $x$.
+	\item[Degree] If $G=(V, E)$ is a graph and $v\in V$, the degree $d(v)$ of $v$ is defined as
+	$d(v) = 2n_s  + n_n$, where $n_s$ is the number of arcs self-incident at $v$ \cite{may1972} (i.e., arc with $v$ as initial endpoint and terminal endpoint) and $n_n$ is the number of arcs incident at $v$.
 
-	\item[Adjacency Matrix] If $G=(X, U), X=\{x_1, x_2, \dots, x_n \}$, define the adjacency matrix $A=[a_{ij}]_{n\times n}$ associated with graph $G$, where $a_{ij} = m_G^+(x_i, x_j)$.
+	\item[Adjacency Matrix] If $V=\{v_1, v_2, \dots, v_n \}$ and $G=(V, E)$, define the adjacency matrix $A=[a_{ij}]_{n\times n}$ associated with graph $G$, where $a_{ij} = m_G^+(v_i, v_j)$.
 \end{description}
 
 \subsubsection{Further Specifications}
 
 \begin{description}
-	\item[Undirected graph] ``All graphs are directed, but sometimes the direction need not be specified" \cite{berge1973}.
-
-	Let $G=(X, U)$ be a graph and $u_k \in U \mid u_k=(a, b)$. The element $e_i=[a, b]$ can be defined as the \textbf{edge} that links $a$ to $b$ without specifying direction. Finally, define the \textbf{undirected graph} $H$ as $(X, E)$, where $E=\{e_i\}$ is the set of edges created from $U$.
+	\item[Undirected graph] Let $G=(V, E)$ be a graph and $e_k \in E \mid e_k=(a, b) \in E$. The element $e_i=[a, b]$ can be defined as the \textbf{edge} that links $a$ to $b$ without specifying direction. Finally, define the \textbf{undirected graph} $G'$ as $(V, E')$, where $E'=\{e_i\}$ is the set of edges created from $E$ \cite{berge1973}.
 
 	Figure \ref{fig:graph} shows the graph \textbf{Les Miserables}, where each vertex is a character and each arc links two characters that have shared stage at some point during the play. The size of each vertex is a result of its own multiplicity.
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=.5\linewidth]{graphs/graph}
+		\includegraphics[width=.5\linewidth]{graphs/lesmiserables}
 		\caption{The \textbf{Les Miserables} graph \protect\footnotemark.}
 		\label{fig:graph}
 	\end{figure}
 	
 	\footnotetext{Retrieved from \href{https://github.com/Comp-UFSCar/graph-theory}{gihut.com/Comp-UFSCar/graph-theory}.}
 
-	\item[Complete graph] A graph $G=(X, U)$ is said to be complete if
-	$$\forall (x, y)\in X, x\ne y, m_G(x, y) \ge 1$$
+	\item[Complete graph] A graph $G=(V, E)$ is said to be complete if
+	$$\forall (x, y)\in E, x\ne y, m_G(x, y) \ge 1$$
 
 	\begin{remark}
-		Let $G=(X, U), G_1=(X, E)$ and $n=|X|$. $G$ is called the complete graph $K_n$ if
-		$$\forall (x, y)\in X, \exists e \in E \mid e=[x, y]$$
+		Let $G=(V, E)$. $G$ is called the complete graph $K_n$ if $E = V \times V$. That is,
+		$$\forall (x, y)\in V \times V, \exists e \in E \mid e=(x, y)$$
 	\end{remark}
 
-	\item[Weighted graph] Let $G=(X, U)$ be a graph and $w\colon U \to \mathbb{R} \mid w(u) = w_u$ be the weighted associated with arc $u$. $G$ is said to be a weighted graph.
+	\item[Weighted graph] Let $G=(V, E)$ be a graph and $w\colon E \to \mathbb{R} \mid w(e) = w_e$ be the weight associated with arc $e$. $G$ is said to be a weighted graph.
 
-	\item[Euclidean graph] If $G=(X, U)$ and $W=\{w_u, \forall u\in U\}\subset \mathbb{R}$, $G$ is said to be an euclidean graph if $w_u$ corresponds to the euclidean distance between the vertices connected by $u$ in a specified embedding.
+	\item[Euclidean graph] If $G=(V, E)$ and $W=\{w_e, \forall e\in E\}\subset \mathbb{R}$, $G$ is said to be an Euclidean graph if $w_e$ corresponds to the euclidean distance between the vertices connected by $e$ in a given vector space.
 
 	\item[Tree] Let $G$ be the graph $(V, E)$ such that $G$ is connected and admits no cycles. $G$ is  said to be a \textbf{tree} \cite{berge1973}. 
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=.4\linewidth]{graphs/tree}
+		\includegraphics[width=.5\linewidth]{graphs/tree}
 		\captionsetup{justification=centering}
 		\caption{A tree extracted (a subgraph) from the \textbf{Les Miserables} graph.}
 		\label{tree}
 	\end{figure}
 \end{description}
 
+\clearpage
 \subsection{Related Problems}
 
 \subsubsection{Nearest-Neighbor Search}
 
-Let $G = (X, U)$ be a weighted graph, where $ \forall u \in U, \exists w_u \in \mathbb{R}$, i.e., the weight or \textbf{length} of the arc $u$, and $n\colon U \to \{0, 1\}$ a definition of \textbf{nearness} in $G$. The nearest-neighbor search is a optimization problem that consists of finding a subgraph $H = (X, F \subseteq U) \mid f \in F \iff n(f) = 1$.
+Let $G = (V, E)$ be a weighted graph, where $w \colon E \to \mathbb{R}$ is the weight or \textbf{length} of the arc $e$, and $n\colon E \to \{0, 1\}$ is a definition of \textbf{nearness} in $G$. The nearest-neighbor search is a optimization problem that consists of finding a subgraph $G' = (V, F \subseteq E) \mid f \in F \iff n(f) = 1$. In other words, to find a subgraph where each arc connects two vertices if and only if these vertices are ``close".
 
-\paragraph{A Generic Algorithm for NN Search}
-\begin{enumerate}
-	\item $F_x \coloneqq \emptyset, \forall x \in X$
-	\item $F_x \coloneqq F_x \bigcup_{\forall p \in U_x} \begin{cases}
-	\{p\}, \text{if } n(p) = 1 \\
-	\emptyset, \text{if } n(p) = 0 \\
-	\end{cases}$
-	\item $H \coloneqq (X, F), F = \cup_{x\in X} F_x$
-\end{enumerate}
+\paragraph{$K$-Nearest-Neighbor Search ($K$-NN)}
+Consider $k \in \mathbb{N}$. $K$-NN will result in a subgraph $G'$ s.t. each vertex $v$ is connected at most to $k$ other vertices and the sum of weights of the arcs incident on $v$ is minimum:
+\begin{minted}
+[
+frame=lines,
+framesep=2mm,
+linenos
+]
+{python}
 
-Let's consider two (between many)  specifications of this algorithm:
+def nearest_neighbors(V, E, w, k):
+    neighbors = set()
+    for v in V:
+        vs = V - {v}
+        # Sort vertices by their how close they are to v.
+        vs = sort(vs, keys=[w((v, u)) for u in vs])
+        # Keep only k-first vertices.
+        vs = vs[0:k]
+        neighbors.add(vs)
+    return V, neighbors
+\end{minted}
 
-\begin{description}
-	\item[K-Nearest Neighbor Search (K-NN)] Fixed $k \in \mathbb{N}$ and $U_x \subseteq U$, where $U_x$ is the set of all arcs with $x$ as initial endpoint, define:
-
-	\begin{align*}
-	n(u_x) &\coloneqq \begin{cases}
-		1, \text{if }  w_{u_x} \le w_p, \forall p \in U_x - F_x \text{ and } |F_x| \le k \\
-		0, \text{otherwise.} \\
-		\end{cases}
-	\end{align*}
-
-	\item[$\epsilon$-Nearest Neighbor ($\epsilon$-NN)] Fixed $\epsilon \in\mathbb{R}$, define:
-	\begin{align*}
-		n(f) &\coloneqq \begin{cases}
-			1, \text{if } w_f \le \epsilon \\
-			0, \text{otherwise} \\
-		\end{cases}
-	\end{align*}
-\end{description}
+\clearpage
+\paragraph{$\epsilon$-Nearest Neighbor Search ($\epsilon$-NN)}
+	Fixed $\epsilon \in\mathbb{R}$, $\epsilon$-NN will find the subgraph $G'=(V, E')$ s.t. each arc in $E'$ has associated weight $w(e) \leq \epsilon$:
+	\begin{minted}[frame=lines,framesep=2mm,linenos]{python}
+def nearest_neighbors(V, E, w, epsilon):
+    neighbors = set()
+    for v in V:
+        vs = {u for u in V - {v} if w(v, u) > epsilon}
+        neighbors.add(vs)
+    return V, neighbors
+	\end{minted}
 
 \begin{example}
-	If $k=1$ and $\epsilon=60$, the graph $G$, the sub-graph $H$ found from K-Nearest neighbor algorithm and the sub-graph $I$ found from the $\epsilon$-Nearest neighbor are defined as follows:
+	If $k=1$ and $\epsilon=60$, the graph $G$, the sub-graph $G'$ found from K-Nearest neighbor algorithm and the sub-graph $G''$ found from the $\epsilon$-Nearest neighbor are defined as follows:
 	\begin{figure}[H]
 		\begin{subfigure}{.33\linewidth}
 			\centering
@@ -395,21 +405,25 @@ Let's consider two (between many)  specifications of this algorithm:
 		\begin{subfigure}{.33\linewidth}
 			\centering
 			\includegraphics[width=.8\linewidth]{graphs/example-graph-nn}
-			\caption{$H$}
+			\caption{$G'$}
 			\label{fig:example-graph-nn}
 		\end{subfigure}%
 		\begin{subfigure}{.33\linewidth}
 			\centering
 			\includegraphics[width=.8\linewidth]{graphs/example-graph-en}
-			\caption{$I$}
+			\caption{$G''$}
 			\label{fig:example-graph-en}
 		\end{subfigure}
+		\caption{The original graph $G$ and the results of $K$-NN and $\epsilon$-NN, respectively.}
 	\end{figure}
 \end{example}
 
+\clearpage
 \subsubsection{Single-pair Shortest-path Problem \cite{cor2011}}
 
-Let $G=(X, U)$ be a weighted graph, a path $p(x, y)=(u_0, u_1, u_2, \dots, u_{p-2}, u_{p-1}, u_{p}) \mid u_0 = (x, \_), u_p = (\_, y), u_i \in U, \forall i \in [0, p]$, and the weight of $p$ be given by $w(p) = \sum_i^p w(u_i)$. The shortest-path weight between two vertices $x$ and $y$ is defined as:
+Let $G=(V, E)$ be a weighted graph, $w \colon E \to \mathbb{R}$ and $w(e)$ the weight associated with the arc $e$. Furthermore, consider the paths in $P_{x \to y}=\{(x, v_1, v_2, \dots, y) \mid v_i \in V, \forall i \in (0, n)\}$ and their weights, defined as $w(p) = \sum_0^{n-1} w(p_i, p_{i+1})$.
+
+Under the conditions above, a path $p \in P$ is said the \textbf{shortest-path} between $x$ and $y \iff w(p) \leq w(q), \forall q \in P$. Additionally, the shortest-path weight between two vertices $x$ and $y$ is defined as:
 \begin{align*}
 	\sigma(x, y) = \begin{cases}
 		\min \{w(p(x, y))\}, \text{ if $p(x, y)$ exists}, \\
@@ -417,29 +431,26 @@ Let $G=(X, U)$ be a weighted graph, a path $p(x, y)=(u_0, u_1, u_2, \dots, u_{p-
 	\end{cases}
 \end{align*}
 
-while $p(x, y)$ is the \textbf{shortest path} from $x$ to $y$.
+The shortest-path between a vertex $x_0 \in X$ and all other vertices can be expressed by the tree $S=(V, F), F \subseteq E$ named \textbf{shortest-path tree}.
 
-The shortest-path between a vertex $x_0 \in X$ and all other vertices can be expressed by the tree $S=(X, F), F \subseteq U$ named \textbf{shortest-path tree}.
+\paragraph{Dijkstra's Algorithm}
 
-\paragraph{Dijkstra's Algorithm \cite{cor2011}}
-
-Let $G=(V, E)$ be a directed weighted graph and $v_0 \in V$ the initial vertex, the shortest-path from $v_0$ to all other vertices can be found through Dijkstra's algorithm:
-
-\begin{lstlisting}[mathescape]
-    $Dijkstra(V, E, w)$:
-        for $v \in $ V
-            $predecessor(v_i) \leftarrow None$
-            $d(v_i) \leftarrow \infty$
-        $d(v_0) \leftarrow 0$
-        S $\leftarrow \emptyset$
-        Q $\leftarrow $ priority_queue(V, d)
-        while Q $\ne \emptyset$
-            u $\leftarrow$ pop_min(Q)
-            for each $v \in V \mid (u, v) \in E$
-                if $d(v) > d(u) + w(u, v)$
-                    $d(v) \leftarrow d(u) + w(u, v)$
-                    $predecessor(v) = u$
-\end{lstlisting}
+Let $G=(V, E)$ be a directed weighted graph and $v_0 \in V$ the initial vertex, the shortest-path from $v_0$ to all other vertices can be found through Dijkstra's algorithm \cite{cor2011}:
+\begin{minted}[frame=lines,framesep=2mm,linenos,mathescape]{python}
+    def dijkstra(V, E, w):
+        predecessor = {v: None for v in V}
+        d = {v: infinity for v in V}
+        S = {}
+        Q = priority_queue(V, d)
+	
+        while len(Q) > 0:
+            u = Q.pop_min()
+            for v in V:
+                if d[v] > d[u] + w(u, v):
+                    d[v] = d[u] + w(u, v)
+                    predecessor[v] = u
+        return (predecessor, d)
+\end{minted}
 
 \begin{remark}
 	Dijkstra's algorithm is based on two strategies: greedy, when extracting the vertex $u$ such that $d(u)$ is minimum, and dynamic programming, during edge relaxation (comparison and update of the $d(v)$ and $predecessor(v)$ values).
@@ -471,33 +482,38 @@ Similarly from the previous problem, all-pairs shortest-path is also a search pr
 
 Clearly, all-pairs shortest-path can be solved by executing the Dijkstra's Algorithm $|V|$ times, using every $v_i \in V$ as initial vertex.
 
-\paragraph{Floyd-Warshall Algorithm \cite{golin2003floydwarshall}}
+\paragraph{Floyd-Warshall Algorithm}
 
-Another solution for the all-pairs shortest-path problem is Floyd-Warshall algorithm, which is entirely based on dynamic programming:
+Another solution for the all-pairs shortest-path problem is Floyd-Warshall algorithm \cite{golin2003floydwarshall}, which is entirely based on dynamic programming:
 
-\begin{lstlisting}[mathescape]
-    $Floyd-Warshall(w, n)$:
-        for $i \in V$
-            for $j  \in [1, n]$
-                $d(i, j) = w(i, j)$
-                $predecessor(i, j) \leftarrow None$
+\begin{minted}[frame=lines,linenos,mathescape]{python}
+def floyd_warshall(V, E, w):
+    d = {}
+    for v in V:
+        for u in V - {v}:
+            d[v, u] = w[v, u]
 
-        for $k  \in [1, n]$
-            for $j \in [1, n]$
-                for $i \in [1, n]$
-                    if $d(i, j) > d(i, k) + d(k, j)$
-                        $d(i, j) \leftarrow d(i, k) + d(k, j)$
-                        $predecessor(i, j) \leftarrow k$
-\end{lstlisting}
+        predecessor[v, u] = None
+
+    for k in V:
+        for v in V:
+            for u in V:
+                if d[u, v] > d[u, k] + d[k, v]:
+                    d[u, v] = d[u, k] + d[k, v]
+                    predecessor[u, v] = k
+\end{minted}
 
 Now, matrix $d$ contains  the weights sum for the paths between all vertices of the graph. These paths can be constructed by:
-\begin{lstlisting}[mathescape]
-    $Path(i, j)$:
-        if $predecessor(i, j) = None$
-            return $[i, j]$
-        return $Path(i, pred[i, j]) \bigcup Path(pred[i, j], j)$
-\end{lstlisting}
+\begin{minted}[frame=lines,linenos,mathescape]{python}
+	def path(i, j, predecessor):
+		if predecessor[i, j] == None:
+			return [i, j]
+		l = path(i, predecessor[i, j])
+		r = path(predecessor[i, j], j)
+		return l.append(r)
+\end{minted}
 
+\clearpage
 \section{Machine Learning}
 “Learning is the improvement of performance is some environment through the acquisition of knowledge resulting from experience in that environment." \cite{pat1996}
 
