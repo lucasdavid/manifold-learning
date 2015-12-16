@@ -25,7 +25,7 @@ The table bellow illustrates an example of data set, where each row represents a
 	\caption{The first three samples of the Iris flower data set \protect\footnotemark.}
 \end{table}
 
-\footnotetext{Available at: \href{https://archive.ics.uci.edu/ml/datasets/Iris}{archive.ics.uci.edu/ml/datasets/Iris}}
+\footnotetext{Retrieved from \href{https://archive.ics.uci.edu/ml/datasets/Iris}{archive.ics.uci.edu}}
 
 Iris flower is an example of data set broadly used in machine learning demonstrations, being usually interpreted as a classification problem where the feature {\em Species} will be learned from its adjacent features. In that scenario, {\em Species} is denominated \textbf{target feature}.
 
@@ -56,7 +56,7 @@ A data set can have each one of its nominal features enumerated, i.e., mapped to
 	\caption{The first three samples of the Indian Liver Patient Dataset (ILPD) \protect\footnotemark}
 \end{table}
 
-\footnotetext{Available at: \href{https://archive.ics.uci.edu/ml/datasets/ILPD+(Indian+Liver+Patient+Dataset)}{archive.ics.uci.edu/ml/ILPD}}
+\footnotetext{Retrieved from \href{https://archive.ics.uci.edu/ml/datasets/ILPD+(Indian+Liver+Patient+Dataset)}{archive.ics.uci.edu}}
 
 Composed by 583 samples and 11 features, the data set ILPD has a nominal feature $Gender \coloneqq \{Male, Female\}$. {\em Gender} can, of course, be mapped on $\{0, 1\}$. ILPD can finally be expressed by the figure bellow:
 
@@ -73,7 +73,7 @@ As many graphs required to display the data set, it is quite difficult to identi
 
 \subsection{Modern Problems and Applications}
 
-Differently from Iris flower or ILPD data set, data sets associated with modern problems are often very dense, i.e., data sets containing many samples and/or features. Although the high number of samples is essentially benefic, a high number of features might be irrelevant or even unconstructive to the learning process \cite{cay2005}. The Leukemia data set, illustrated in the table \ref{tb:ds_leukemia}, is an example of extremelly high dimensionality data set, as it is contained in the $\mathbb{R}^{7130}$.
+Differently from Iris flower or ILPD data set, data sets associated with modern problems are often very dense, i.e., data sets containing many samples and/or features. Although the high number of samples is essentially benefic, a high number of features might be irrelevant or even unconstructive to the learning process \cite{cay2005}. The Leukemia data set, illustrated in the table \ref{tb:ds_leukemia}, is an example of extremelly high dimensionality data set, as it is a sub set of the $\mathbb{R}^{7130}$.
 
 \begin{table}[H]
 	\centering
@@ -171,7 +171,7 @@ $$
 
 Let $X$ be a data set, $X'$ the data set $X$ with its features centered ($X'=HX$), and $X'_{.j}$ the {\em j-th} feature column of the centered data set $X'$, the covariance between each pair of features can be represented by the matrix:
 \begin{align*}
-\Sigma &= [\sigma_{xy}]_{n \times n} \\
+\Sigma_X &= [\sigma_{xy}]_{n \times n} \\
 &= \begin{bmatrix}
 \sigma(X'_{.0}, X'_{.0}) & \sigma(X'_{.0}, X'_{.1}) & \cdots & \sigma(X'_{.0}, X'_{.n-1}) \\
 \sigma(X'_{.1}, X'_{.0}) & \sigma(X'_{.1}, X'_{.1}) & & \sigma(X'_{.1}, X'_{.n-1}) \\
@@ -193,19 +193,19 @@ $\lambda$ is the \textbf{eigenvalue} associated to the eigenvector $v$.
 
 \subsection{Spectral Decomposition of a Matrix}
 
-If $[M]_{n\times n}$ is a symmetric matrix of rank $n$ and admits $n$ pairs of eigenvalues $\lambda$ and eigenvectors $[V]_{n\times n} = [v_0, v_1, v_2, ..., v_{n-1}]$, such that $V$ is an orthogonal matrix (i.e., $V^TV=I_n$), then
-$$MV = V \lambda$$
+If $[A]_{n\times n}$ is a symmetric matrix of rank $n$ and admits $n$ pairs of eigenvalues $\lambda$ and eigenvectors $[V]_{n\times n} = [v_0, v_1, v_2, ..., v_{n-1}]$, such that $V$ is an orthogonal matrix (i.e., $V^TV=I_n$), then
+$$AV = V \lambda$$
 
 $\lambda = diag(\sigma_0, \sigma_1, ..., \sigma_{n-1})$ is the diagonal matrix, where $\sigma_i$ is the eigenvalue associated to the eigenvector $v_i$ \cite{cox2001}. Furthermore, $V$'s columns are linear independent, hence $V$ is invertible.
 \begin{align*}
-	MV &= V \lambda \\
-	MVV^T &= V \lambda V^T \\
-	M &= V \lambda V^T
+	AV &= V \lambda \\
+	AVV^T &= V \lambda V^T \\
+	A &= V \lambda V^T
 \end{align*}
 
 \subsection{Singular Value Decomposition}
 \label{sec:svd}
-If $M \in \mathbb{R}^{m \times n}$, then $\exists U \in \mathbb{R}^{m \times m}, V \in \mathbb{R}^{n \times n}$ and $\Sigma =  diag(\sigma_0, \dots, \sigma_{n-1})$ conditioned to $\sigma_i \ge \sigma_{i+1} \ge 0, \forall \sigma \in [0, n)$ s.t. \cite{gan2008}
+Let $[A]_{n\times n}$ be a matrix, then $\exists U \in \mathbb{R}^{m \times m}, V \in \mathbb{R}^{n \times n}$ and $\Sigma =  diag(\sigma_0, \dots, \sigma_{n-1})$ conditioned to $\sigma_i \ge \sigma_{i+1} \ge 0, \forall \sigma \in [0, n)$ s.t. \cite{gan2008}
 $$M = U\Sigma V^T$$
 
 \subsubsection{Decomposition of Symmetric Matrices}
@@ -229,17 +229,17 @@ Intuitively, $n$-dimensional topological manifolds are sets that are ``locally E
 
 Formally, a set $M$ is said to be a \textbf{$n$-dimensional topological manifold} $\iff M$ is a paracompact Hausdorff topological space $\mid \forall p \in M, p \in U_p$, where $U_p$ is an open set that is homeomorphic to an open set $V_p$ of the Euclidean space $\mathbb{R}^n$ \cite{lee2009}.
 
-From now on in this report, we will use the word manifold to refer to a $n$-dimensional topological manifold.
-
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
 	\includegraphics[scale=.4]{manifold/torus}
-	\caption{The Torus, a manifold often studied in topology \protect\footnotemark.}
+	\caption{The Torus, often studied in topology, it is a manifold that can be mapped to the $\mathbb{R}^2$ \protect\footnotemark.}
 	\label{fig:mani_torus}
 \end{figure}
 
-\footnotetext{Available at: \href{Weisstein, Eric W. "Torus." From MathWorld--A Wolfram Web Resource. http://mathworld.wolfram.com/Torus.html}{mathworld.wolfram.com/Torus}}
+\footnotetext{Retrieved from \href{Weisstein, Eric W. "Torus." From MathWorld--A Wolfram Web Resource. http://mathworld.wolfram.com/Torus.html}{mathworld.wolfram.com/Torus}}
+
+From now on in this report, we will use the word manifold to refer to a $n$-dimensional topological manifold.
 
 \subsubsection{Charts}
 The pair $(U_i, \phi_i)$ is called a \textbf{coordinate chart} or \textbf{chart} on $M$ if $U \in M$ and $\phi_i$ is a \textbf{homeomorphism} such that $\phi_i(U_i) = V_i \subseteq \mathbb{R}^n$ \cite{lee2002}.
@@ -253,7 +253,7 @@ The pair $(U_i, \phi_i)$ is called a \textbf{coordinate chart} or \textbf{chart}
 	\label{fig:mani_charts}
 \end{figure}
 
-\footnotetext{Available at: \href{https://en.wikipedia.org/wiki/Manifold}{wiki/Manifold/Charts}}
+\footnotetext{Retrieved from \href{https://en.wikipedia.org/wiki/Manifold}{wiki/Manifold/Charts}}
 
 \subsubsection{Atlas}
 A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a manifold $M$ if $\cup_{i \in A} U_i = M$ \cite{lee2002}.
@@ -270,12 +270,19 @@ A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a man
 		\captionsetup{justification=centering}
 
 		\includegraphics[scale=.8]{manifold/stereo_earth}
-		\caption{Stereographic projection applied to Earth.}
+		\caption{Stereographic projection applied to Earth \cite{stereo_proj}.}
 		\label{fig:stereographic_earth}
 	\end{figure}
 \end{example}
 
+\subsection{Embedding}
+
+When talking about the relationship between two topological objects, such as two vector spaces, manifolds or graphs (section \ref{sec:graphs}); it is interesting to imagine a mapping from one object to the other that somehow preserves its original properties.
+
+Let $A$ and $B$ be two topological objects of the same type, a function $\phi \colon A \to B$ is an embedding of A into B if $\phi$ is an isomorphism which preserves the original algebric properties of A \cite{burris2011course}. Shortly, A is said to be \textit{embedded} in B.
+
 \section{Graph Theory}
+\label{sec:graphs}
 \subsection{Graphs}
 
 Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph} \cite{berge1973}, where
@@ -305,14 +312,16 @@ Let $G$ be the pair $(X, U)$. $G$ is defined as a \textbf{graph} \cite{berge1973
 
 	Let $G=(X, U)$ be a graph and $u_k \in U \mid u_k=(a, b)$. The element $e_i=[a, b]$ can be defined as the \textbf{edge} that links $a$ to $b$ without specifying direction. Finally, define the \textbf{undirected graph} $H$ as $(X, E)$, where $E=\{e_i\}$ is the set of edges created from $U$.
 
-	Figure \ref{fig:graph} shows the graph \textbf{Les Miserables}, where each node is a character and each arc links two characters that have shared stage at some point during the play.
+	Figure \ref{fig:graph} shows the graph \textbf{Les Miserables}, where each vertex is a character and each arc links two characters that have shared stage at some point during the play. The size of each vertex is a result of its own multiplicity.
 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=.5\linewidth]{graphs/graph}
-		\caption{The \textbf{Les Miserables} graph.}
+		\caption{The \textbf{Les Miserables} graph \protect\footnotemark.}
 		\label{fig:graph}
 	\end{figure}
+	
+	\footnotetext{Retrieved from \href{https://github.com/Comp-UFSCar/graph-theory}{gihut.com/Comp-UFSCar/graph-theory}.}
 
 	\item[Complete graph] A graph $G=(X, U)$ is said to be complete if
 	$$\forall (x, y)\in X, x\ne y, m_G(x, y) \ge 1$$

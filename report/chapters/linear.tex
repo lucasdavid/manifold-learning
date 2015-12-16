@@ -116,7 +116,8 @@ Now consider the matrix $B=XX^T$, where $b_{rs}=x_{.r}\cdot x_{.s}$. $B$ can be 
 
 Firstly, we will assume that $Y$ is centered in the origin (i.e., $Y$ has its features' means equal to zero):
 \begin{align}
-\sigma_f = \sum_i y_{if} = 0, \forall f\in [0, m)
+	\label{eq:mds_zeromean}
+	\sigma_f = \sum_i y_{if} = 0, \forall f\in [0, m)
 \end{align}
 
 Now, \ref{eq:basemds} $\implies$
@@ -156,8 +157,9 @@ To eliminate the $x_r\cdot x_r$ term from \ref{eq:xrsderivation}:
 \begin{align}
 \label{eq:msd-xrr}
 \begin{split}
-\frac{1}{n^2} \sum_s\sum_r\delta_{rs}^2 &= \frac{1}{n^2} \sum_s\sum_r(x_r\cdot x_r + x_s\cdot x_s -2x_r\cdot x_s)\\
-&= \frac{1}{n^2}\sum_s(\sum_r x_r\cdot x_r + \sum_r x_s\cdot x_s -2\sum_r x_r\cdot x_s)
+\frac{1}{n^2} \sum_s\sum_r\delta_{rs}^2 &= \frac{1}{n^2} \sum_s\sum_r(x_r\cdot x_r + x_s\cdot x_s -2x_r\cdot x_s) \\
+&= \frac{1}{n^2}\sum_s(\sum_r x_r\cdot x_r + \sum_r x_s\cdot x_s -2\sum_r x_r\cdot x_s) \\
+&= \frac{1}{n^2}\sum_s [\sum_r x_r\cdot x_r + \sum_r x_s\cdot x_s -2( 0 \cdot x_s)] \textnormal{, because of \ref{eq:mds_zeromean}} \\
 &= \frac{1}{n^2}\sum_s(\sum_r x_r\cdot x_r + n x_s\cdot x_s) \\
 &= \frac{1}{n^2}(n \sum_r x_r\cdot x_r + n \sum_s x_s \cdot x_s) \\
 &= \frac{1}{n^2} 2n \sum_r x_r\cdot x_r \\
