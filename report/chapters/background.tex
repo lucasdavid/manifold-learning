@@ -6,8 +6,9 @@ In the context of Computer Science, very often our goal is to develop machines t
 Although the recurrent usage of the term ``data set" in scientific work, there is not a clear definition established. It is possible, however, to observe the regular presence of four related features: grouping, content, relatedness and purpose \cite{ren2010}.
 For the scope of this work, the term data set is invariably associated with the idea of a collection of samples. Each sample is a sequence of features, where the {\em i-th} feature of all instances belong to a same set of symbols $f_i$.
 
-Succinctly, let $S$ be a set of samples and $F \coloneqq  \{f_i \mid f_i \textnormal{ is a set of symbols}\}$. Then, the dataset $X$ is defined as:
-$$X\coloneqq [x_{ij}] \mid x_{ij} \in f_j, \forall i \in [1, |S|], \forall j \in [1, |F|]$$
+Succinctly, let $S$ be a set of samples and $F \coloneqq  \{f_i \mid f_i \textnormal{ is a set of symbols}\}$.
+Then, the dataset $\vect X$ is defined as:
+$$\vect X \coloneqq [x_{ij}] \mid x_{ij} \in f_j, \forall i \in [1, |S|], \forall j \in [1, |F|]$$
 
 \subsubsection{Example of a canonical data set} \label{irisdataset}
 
@@ -97,56 +98,57 @@ In many cases, there are indicatives that the data set lie near a lower-dimensio
 \subsection{Feature Normalization and Standardization}
 Many of the methods ahead will require the data set to be centered in the origin. This is equivalent to remove the mean from each one of the data set's features.
 
-Let $[X]_{n \times f}$ be a data set, $X_{.j}$ the $j$-th column of the matrix $X$ and $\mu_j$ the mean of $X_{.j}$, we build a \textbf{normalized} data set $X'$ s.t. each column has zero mean:
-$$X'_{.j} = X_{.j} - \mu_j$$
+Let $[\vect X]_{n \times f}$ be a data set, $\vect X_{.j}$ the $j$-th column of the matrix $\vect X$, $\mu_j$ the mean of $\vect X_{.j}$ and $\vect 1_n$ the column vector of 1's, we build a \textbf{normalized} data set $\vect X'$ s.t. each column has zero mean:
+$$\vect X'_{.j} = \vect X_{.j} - \mu_j \vect 1_n$$
 
 If $\sigma_j$ is the standard deviation of $X_{.j}$, it is also possible to build the \textbf{standardized} $X'$, where each column has zero mean and it is contracted by its standard deviation:
-$$X'_{.j} = \frac{X_{.j} - \mu_j}{\sigma_j}$$
+$$X'_{.j} = \frac{X_{.j} - \mu_j \vect 1_n}{\sigma_j}$$
 
 \subsection{Centering Matrix}
-The symmetric matrix $H$ is named the \textbf{centering matrix} when the multiplication of it by a matrix $X$ produces the same effect of subtracting the mean of the components from each component of $X$. $H$ is defined as:
+The symmetric matrix $\vect H$ is named the \textbf{centering matrix} when the multiplication of it by a matrix $\vect X$ produces the same effect of subtracting the mean of the components from each component of $\vect X$. $\vect H$ is defined as:
 $$
-H = I_n - \frac{1}{n}\textbf{11}^T \textnormal{, where:}
+\vect H = \vect I_n - \frac{1}{n}\vect{11}^\top \textnormal{, where:}
 $$
 \begin{enumerate}
-	\item $I_n$ is the identity matrix of order $n$.
-	\item $\textbf{1}$ is the column vector of 1's.
+	\item $\vect I_n$ is the identity matrix of order $n$.
+	\item $\vect 1$ is the column vector of 1's.
 \end{enumerate}
 
 \subsection{Variance}
-Variance is the measure which describes how far the samples in a given set X vary. For the scope of this project, only discrete probabilities will be considered. That is, if $X$ represents a random variable with known distribution $P(x)$, where $P(x) = k \in \mathbb{R}^{+}, \forall x \in X$ and $\sum_{x \in X} P(x) = 1$, and $\mu$ is the population mean of $X$, then \cite{ross2010introductory}:
+Variance is the measure which describes how far the samples in a given set $X$ vary. For the scope of this project, only discrete probabilities will be considered. That is, if $X$ represents a random variable with known distribution $P(x)$, where $P(x) = k \in \mathbb{R}^{+}, \forall x \in X$ and $\sum_{x \in X} P(x) = 1$, $\mu$ is the population mean of $X$ and $\vect 1_n$ is the column vector of 1's, then, for $n$ samples of $X$ \cite{ross2010introductory}:
 \begin{align*}
-	Var(X) = \frac{1}{n} (X-\mu) \cdot (X-\mu) = \frac{1}{n} \sum_{x \in X} (x - \mu)^2
+	Var(X) = \frac{1}{n} (X-\mu \vect 1_n) \cdot (X-\mu \vect 1_n) = \frac{1}{n} \sum_{x \in X} (x - \mu)^2
 \end{align*}
 
 \begin{example}
-	If $X=\{1, 2, -2, 4\}$ and $\mu = \frac{1}{4} \sum X_i = \frac{1+2-2+4}{4} = 1.25$, then
+	If $X=\{1, 2, -2, 4\}$ and $\mu = \frac{1}{n} \sum_{x \in X} x = \frac{1+2-2+4}{4} = 1.25$, then
 	\begin{align*}
-	var(X) &= \frac{1}{4} \sum (X_i - \mu)^2 \\
+	var(X) &= \frac{1}{n} \sum_{x \in X} (x - \mu)^2 \\
 	&= \frac{(1-1.25)^2 + (2-1.25)^2 + (-2-1.25)^2 + (4-1.25)^2}{4} \\
 	&= 4.6875
 	\end{align*}
 \end{example}
 
 \begin{example}
-	The variance of the Sepal length feature in the Iris flower data set can be calculated as:
+	The variance of the Sepal length feature $\vect X_{.0}$ in the Iris flower data set can be calculated as:
 	\begin{align*}
-	var(X) &= \frac{1}{150} \sum (X_i - \mu)^2 \\
+	var(X) &= \frac{1}{150} \sum_i (x_{i,0} - \mu)^2 \\
 	&= \frac{1}{150} [(5.1-5.84)^2 + (4.9-5.84)^2 + \cdots + (5.9-5.84)^2] \\
 	&= \frac{102.17}{150} = .681122
 	\end{align*}
 \end{example}
 
-Let $[X]_{n \times f}$ be a data set and $\mu_j \in \mathbb{R}^n$ the column vector containing the mean of the $j$-th column of $X$ in all its position. If $var(X_{.j}) = 0, \forall j \in [0, f)$, then all samples in $X$ are the same.
+Let $[\vect X]_{n \times f}$ be a data set, $\mu_j$ the mean of the $j$-th column of $\vect X$ and $\vect 1_n$ the column vector of 1's. If $var(\vect X_{.j}) = 0, \forall j \in [0, f)$, then all samples in $\vect X$ are the same.
 \begin{proof}
 	\begin{align*}
-	Var(X_{.j}) &= 0 \\
-	\frac{1}{n} (X_{.j} - \mu_j) \cdot (X_{.j} - \mu_j) &= 0 \\
-	X_{.j} - \mu_j &= 0  \\
+	Var(\vect X_{.j}) &= 0 \\
+	\frac{1}{n} (\vect X_{.j} - \mu_j \vect 1_n) \cdot (\vect X_{.j} - \mu_j \vect 1_n) &= 0 \\
+	\vect X_{.j} - \mu_j \vect 1_n &= 0  \\
 	\iff& \\
-	X_{.j} &= \mu_j
+	\vect X_{.j} &= \mu_j \vect 1_n
 	\end{align*}
-	But all elements in $\mu_j$ are the same. Therefore all elements in $X_{.j}$ are the same.
+	
+	All elements in $\mu_j \vect 1_n$ are the same. Therefore $\vect X_{ij} = \mu_j, \forall i \in [0, n)$.
 \end{proof}
 
 \subsection{Covariance}
@@ -155,72 +157,70 @@ The covariance measures the variance of two random variables in respect to each 
 $$\sigma(X, Y) = \frac{1}{n} (X - \mu_X) \cdot (Y - \mu_Y) $$
 
 Simply putting, the covariance of two random variables $X$ and $Y$ can be interpreted as one of the following behaviors:
-$$
-\sigma(X,Y) = \begin{cases}
-\sigma_{xy} > 0 \implies \textnormal{X tends to increase as Y increases.}\\
-\sigma_{xy} < 0 \implies \textnormal{X tends to increase as Y decreases.}\\
-\sigma_{xy} = 0 \implies \textnormal{X and Y are completely unrelated.}
-\end{cases}
-$$
+\begin{itemize}
+	\item $\sigma(X,Y) > 0$ X tends to increase as Y increases.
+	\item $\sigma(X,Y) < 0$ X tends to increase as Y decreases.
+	\item $\sigma(X,Y) = 0$ X and Y are completely unrelated.
+\end{itemize}
 
 \begin{remark}
-	For a random variable $X$, $var(X) = \sigma(X, X)$.
+	For a random variable $X$, $Var(X) = \sigma(X, X)$.
 \end{remark}
 
 \paragraph{Covariance Matrix of Features in a Centered Data Set}
 
-Let $X$ be a data set, $X'$ the data set $X$ with its features centered ($X'=HX$), and $X'_{.j}$ the {\em j-th} feature column of the centered data set $X'$, the covariance between each pair of features can be represented by the matrix:
+Let $\vect X$ be a data set, $\vect X'$ the data set $\vect X$ with its features centered ($\vect X'=\vect H \vect X$), and $\vect X'_{.j}$ the {\em j-th} feature column of the centered data set $\vect X'$, the covariance between each pair of features can be represented by the matrix:
 \begin{align*}
-\Sigma_X &= [\sigma_{xy}]_{n \times n} \\
+\vect \Sigma_X &= [\vect \sigma_{xy}]_{n \times n} \\
 &= \begin{bmatrix}
-\sigma(X'_{.0}, X'_{.0}) & \sigma(X'_{.0}, X'_{.1}) & \cdots & \sigma(X'_{.0}, X'_{.n-1}) \\
-\sigma(X'_{.1}, X'_{.0}) & \sigma(X'_{.1}, X'_{.1}) & & \sigma(X'_{.1}, X'_{.n-1}) \\
+\sigma(\vect X'_{.0}, \vect X'_{.0}) & \sigma(\vect X'_{.0}, \vect X'_{.1}) & \cdots & \sigma(\vect X'_{.0}, \vect X'_{.n-1}) \\
+\sigma(\vect X'_{.1}, \vect X'_{.0}) & \sigma(\vect X'_{.1}, \vect X'_{.1}) & & \sigma(\vect X'_{.1}, \vect X'_{.n-1}) \\
 \vdots &&& \vdots \\
-\sigma(X'_{.n-1}, X'_{.0}) & \sigma(X'_{.n-1}, X'_{.1}) & \cdots & \sigma(X'_{.n-1}, D_{.n-1})
+\sigma(\vect X'_{.n-1}, \vect X'_{.0}) & \sigma(\vect X'_{.n-1}, \vect X'_{.1}) & \cdots & \sigma(\vect X'_{.n-1}, \vect D_{.n-1})
 \end{bmatrix} \\
-&= \frac{1}{n} (X')^T X' \\
-&= \frac{1}{n} (HX)^T HX \\
-&= \frac{1}{n} X^T H^T H X \\
- &= \frac{1}{n} X^T H X
+&= \frac{1}{n} (\vect X')^\top \vect X' \\
+&= \frac{1}{n} (\vect{HX})^\top \vect{HX} \\
+&= \frac{1}{n} \vect X^\top \vect H^\top \vect{HX} \\
+ &= \frac{1}{n} \vect X^\top \vect{HX}
 \end{align*}
 
 \section{Numerical Analysis}
 \subsection{Eigenvalues and Eigenvectors of a Matrix}
 
-Given a matrix $A \ne 0 \in \mathbb{R}^{2n}$, a vector $v \in \mathbb{R}^n$ is said to be an \textbf{eigenvector} of $A$ if the multiplication $Av$ does not change the direction of $v$; that is:
-$$\exists \lambda \in \mathbb{R} \mid Av = \lambda v \textnormal{, where}$$
-$\lambda$ is the \textbf{eigenvalue} associated to the eigenvector $v$.
+Given a matrix $\vect A \ne 0 \in \mathbb{R}^{2n}$, a vector $\vect v \in \mathbb{R}^n$ is said to be an \textbf{eigenvector} of $\vect A$ if the multiplication $\vect{Av}$ does not change the direction of $\vect v$; that is:
+$$\exists \lambda \in \mathbb{R} \mid \vect{Av} = \lambda \vect v \textnormal{, where}$$
+$\lambda$ is the \textbf{eigenvalue} associated to the eigenvector $\vect v$.
 
 \subsection{Spectral Decomposition of a Matrix}
 
-If $[A]_{n\times n}$ is a symmetric matrix of rank $n$ and admits $n$ pairs of eigenvalues $\lambda = diag(\lambda_0, \lambda_1, ... \lambda_{n-1})$ and eigenvectors $[V]_{n\times n} = [v_0, v_1, v_2, ..., v_{n-1}]$, such that $V$ is an orthogonal matrix (i.e., $V^TV=I_n$), then
-$$AV = V \lambda$$
+If $[\vect A]_{n\times n}$ is a symmetric matrix of rank $n$ and admits $n$ pairs of eigenvalues $\vect \lambda = diag(\lambda_0, \lambda_1, ... \lambda_{n-1})$ and eigenvectors $[\vect V]_{n\times n} = [\vect v_0, \vect v_1, \vect v_2, ..., \vect v_{n-1}]$, such that $\vect V$ is an orthogonal matrix (i.e., $\vect V^\top \vect V=\vect I_n$), then
+$$\vect{AV} = \vect{V \lambda}$$
 
-$\lambda$ is a diagonal matrix, where $\lambda_{ii}$ is the eigenvalue associated to the eigenvector $v_i$ \cite{cox2001}. Furthermore, $V$'s columns are linear independent, hence $V$ is invertible.
+$\vect \lambda$ is a diagonal matrix, where $\lambda_{ii}$ is the eigenvalue associated to the eigenvector $\vect v_i$ \cite{cox2001}. Furthermore, the columns of $\vect V$ are linear independent, hence $\vect V$ is invertible.
 \begin{align*}
-	AV &= V \lambda \\
-	AVV^T &= V \lambda V^T \\
-	A &= V \lambda V^T
+	\vect{AV} &= \vect{V \lambda} \\
+	\vect{AVV^\top} &= \vect{V \lambda V^\top} \\
+	\vect A &= \vect{V \lambda V^\top}
 \end{align*}
 
 \subsection{Singular Value Decomposition}
 \label{sec:svd}
-Let $[A]_{n\times n}$ be a matrix, then $\exists U \in \mathbb{R}^{m \times m}, V \in \mathbb{R}^{n \times n}$ and $\Sigma =  diag(\sigma_0, \dots, \sigma_{n-1})$ conditioned to $\sigma_i \ge \sigma_{i+1} \ge 0, \forall \sigma \in [0, n)$ s.t. \cite{gan2008}
-$$M = U\Sigma V^T$$
+Let $[\vect A]_{n\times n}$ be a matrix, then $\exists \vect U \in \mathbb{R}^{m \times m}, \vect V \in \mathbb{R}^{n \times n}$ and $\vect \Sigma =  diag(\sigma_0, \dots, \sigma_{n-1})$ conditioned to $\sigma_i \ge \sigma_{i+1} \ge 0, \forall \sigma \in [0, n)$ s.t. \cite{gan2008}
+$$\vect M = \vect{U\Sigma V^\top}$$
 
 \subsubsection{Decomposition of Symmetric Matrices}
 	\label{th:svd-aat}
-	If $A = U \Sigma V^T$, $AA^T = U \Sigma^2 U$ and $A^TA = V \Sigma^2 V$.
+	If $\vect A = \vect {U \Sigma V^\top}$, $\vect{AA^\top} = \vect{U \Sigma^2 U}$ and $\vect{A^\top A} = \vect{V \Sigma^2 V}$.
 \begin{proof}
 	\begin{align*}
-	A^TA &= (U\Sigma V^T)^T(U\Sigma V^T) \\
-	&= V \Sigma^T U^T U \Sigma V^T \\
-	&= V \Sigma \Sigma V^T \\
-	&= V \Sigma^2 V^T
+	\vect{A^\top A} &= (\vect{U\Sigma V^\top})^\top (\vect{U\Sigma V^\top}) \\
+	&= \vect{V \Sigma^\top U^\top U \Sigma V^\top} \\
+	&= \vect{V \Sigma \Sigma V^\top} \\
+	&= \vect{V \Sigma^2 V^\top}
 	\end{align*}
 \end{proof}
 
-Proving $AA^T = U \Sigma^2 U^T$ is analogous to the above.
+Proving $\vect{AA^\top} = \vect{U \Sigma^2 U^\top}$ is analogous to the above.
 
 \section{Topology}
 \subsection{Manifolds}
@@ -281,6 +281,8 @@ When talking about the relationship between two topological objects, such as two
 
 Let $A$ and $B$ be two topological objects of the same type, a function $\phi \colon A \to B$ is an embedding of A into B if $\phi$ is an isomorphism which preserves the original algebric properties of A \cite{burris2011course}. Shortly, A is said to be \textit{embedded} in B.
 
+% TODO : example of embedding.
+
 \section{Graph Theory}
 \label{sec:graphs}
 \subsection{Graphs}
@@ -310,7 +312,7 @@ Let $G$ be the pair $(V, E)$. $G$ is defined as a \textbf{graph} \cite{berge1973
 	\item[Degree] If $G=(V, E)$ is a graph and $v\in V$, the degree $d(v)$ of $v$ is defined as
 	$d(v) = 2n_s  + n_n$, where $n_s$ is the number of arcs self-incident at $v$ \cite{may1972} (i.e., arc with $v$ as initial endpoint and terminal endpoint) and $n_n$ is the number of arcs incident at $v$.
 
-	\item[Adjacency Matrix] If $V=\{v_1, v_2, \dots, v_n \}$ and $G=(V, E)$, define the adjacency matrix $A=[a_{ij}]_{n\times n}$ associated with graph $G$, where $a_{ij} = m_G^+(v_i, v_j)$.
+	\item[Adjacency Matrix] If $V=\{v_1, v_2, \dots, v_n \}$ and $G=(V, E)$, define the adjacency matrix $\vect A=[a_{ij}]_{n\times n}$ associated with graph $G$, where $a_{ij} = m_G^+(v_i, v_j)$.
 \end{description}
 
 \subsubsection{Further Specifications}
@@ -645,7 +647,7 @@ The figure bellow illustrates a non-linearly separable data set defined in the $
 	\label{fig:svmkernel}
 \end{figure}
 
-Between many different kernels, two often used are the RBF: $\exp(-\frac{\|x -x'\|^2}{2\sigma^2})$ and the Polynomial: $(u^T v + c)^{d}$ \cite{svmkernels}.
+Between many different kernels, two often used are the RBF: $\exp(-\frac{\|x -x'\|^2}{2\sigma^2})$ and the Polynomial: $(u^\top v + c)^{d}$ \cite{svmkernels}.
 
 \subsection{Multi-class Classification}
 
