@@ -531,15 +531,21 @@ Now, matrix $d$ contains  the weights sum for the paths between all vertices of 
 \section{Machine Learning}
 Learning it is Improvement of an agent's performance over a specific environment through acquisition of experience \cite{pat1996}. Machine learning relates to the area in Computer Science which aims to extend the human learning concept to machines. That is, the implementation of machines that can imitate human learning \cite{hot2009}. Practically, this usually translates into creating machines that are able to recognize patterns in an environment and interpret those using concepts related to artificial intelligence. Such interpretation can create a model which might eventually be used to predict new patterns, take actions and/or solve domain problems.
 
-Based on how the learning phase of a problem is, ML algorithms are mostly divided into one of the following categories: supervised, unsupervised, semi-supervised and reinforcement \cite{awa2015}.
+Based on how the learning phase of a problem is, ML algorithms are mostly divided into one of the following categories:
 
-In this section we will study supervised and unsupervised algorithms, as they very often assume the position of end-in the learning process and are directly fed by results of dimensionality reductions techniques. Later, we will use them to simulate how the reductions produced by ISOMAP are interpreted by real ML algorithms, when compared with the raw data.
+\begin{description}
+	\item[Supervised] A direct feedback is presented during the learning phase \cite{pat1996}. For the instances where the ME problem relies on a data set, the learning task uses the labeled training samples (i.e., samples that present the \textbf{target feature}) to synthesize the model that attempts to generalize the relationship between the feature vectors and the target variable \cite{awa2015}.
+	
+	\item[Unsupervised] Infer hidden structures from the data set without direct feedback, such as known labels for the samples \cite{awa2015}.
+	
+	\item[Semi-supervised] Most commonly, it is given by the extension of either supervised or unsupervised learning to include the other paradigm, resulting in a combination of both \cite{zhu2009}.
+	
+	\item[Reinforcement] Through iterative exploration, the learner is positively or negatively reinforced for its actions. The learner's goal is, ultimately, maximize the cumulative reward gained \cite{awa2015}.
+\end{description}
 
-\subsection{Supervised Learning}
+ML algorithms often represent the end-point in the learning process, receiving the result of reduction algorithms as input and learning from them. In this section, we will study a small set of supervised ML algorithms. Later, we will use them to simulate how the reductions produced by ISOMAP are interpreted by real ML algorithms, when compared with the raw data.
 
-In supervised learning, a direct feedback is presented during the learning phase \cite{pat1996}. For the instances where the ML problem relies on a data set, the learning task uses the labeled training samples (i.e., samples that present the \textbf{target feature}) to synthesize the model that attempts to generalize the relationship between the feature vectors and the target variable \cite{awa2015}.
-
-\subsubsection{Support Vector Machine}
+\subsection{Support Vector Machine}
 
 Contained in the supervised learning category, Support Vector Machine (SVM) is a powerful tool, often used in classification and regression problems.
 
@@ -585,9 +591,9 @@ As the goal is to maximize the width, while still respecting the constraint (\re
 
 Which can be solved using standard quadratic programming.
 
-\paragraph{SVM for non-separable data sets (soft margins)}
+\subsubsection{SVM for non-separable data sets (soft margins)}
 
-To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$ to the optimizing equation (\ref{eq:svmminw}) and to the decision rule (\ref{svmconst}) \cite{wessvmdef}, which represent a trade-off between maximum margin/distance of the misclassified samples from the decision boundary, transforming them into:
+To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$ to the optimizing equation (\ref{eq:svmminw}) and to the decision rule (\ref{svmconst}) \cite{wessvmdef}. This represents a trade-off between maximum margin/distance of the misclassified samples from the decision boundary. The optimizing equation and the decision rule are updated to:
 \begin{align*}
 	&\min \frac{1}{2} \|\vect w\|^2 + C \sum_{1}^{m}\xi_i \text{, constrained to:} \\
 	&y_i(\vect w \cdot \vect x_i +b) \geq 1- \xi_i, \xi_i \geq 0
@@ -595,7 +601,7 @@ To deal with non-separable data sets, it is possible to introduce the variables 
 
 Such trade-off can be adjusted through the parameter $C$. Notice that small values for $C$ might result in misclassification, whereas high values can produce overfitting.
 
-\paragraph{Dependency over the dot product}
+\subsubsection{Dependency over the dot product}
 
 Equation \ref{eq:svmminw} does not explicitly illustrates how the model generated depends on the dot product between the training samples. The implications of such fact will be discussed in the next section. For now, let us convert \ref{eq:svmminw} to its dual form. By the Lagrange multipliers method \cite{mitsvm}:
 \begin{align} \label{eq:svmlag1}
@@ -624,7 +630,7 @@ Now, as we finally plug (\ref{svmlag2}) back into our decision rule, it becomes 
 	\end{cases}
 \end{align*}
 
-\paragraph{Kernel functions}
+\subsubsection{Kernel functions}
 
 "The kernel function represent the dot product of both vectors projected onto the new space". \cite{mitsvm}
 
@@ -663,7 +669,7 @@ Many different kernels exist. Two which are frequently used among all of them\ci
 	\item Polynomial: $(u^\top v + c)^{d}$.
 \end{itemize}
 
-\paragraph{Multi-class Classification}
+\subsubsection{Multi-class Classification}
 
 Not all problems are binary. In classification, this reflects data sets that have their samples separated into more than two classes. The Iris flower data set is an example of this, when predicting the samples' {\em species}.
 
@@ -683,14 +689,11 @@ There are many different approaches for multi-class classification \cite{rif2008
 	$$ y(\vect x) = \argmax_i{\sum_{j=1}^{n} \frac{j-i}{|j-i|} c_{\min(i, j) \max(i, j)}(\vect x)} $$
 \end{description}
 
-\subsection{Unsupervised Learning}
-Infer hidden structures from the data set without direct feedback, such as known labels for the samples \cite{awa2015}.
-
-\subsubsection{Nearest Neighbors}
+\subsection{$K$-Nearest Neighbors}
 
 ...
 
-\subsubsection{Evaluating Supervised Learners}
+\subsection{Evaluating Supervised Learners}
 
 Machine Learning algorithms might be susceptible to data noise, incorrect configuration or even random factors, which would eventually decrease the generated model's accuracy. In order to evaluate this same accuracy, models are quite often tested after trained.
 
@@ -718,9 +721,7 @@ Naturally, a diagonal matrix represents that all samples of the class $i$ were c
 
 \subsubsection{Cross Validation}
 
-Sometimes (for example, when the data set does not have too many samples), partitioning of the data set into subsets might be benign to the learning process, as the model will be constructed only considering a small, random portion of the samples. This event is known as \textbf{underfitting}.
-
-When $k$-fold cross-validating \cite{crossvalid}, the data set can be partitioned into $k$ folds. For each fold $k_i$, a model is trained with all folds, except for $k_i$. The model is then tested over $k_i$. Finally, the score reported by the cross-validation method is the average accuracy when testing over all folds.
+Sometimes (for example, when the data set does not have too many samples), partitioning of the data set into subsets might be malign to the learning process, as the model will be constructed only considering a small, random portion of the samples. This event is known as \textbf{underfitting}. A way to validate an set of parameters for a given algorithm is to. When $k$-fold cross-validating \cite{crossvalid}, the data set can be partitioned into $k$ folds. For each fold $k_i$, a model is trained with all folds, except for $k_i$. The model is then tested over $k_i$. Finally, the score reported by the cross-validation method is the average accuracy when testing over all folds.
 
 \subsubsection{Grid Search}
 
