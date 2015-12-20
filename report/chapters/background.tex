@@ -533,7 +533,7 @@ Learning it is Improvement of an agent's performance over a specific environment
 
 Based on how the learning phase of a problem is, ML algorithms are mostly divided into one of the following categories: supervised, unsupervised, semi-supervised and reinforcement \cite{awa2015}.
 
-In this section we will study supervised and unsupervised algorithms, as they very often assume the position of ``back-end" of the learning process and are directly fed by results of dimensionality reductions techniques. Later, we will use them to simulate how the reductions produced by ISOMAP are interpreted by real ML algorithms, when compared with the raw data.
+In this section we will study supervised and unsupervised algorithms, as they very often assume the position of end-in the learning process and are directly fed by results of dimensionality reductions techniques. Later, we will use them to simulate how the reductions produced by ISOMAP are interpreted by real ML algorithms, when compared with the raw data.
 
 \subsection{Supervised Learning}
 
@@ -541,7 +541,7 @@ In supervised learning, a direct feedback is presented during the learning phase
 
 \subsubsection{Support Vector Machine}
 
-Contained in the supervised learning category, Support Vector Machines (SVM) are powerful tools, often used in classification and regression problems.
+Contained in the supervised learning category, Support Vector Machine (SVM) is a powerful tool, often used in classification and regression problems.
 
 Intuitively, the SVM classifier attempts to find a hyperplane that separates the samples in a data set into two different groups: positives and negatives (i.e., binary classification). Furthermore, the hyperplane is placed such that the distance between the \textbf{support vectors} (the closest samples) and it are maximized.
 
@@ -549,77 +549,80 @@ Intuitively, the SVM classifier attempts to find a hyperplane that separates the
 	\centering
 	\captionsetup{justification=centering}
 
-	\includegraphics[scale=.5]{svm_margin}
+	\includegraphics[scale=.5]{ml/svm_margin}
 	\caption{A SVM classifier projecting a hyperplane that perfectly separates two classes of samples \cite{sksvm}}.
 	\label{fig:svmmargin}
 \end{figure}
 
-More elaborately, given any linearly separable data set $\vect X$ containing samples from two distinguished classes $\{-1, +1\}$, consider the vector $w$ and the hyperplane $d = \{x \mid w \cdot x + b = 0\}$ (represented in fig. \ref{fig:svmmargin} by the contiguous line), a decision rule $f$ is defined as:
+More elaborately, given any linearly separable data set $\vect X$ containing samples from two distinguished classes $\{-1, +1\}$, consider the vector $\vect w$ and the hyperplane $d = \{\vect x \mid \vect w \cdot \vect x + b = 0\}$ (represented in fig. \ref{fig:svmmargin} by the contiguous line). The class $y_i = y(x_i)$ to which a given sample $\vect x_i$ belongs can be defined as:
 \begin{align*}
-	f(x_i) = \begin{cases}
-		+1, \text{if } w \cdot x_i +b > 0 \\
+	y(x_i) = \begin{cases}
+		+1, \text{if } \vect w \cdot \vect x_i +b > 0 \\
 		-1, \text{otherwise.}
 	\end{cases}
 \end{align*}
 
-To prevent samples from falling into the margin or being misclassified \cite{wessvmdef}, reinforce that for any positive sample $x_+$, $w \cdot x_+ +b \geq 1$. Similarly for $x_-$ samples, $w \cdot x_- +b \leq 1$. These both constraints can be expressed as
+To prevent samples from falling into the margin or being misclassified \cite{wessvmdef}, reinforce that for any positive sample $\vect x_+$, $\vect w \cdot \vect x_+ +b \geq 1$. Similarly for $\vect x_-$ samples, $\vect w \cdot \vect x_- +b \leq 1$. These both constraints can be expressed as
 \begin{equation} \label{svmconst}
-y_i(w \cdot x_i +b) -1 \geq 0
+y_i(\vect w \cdot \vect x_i +b) -1 \geq 0
 \end{equation}
 
-Notice that $y_i(w \cdot x_i +b) -1 = 0 \iff x_i $ is a \textbf{support vector}.
+Notice that $y_i(\vect w \cdot \vect x_i +b) -1 = 0 \iff \vect x_i $ is a \textbf{support vector}.
 
-The width (the distance between the two margins) of the street is the vector $(x_+^0 -x_-^0)$ projected onto the vector $w$, where $x_+^0$ is a positive support vector and $x_-^0$ is a negative one.
+The width (the distance between the two margins) of the street is the vector $(\vect x_+^0 - \vect x_-^0)$ projected onto the vector $\vect w$, where $\vect x_+^0$ is a positive support vector and $\vect x_-^0$ is a negative one.
 \begin{equation} \label{eq:eqsvmwidth}
 \begin{split}
-width &= (x_+^0 - x_-^0) \cdot \frac{w}{\|w\|} \\
-      &=\frac{x_+^0 \cdot w - x_-^0 \cdot w}{\|w\|} \\
-      &=\frac{1-b - (-1-b)}{\|w\|} = \frac{2}{\|w\|}
+width &= (\vect x_+^0 - \vect x_-^0) \cdot \frac{\vect w}{\|\vect w\|} \\
+      &=\frac{\vect x_+^0 \cdot \vect w - \vect x_-^0 \cdot \vect w}{\|\vect w\|} \\
+      &=\frac{1-b - (-1-b)}{\|\vect w\|} = \frac{2}{\|\vect w\|}
 \end{split}
 \end{equation}
 
 As the goal is to maximize the width, while still respecting the constraint (\ref{svmconst}).
 \begin{equation} \label{eq:svmminw}
-	\max width = \max \frac{2}{\|w\|} \equiv \min \frac{1}{2} \|w\|^2
+	\max width = \max \frac{2}{\|\vect w\|} \equiv \min \frac{1}{2} \|\vect w\|^2
 \end{equation}
 
 Which can be solved using standard quadratic programming.
 
 \paragraph{SVM for non-separable data sets (soft margins)}
 
-To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$ to the optimizing equation and decision rule \cite{wessvmdef}, which represent a trade-off between maximum margin/distance of the misclassified samples from the decision boundary.
-$$\min \frac{1}{2} \|w\|^2 + C \sum_{1}^{m}\xi_i \text{, constrained to:}$$
-$$f(x_i) = y_i(w \cdot x_i +b) \geq 1- \xi_i, \xi_i \geq 0$$
+To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$ to the optimizing equation (\ref{eq:svmminw}) and to the decision rule (\ref{svmconst}) \cite{wessvmdef}, which represent a trade-off between maximum margin/distance of the misclassified samples from the decision boundary, transforming them into:
+\begin{align*}
+	&\min \frac{1}{2} \|\vect w\|^2 + C \sum_{1}^{m}\xi_i \text{, constrained to:} \\
+	&y_i(\vect w \cdot \vect x_i +b) \geq 1- \xi_i, \xi_i \geq 0
+\end{align*}
 
 Such trade-off can be adjusted through the parameter $C$. Notice that small values for $C$ might result in misclassification, whereas high values can produce overfitting.
 
 \paragraph{Dependency over the dot product}
 
-Equation \ref{eq:svmminw} does not explicitly illustrates how the model generated depents on the dot product between the training samples. The implications of such fact will be discussed in the next section. For now, let us convert \ref{eq:svmminw} to its dual form. By the Lagrange multipliers method \cite{mitsvm}:
+Equation \ref{eq:svmminw} does not explicitly illustrates how the model generated depends on the dot product between the training samples. The implications of such fact will be discussed in the next section. For now, let us convert \ref{eq:svmminw} to its dual form. By the Lagrange multipliers method \cite{mitsvm}:
 \begin{align} \label{eq:svmlag1}
-	L &= \frac{1}{2}\|w\|^2 - \sum \alpha_i[y_i(w \cdot x_i +b) -1] \\
+	L &= \frac{1}{2}\|\vect w\|^2 - \sum \alpha_i[y_i(\vect w \cdot \vect x_i +b) -1] \\
 	\label{svmlag2}
-	\frac{\partial L}{\partial w} &= w -\sum\alpha_i y_i x_i = 0 \implies w = \sum\alpha_i y_i x_i \\
+	\frac{\partial L}{\partial \vect w} &= \vect w -\sum\alpha_i y_i \vect x_i = 0 \implies \vect w = \sum\alpha_i y_i \vect x_i \\
 	\label{svmlag3}
 	\frac{\partial L}{\partial b} &= -\sum\alpha_i y_i = 0 \implies \sum\alpha_i y_i = 0
 \end{align}
 
 Applying (\ref{svmlag2}) and (\ref{svmlag3}) on (\ref{eq:svmlag1}), our problem of minimizing (\ref{eq:svmminw}) constrained by (\ref{svmconst}) becomes maximizing $L$, subject to (\ref{svmlag3}):
 \begin{gather*}
-L = \frac{1}{2}\sum\alpha_i y_i x_i \cdot \sum\alpha_j y_j x_j
-- \sum \alpha_i y_i x_i \cdot \sum \alpha_j y_j x_j
+L = \frac{1}{2}\sum\alpha_i y_i \vect x_i \cdot \sum\alpha_j y_j \vect x_j
+- \sum \alpha_i y_i \vect x_i \cdot \sum \alpha_j y_j \vect x_j
 - \sum \alpha_i y_i b + \sum \alpha_i \\
-= \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j (x_i \cdot x_j)
+= \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j (\vect x_i \cdot \vect x_j)
 \end{gather*}
 
-$w$ and $b$ can easily be found from (\ref{svmlag2}) and $\alpha_i[y_i(w \cdot x_i + b) - 1] = 0$ (for any $i \mid \alpha_i \ne 0$), respectively.
+$w$ and $b$ can easily be found from (\ref{svmlag2}) and $\alpha_i[y_i(\vect w \cdot \vect x_i + b) - 1] = 0$ (for any $i \mid \alpha_i \ne 0$), respectively.
 
 Now, as we finally plug (\ref{svmlag2}) back into our decision rule, it becomes clear that both training and prediction phases depend only on the dot product between the sample vectors \cite{mitsvm}:
-
-$$\text{\textbf{decision rule}} \begin{cases}
-	\sum\alpha_i y_i x_i \cdot u +b \geq 0 \implies y_u=+1\\
-	\sum\alpha_i y_i x_i \cdot u +b < 0 \implies y_u=-1\\
-\end{cases}$$
+\begin{align*}
+	y(\vect x_k) = \begin{cases}
+		+1, \text{if } \sum\alpha_i y_i \vect x_i \cdot \vect x_k +b \geq 0\\
+		-1, \text{otherwise.}
+	\end{cases}
+\end{align*}
 
 \paragraph{Kernel functions}
 
@@ -627,37 +630,40 @@ $$\text{\textbf{decision rule}} \begin{cases}
 
 Some data sets are not linearly separable, as previously mentioned	. They can, however, be projected to a different vector space, where they hopefully will be. To achieve this, a transformation $\phi$ is applied on both vectors. The dot product between those is then calculated in the new space and the value is used during training and prediction:
 \begin{gather*}
-L = \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j \phi(x_i) \cdot \phi(x_j)
+L = \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j \phi(\vect x_i) \cdot \phi(\vect x_j)
 \end{gather*}
 
 \begin{remark}
-	Practically, Let $k: (\mathbb{R}^n, \mathbb{R}^n) \rightarrow \mathbb{R} \mid k(u, v) = \phi(u) \cdot \phi(v)$,
-	\begin{gather*}
-	L = \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j k(x_i, x_j)
-	\end{gather*}
-
-	Which entails, given a known function $k$, there is no need to explicitly know which are the projections of $x_i$ and $x_j$ onto the new vector space. This is commonly known as the \textbf{kernel trick}.
+	Practically, Let $k: (\mathbb{R}^n, \mathbb{R}^n) \rightarrow \mathbb{R} \mid k(\vect u, \vect v) = \phi(\vect u) \cdot \phi(\vect v)$, then:
+	\begin{align*}
+	L &= \sum\alpha_i -\frac{1}{2}\sum\sum\alpha_i\alpha_j y_i y_j k(\vect u, \vect v) \\
+	y(\vect x_k) &= \begin{cases}
+			+1, \text{if } \sum\alpha_i y_i k(\vect x_i, \vect x_k) +b \geq 0\\
+			-1, \text{otherwise.}
+		\end{cases}
+	\end{align*}
+	
+	Which entails, given a known function $k$, there is no need to explicitly know which are the projections of $u$ and $v$ onto the new vector space. This is commonly known as the \textbf{kernel trick}.
 \end{remark}
 
-$$\text{\textbf{decision rule}} \begin{cases}
-\sum\alpha_i y_i k(x_i, u) +b \geq 0 \implies y_u=+1\\
-\sum\alpha_i y_i k(x_i, u) +b < 0 \implies y_u=-1\\
-\end{cases}$$
-
-The figure bellow illustrates a non-linearly separable data set defined in the $\mathbb{R}$ being projected to the $\mathbb{R}^2$.
+The first set of axis $\{x\}$ in the figure bellow illustrates the non-linearly separable distribution of positive and negative samples in the $\mathbb{R}$. The second basis $\{x, y=x^2\}$ represents the same samples being projected to the $\mathbb{R}^2$.
 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
 
-	\includegraphics[scale=.4]{svm_kernel}
+	\includegraphics[scale=.4]{ml/svm_kernel}
 	\caption{Projection of samples from the $\mathbb{R}$ to the $\mathbb{R}^2$, allowing SVM to find a hyperplane that perfectly separates both classes \cite{svmkernels}.}
 	\label{fig:svmkernel}
 \end{figure}
 
-Between many different kernels, two often used are the RBF: $\exp(-\frac{\|x -x'\|^2}{2\sigma^2})$ and the Polynomial: $(u^\top v + c)^{d}$ \cite{svmkernels}.
+Many different kernels exist. Two which are frequently used among all of them\cite{svmkernels} are:
+\begin{itemize}
+	\item RBF: $\exp(-\frac{\|x -x'\|^2}{2\sigma^2})$
+	\item Polynomial: $(u^\top v + c)^{d}$.
+\end{itemize}
 
-\subsubsection{Multi-class Classification}
+\paragraph{Multi-class Classification}
 
 Not all problems are binary. In classification, this reflects data sets that have their samples separated into more than two classes. The Iris flower data set is an example of this, when predicting the samples' {\em species}.
 
@@ -666,15 +672,15 @@ There are many different approaches for multi-class classification \cite{rif2008
 \begin{description}
 	\item[One-vs-All (OVA)] $n$ binary classifiers are built, where $n$ is also the number of classes in the data set. For the classifier $c^j, j \in [1, n]$, all samples of the $j$th class are taken as positive examples, at the same time that all the other samples are considered negative.
 
-	If
-	$$c^j(x) = \sum_{i=1}^{m} y_i \alpha_i^j x \cdot x_i + b$$
+	If $c^j(\vect x)$, the $j$-th classification of sample $\vect x$, is defined as:
+	$$c^j(\vect x) = \sum_{i=1}^{m} \alpha_i^j y_i \vect x \cdot \vect x_i + b$$
 
-	Then positive values for $c^j(x)$ indicate that the sample $x$ belongs to the $j$th class. Additionally, greater $c^j(x)$ values imply on further distance from the hyperplane (i.e., $c^j(x)$ can also be interpreted as a \textbf{confidence value}) and the sample $x$ should be assigned to the class which holds greatest confidence \cite{ovacj}. Shortly, classification is given by
-	$$ f(x) = \argmax_j{c^j(x)} $$
-	\item[All-vs-All (AVA)] Also known as all-pairs or one-vs-one, a classifier $c_{ij}$ is built for each pair of classes $(i, j)$, resulting in a total of $n(n-1)$ classifiers. $c_{ij}$ responds with positive values for samples of the $i$th class and negative values for samples of the $j$th class. Classification can be done by simply counting the class most frequently associated with $x$:
-	$$ f(x) = \argmax_i{\sum_{j=1}^{n} c_{ij}(x)} $$
+	Then positive values for $c^j(\vect x)$ indicate that the sample $\vect x$ belongs to the $j$th class. Additionally, greater $c^j(\vect x)$ values imply on further distance from the hyperplane (i.e., $c^j(\vect x)$ can also be interpreted as a \textbf{confidence value}) and the sample $x$ should be assigned to the class which holds greatest confidence \cite{ovacj}. Shortly, classification is given by
+	$$ y(\vect x) = \argmax_j{c^j(\vect x)} $$	
+	\item[All-vs-All (AVA)] Also known as all-pairs or one-vs-one, a classifier $c_{ij}$ is built for each pair of classes $(i, j)$, resulting in a total of $n(n-1)$ classifiers. $c_{ij}$ responds with positive values for samples of the $i$-th class and negative values for samples of the $j$-th class. Classification can be done by simply counting the class most frequently associated with $\vect x$:
+	$$ y(\vect x) = \argmax_i{\sum_{j=1}^{n} c_{ij}(\vect x)} $$
 	Or equivalently, but only using $\frac{n(n-1)}{2}$ classifiers,
-	$$ f(x) = \argmax_i{\sum_{j=1}^{n} \frac{j-i}{|j-i|} c_{\min(i, j) \max(i, j)}(x)} $$
+	$$ y(\vect x) = \argmax_i{\sum_{j=1}^{n} \frac{j-i}{|j-i|} c_{\min(i, j) \max(i, j)}(\vect x)} $$
 \end{description}
 
 \subsection{Unsupervised Learning}
@@ -684,7 +690,7 @@ Infer hidden structures from the data set without direct feedback, such as known
 
 ...
 
-\subsection{Evaluating learners}
+\subsubsection{Evaluating Supervised Learners}
 
 Machine Learning algorithms might be susceptible to data noise, incorrect configuration or even random factors, which would eventually decrease the generated model's accuracy. In order to evaluate this same accuracy, models are quite often tested after trained.
 
@@ -732,7 +738,7 @@ The figure bellow illustrates the distribution of coffee sales per time of the d
 	\centering
 	\captionsetup{justification=centering}
 
-	\includegraphics[scale=.4]{rohrer2015}
+	\includegraphics[scale=.4]{ml/rohrer2015}
 	\caption{graphic representation of a data set generalization by a linear (orange) and a nonlinear model (green) \cite{roh2015}.}
 	\label{fig:rohrer2015}
 \end{figure}
@@ -749,7 +755,7 @@ Through GridSearch, it was found that the SVM algorithm with $C=100$, $gamma=.01
 	\centering
 	\captionsetup{justification=centering}
 
-	\includegraphics[scale=.2]{svm_cm_iris}
+	\includegraphics[scale=.2]{ml/svm_cm_iris}
 	\caption{Confusion matrix of a SVM with $C=100$, $gamma=.01$ and $rbf$ kernel when predicting samples from the Iris flower data set.}
 	\label{fig:cmsvmiris}
 \end{figure}
