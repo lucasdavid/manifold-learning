@@ -16,8 +16,10 @@
 \usepackage{tabularx}
 \usepackage{titlesec}
 \usepackage{wrapfig}
-\usepackage{minted}
-\usemintedstyle{trac}
+\usepackage[cache=false]{minted}
+
+\usepackage{xcolor}
+\usepackage{textcomp}
 
 \geometry{a4paper}
 
@@ -60,3 +62,7 @@
 \newtheorem{experiment}{Experiment}[section]
 
 \graphicspath{{img/}}
+
+% Minted config.
+\usemintedstyle{trac}
+\definecolor{bgCode}{rgb}{0.96,0.96,0.96}

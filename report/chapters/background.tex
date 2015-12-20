@@ -363,14 +363,9 @@ Let $G = (V, E)$ be a weighted graph, where $w \colon E \to \mathbb{R}$ is the w
 
 \paragraph{$K$-Nearest-Neighbor Search ($K$-NN)}
 Consider $k \in \mathbb{N}$. $K$-NN will result in a subgraph $G'$ s.t. each vertex $v$ is connected at most to $k$ other vertices and the sum of weights of the arcs incident on $v$ is minimum:
-\begin{minted}
-[
-frame=lines,
-framesep=2mm,
-linenos
-]
-{python}
 
+\begin{listing}[H]
+\begin{minted}[linenos,bgcolor=bgCode]{python}
 def nearest_neighbors(V, E, w, k):
     neighbors = set()
     for v in V:
@@ -382,18 +377,23 @@ def nearest_neighbors(V, E, w, k):
         neighbors.add(vs)
     return V, neighbors
 \end{minted}
+\caption{$K$-Nearest Neighbors Algorithm.}
+\end{listing}
 
-\clearpage
 \paragraph{$\epsilon$-Nearest Neighbor Search ($\epsilon$-NN)}
 	Fixed $\epsilon \in\mathbb{R}$, $\epsilon$-NN will find the subgraph $G'=(V, E')$ s.t. each arc in $E'$ has associated weight $w(e) \leq \epsilon$:
-	\begin{minted}[frame=lines,framesep=2mm,linenos]{python}
+	
+\begin{listing}[H]
+\begin{minted}[linenos,bgcolor=bgCode]{python}
 def nearest_neighbors(V, E, w, epsilon):
     neighbors = set()
     for v in V:
         vs = {u for u in V - {v} if w(v, u) > epsilon}
         neighbors.add(vs)
     return V, neighbors
-	\end{minted}
+\end{minted}
+\caption{$\epsilon$-Nearest Neighbors Algorithm.}
+\end{listing}
 
 \begin{example}
 	If $k=1$ and $\epsilon=60$, the graph $G$, the sub-graph $G'$ found from K-Nearest neighbor algorithm and the sub-graph $G''$ found from the $\epsilon$-Nearest neighbor are defined as follows:
@@ -437,22 +437,26 @@ The shortest-path between a vertex $x_0 \in X$ and all other vertices can be exp
 
 \paragraph{Dijkstra's Algorithm}
 
-Let $G=(V, E)$ be a directed weighted graph and $v_0 \in V$ the initial vertex, the shortest-path from $v_0$ to all other vertices can be found through Dijkstra's algorithm \cite{cor2011}:
-\begin{minted}[frame=lines,framesep=2mm,linenos,mathescape]{python}
-    def dijkstra(V, E, w):
-        predecessor = {v: None for v in V}
-        d = {v: infinity for v in V}
-        S = {}
-        Q = priority_queue(V, d)
+Let $G=(V, E)$ be a directed weighted graph and $v_0 \in V$ the initial vertex, the shortest-path from $v_0$ to all other vertices can be found through Dijkstra's algorithm:
+\begin{listing}[H]
+\begin{minted}[linenos,bgcolor=bgCode]{python}
+def dijkstra(V, E, w):
+    predecessor = {v: None for v in V}
+    d = {v: infinity for v in V}
+    S = {}
+    Q = priority_queue(V, d)
 	
-        while len(Q) > 0:
-            u = Q.pop_min()
-            for v in V:
-                if d[v] > d[u] + w(u, v):
-                    d[v] = d[u] + w(u, v)
-                    predecessor[v] = u
-        return (predecessor, d)
+    while len(Q) > 0:
+        u = Q.pop_min()
+        for v in V:
+            if d[v] > d[u] + w(u, v):
+                d[v] = d[u] + w(u, v)
+                predecessor[v] = u
+    return (predecessor, d)
 \end{minted}
+\caption{Dijkstra's algorithm \cite{cor2011}.}
+\end{listing}
+
 
 \begin{remark}
 	Dijkstra's algorithm is based on two strategies: greedy, when extracting the vertex $u$ such that $d(u)$ is minimum, and dynamic programming, during edge relaxation (comparison and update of the $d(v)$ and $predecessor(v)$ values).
@@ -486,9 +490,10 @@ Clearly, all-pairs shortest-path can be solved by executing the Dijkstra's Algor
 
 \paragraph{Floyd-Warshall Algorithm}
 
-Another solution for the all-pairs shortest-path problem is Floyd-Warshall algorithm \cite{golin2003floydwarshall}, which is entirely based on dynamic programming:
+Another solution for the all-pairs shortest-path problem is Floyd-Warshall algorithm, which is entirely based on dynamic programming:
 
-\begin{minted}[frame=lines,linenos,mathescape]{python}
+\begin{listing}[H]
+\begin{minted}[linenos,bgcolor=bgCode]{python}
 def floyd_warshall(V, E, w):
     d = {}
     for v in V:
@@ -503,10 +508,15 @@ def floyd_warshall(V, E, w):
                 if d[u, v] > d[u, k] + d[k, v]:
                     d[u, v] = d[u, k] + d[k, v]
                     predecessor[u, v] = k
+      return predecessors, d
 \end{minted}
+\caption{Floyd-Warshall Algorithm \cite{golin2003floydwarshall}.}
+\end{listing}
 
 Now, matrix $d$ contains  the weights sum for the paths between all vertices of the graph. These paths can be constructed by:
-\begin{minted}[frame=lines,linenos,mathescape]{python}
+
+\begin{listing}[H]
+\begin{minted}[linenos,bgcolor=bgCode]{python}
 	def path(i, j, predecessor):
 		if predecessor[i, j] == None:
 			return [i, j]
@@ -514,30 +524,26 @@ Now, matrix $d$ contains  the weights sum for the paths between all vertices of 
 		r = path(predecessor[i, j], j)
 		return l.append(r)
 \end{minted}
+\caption{Algorithm for path reconstruction from list of predecessors \cite{golin2003floydwarshall}.}
+\end{listing}
 
 \clearpage
 \section{Machine Learning}
-“Learning is the improvement of performance is some environment through the acquisition of knowledge resulting from experience in that environment." \cite{pat1996}
+Learning it is Improvement of an agent's performance over a specific environment through acquisition of experience \cite{pat1996}. Machine learning relates to the area in Computer Science which aims to extend the human learning concept to machines. That is, the implementation of machines that can imitate human learning \cite{hot2009}. Practically, this usually translates into creating machines that are able to recognize patterns in an environment and interpret those using concepts related to artificial intelligence. Such interpretation can create a model which might eventually be used to predict new patterns, take actions and/or solve domain problems.
 
-According to \cite{hot2009}, “Machine learning is the area in Computer Science that has as goal the projection and implementation of machines that have the ability to learn autonomously”. In other words, the creation of machines that are able to recognize patterns in an environment and interpret those using concepts related to artificial intelligence. Such interpretation can create a model which might eventually be used to predict new patterns, take actions and/or solve domain problems.
+Based on how the learning phase of a problem is, ML algorithms are mostly divided into one of the following categories: supervised, unsupervised, semi-supervised and reinforcement \cite{awa2015}.
 
-\subsection{Machine Learning Algorithms}
+In this section we will study supervised and unsupervised algorithms, as they very often assume the position of ``back-end" of the learning process and are directly fed by results of dimensionality reductions techniques. Later, we will use them to simulate how the reductions produced by ISOMAP are interpreted by real ML algorithms, when compared with the raw data.
 
-Based on how the learning phase of a problem is, most of the ML algorithms may be divided into one of the following categories:
+\subsection{Supervised Learning}
 
-\begin{description}
-	\item[Supervised] A direct feedback is presented during the learning phase \cite{pat1996}. For the instances where the ME problem relies on a data set, the learning task uses the labeled training samples (i.e., samples that present the \textbf{target feature}) to synthesize the model that attempts to generalize the relationship between the feature vectors and the target variable \cite{awa2015}.
+In supervised learning, a direct feedback is presented during the learning phase \cite{pat1996}. For the instances where the ML problem relies on a data set, the learning task uses the labeled training samples (i.e., samples that present the \textbf{target feature}) to synthesize the model that attempts to generalize the relationship between the feature vectors and the target variable \cite{awa2015}.
 
-	\item[Unsupervised] Infer hidden structures from the data set without direct feedback, such as known labels for the samples \cite{awa2015}.
+\subsubsection{Support Vector Machine}
 
-	\item[Semi-supervised] Most commonly, it is given by the extension of either supervised or unsupervised learning to include the other paradigm, resulting in a combination of both \cite{zhu2009}.
+Contained in the supervised learning category, Support Vector Machines (SVM) are powerful tools, often used in classification and regression problems.
 
-	\item[Reinforcement] Through iterative exploration, the learner is positively or negatively reinforced for its actions. The learner's goal is, ultimately, maximize the cumulative reward gained \cite{awa2015}.
-\end{description}
-
-\subsection{Support Vector Machine: An Example of Supervised Learning}
-
-The Support Vector Machine algorithm (SVM) is a is a powerful tool, often used in classification problems. Intuitively, the SVM algorithm attempts to find a hyperplane that separates the samples in a data set into two different groups: positives and negatives. Furthermore, the hyperplane is placed such that the distance between the \textbf{support vectors} (the closest samples) and it are maximized.
+Intuitively, the SVM classifier attempts to find a hyperplane that separates the samples in a data set into two different groups: positives and negatives (i.e., binary classification). Furthermore, the hyperplane is placed such that the distance between the \textbf{support vectors} (the closest samples) and it are maximized.
 
 \begin{figure}[H]
 	\centering
@@ -548,11 +554,13 @@ The Support Vector Machine algorithm (SVM) is a is a powerful tool, often used i
 	\label{fig:svmmargin}
 \end{figure}
 
-More elaborately, given any linearly separable data set $X$ containing samples from two distinguished classes $\{-1, +1\}$, consider the vector $w$ a hyperplane $d = \{x \mid w \cdot x + b = 0\}$ (represented in fig. \ref{fig:svmmargin} by the contiguous line) s.t.
-$$\text{\textbf{decision rule}} \begin{cases}
-	w \cdot u +b \geq 0 \implies y_u=+1\\
-	w \cdot u +b < 0 \implies y_u=-1\\
-\end{cases}$$
+More elaborately, given any linearly separable data set $\vect X$ containing samples from two distinguished classes $\{-1, +1\}$, consider the vector $w$ and the hyperplane $d = \{x \mid w \cdot x + b = 0\}$ (represented in fig. \ref{fig:svmmargin} by the contiguous line), a decision rule $f$ is defined as:
+\begin{align*}
+	f(x_i) = \begin{cases}
+		+1, \text{if } w \cdot x_i +b > 0 \\
+		-1, \text{otherwise.}
+	\end{cases}
+\end{align*}
 
 To prevent samples from falling into the margin or being misclassified \cite{wessvmdef}, reinforce that for any positive sample $x_+$, $w \cdot x_+ +b \geq 1$. Similarly for $x_-$ samples, $w \cdot x_- +b \leq 1$. These both constraints can be expressed as
 \begin{equation} \label{svmconst}
@@ -561,7 +569,7 @@ y_i(w \cdot x_i +b) -1 \geq 0
 
 Notice that $y_i(w \cdot x_i +b) -1 = 0 \iff x_i $ is a \textbf{support vector}.
 
-The width (the distance between the two margins) of the street is the vector $(x_+^0 -x_-^0)$ projected onto the vector $w$, where $x_-^0$ is a positive support vector and $x_+^0$ is a negative one.
+The width (the distance between the two margins) of the street is the vector $(x_+^0 -x_-^0)$ projected onto the vector $w$, where $x_+^0$ is a positive support vector and $x_-^0$ is a negative one.
 \begin{equation} \label{eq:eqsvmwidth}
 \begin{split}
 width &= (x_+^0 - x_-^0) \cdot \frac{w}{\|w\|} \\
@@ -577,15 +585,15 @@ As the goal is to maximize the width, while still respecting the constraint (\re
 
 Which can be solved using standard quadratic programming.
 
-\subsubsection{SVM for non-separable data sets (soft margins)}
+\paragraph{SVM for non-separable data sets (soft margins)}
 
-To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$ \cite{wessvmdef}, which represent a trade-off between maximum margin/distance of the misclassified samples from the decision boundary.
+To deal with non-separable data sets, it is possible to introduce the variables $\xi_i$ to the optimizing equation and decision rule \cite{wessvmdef}, which represent a trade-off between maximum margin/distance of the misclassified samples from the decision boundary.
 $$\min \frac{1}{2} \|w\|^2 + C \sum_{1}^{m}\xi_i \text{, constrained to:}$$
-$$y_i(w \cdot x_i +b) \geq 1- \xi_i, \xi_i \geq 0$$
+$$f(x_i) = y_i(w \cdot x_i +b) \geq 1- \xi_i, \xi_i \geq 0$$
 
 Such trade-off can be adjusted through the parameter $C$. Notice that small values for $C$ might result in misclassification, whereas high values can produce overfitting.
 
-\subsubsection{Dependency over the dot product}
+\paragraph{Dependency over the dot product}
 
 Equation \ref{eq:svmminw} does not explicitly illustrates how the model generated depents on the dot product between the training samples. The implications of such fact will be discussed in the next section. For now, let us convert \ref{eq:svmminw} to its dual form. By the Lagrange multipliers method \cite{mitsvm}:
 \begin{align} \label{eq:svmlag1}
@@ -613,7 +621,7 @@ $$\text{\textbf{decision rule}} \begin{cases}
 	\sum\alpha_i y_i x_i \cdot u +b < 0 \implies y_u=-1\\
 \end{cases}$$
 
-\subsubsection{Kernel functions}
+\paragraph{Kernel functions}
 
 "The kernel function represent the dot product of both vectors projected onto the new space". \cite{mitsvm}
 
@@ -649,7 +657,7 @@ The figure bellow illustrates a non-linearly separable data set defined in the $
 
 Between many different kernels, two often used are the RBF: $\exp(-\frac{\|x -x'\|^2}{2\sigma^2})$ and the Polynomial: $(u^\top v + c)^{d}$ \cite{svmkernels}.
 
-\subsection{Multi-class Classification}
+\subsubsection{Multi-class Classification}
 
 Not all problems are binary. In classification, this reflects data sets that have their samples separated into more than two classes. The Iris flower data set is an example of this, when predicting the samples' {\em species}.
 
@@ -668,6 +676,13 @@ There are many different approaches for multi-class classification \cite{rif2008
 	Or equivalently, but only using $\frac{n(n-1)}{2}$ classifiers,
 	$$ f(x) = \argmax_i{\sum_{j=1}^{n} \frac{j-i}{|j-i|} c_{\min(i, j) \max(i, j)}(x)} $$
 \end{description}
+
+\subsection{Unsupervised Learning}
+Infer hidden structures from the data set without direct feedback, such as known labels for the samples \cite{awa2015}.
+
+\subsubsection{Nearest Neighbors}
+
+...
 
 \subsection{Evaluating learners}
 
