@@ -30,7 +30,7 @@ Additionally, something interesting can be observed when analyzing the covarianc
 
 As in $K$, some data sets follow certain distributions that are majorly contained in a few orthogonal components, where a component is the result of a linear combination of the original features.
 
-Principal Component Analysis (PCA) is a statistical technique that attempts to transform a $n$-dimensional data set $X$ into a $m$-dimensional data set $Y$, where, hopefully, $k \ll n$. Furthermore, the dimensions of $Y$ will necessarily be orthogonal components aligned with the direction in which the variance of samples in $X$ is maximum, commonly referred to as \textbf{principal components} \cite{pca1989}. In figure \ref{fig:datasetrpc}, the orange and purple vectors are the principal components of the data set $K$.
+Principal Component Analysis (PCA) is a statistical technique that attempts to transform a $n$-dimensional data set $X$ into a $m$-dimensional data set $Y$, where, hopefully, $m \ll n$. Furthermore, the dimensions of $Y$ will necessarily be orthogonal components aligned with the direction in which the variance of samples in $X$ is maximum, commonly referred to as \textbf{principal components} \cite{pca1989}. In figure \ref{fig:datasetrpc}, the orange and purple vectors are the principal components of the data set $K$.
 
 \begin{figure}[H]
 	\centering
@@ -96,17 +96,17 @@ Let $D$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 
 Alternatively to PCA, Multidimensional Scaling (or simply MDS) can be used to reduce the dimensionality of a data set. The method has, however, an extensive application domain and often appears in the literature in different contexts. An example of this is the problem of, given a set of objects $O$ and a dissimilarity measurement $\delta_{rs}, \forall (r, s) \in O\times O$, finding a suitable representation in the $\mathbb{R}^n$ for the objects in $O$ \cite{cox2001}.
 
-For this project, we study the \textbf{classic MDS}. That is, when the dissimilarities considered are the euclidean distances between coordinates in the $\mathbb{R}^n$.
+For this project, we study the \textbf{classic MDS}. That is, when the dissimilarities considered are the Euclidean distances between coordinates in the $\mathbb{R}^n$, equivalating the method to PCA.
 
 \subsection{Study of the MDS}
 
-If $\delta = [\delta_{rs}]_{n\times n}$ is the dissimilarity matrix, where $\delta_{rs}$ represents the euclidean distances between two samples $x_r, x_s\in \mathbb{R}^m$ from the data set $[X]_{n\times m}$ induced by the $L2$-norm. In other words,
+Let $\delta = [\delta_{rs}]_{n\times n}$ be the dissimilarity matrix, where $\delta_{rs}$ represents the Euclidean distances between two samples $x_r, x_s\in \mathbb{R}^m$ from the data set $[X]_{n\times m}$ induced by the $L2$-norm. In other words,
 \begin{align}
 \label{eq:basemds}
 \begin{split}
   \delta_{rs}  &= \sqrt{\sum_i (x_{ri}-x_{si})^2} \\
   &\iff \\
-  \delta_{rs}^2 &= \sum_i (x_{ri}-x_{si}^2) \\
+  \delta_{rs}^2 &= \sum_i (x_{ri}-x_{si})^2 \\
   &= (x_r-x_s)\cdot (x_r-x_s) \\
   &= x_r\cdot x_r + x_s\cdot x_s -2x_r\cdot x_s
 \end{split}
@@ -200,12 +200,9 @@ Let $X$ be a data set with $n$ samples and $f$ features and $m\in\mathbb{R}$ the
 
 \section{Evaluating Reductions}
 
-``Often it is the researcher's past experience with MDS and his or her judgment that
-ultimately determine whether the fit of a particular MDS solution is acceptable or not." \cite{naes1996multivariate}
+Although the factors that determine if a reduction is acceptable or not are often influenced by particularities of the problem in hand, the researcher's past experience with MDS and his judgment \cite{naes1996multivariate}, some measures were developed to attempt to somehow formalize it. One in particular, which recurrently appears in literature, is known as the \textbf{Kruskal's stress}.
 
-Although the factors that determine what is a ``good" reduction are strongly influenced by particularities of the problem in hand, some measures were developed to attempt to somehow formalize it. One in particular, which recurrently appears in literature, is known as the \textbf{Kruskal's stress}.
-
-Intuitively, Kruskal's stress \cite{naes1996multivariate} considers reductions that preserve dissimilarities between samples a better fit that the ones which highly distort them. Formally, let $X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $Y_{n \times p}$ its reduction to $p$ dimensions, and the dissimilarity measurements $\delta_{ij}$ and $\hat{\delta}_{ij}$ defined for all samples $i$ and $j$ in $X$ and $Y$, respectively:
+Intuitively, Kruskal's stress \cite{naes1996multivariate} considers reductions that preserve dissimilarities between samples better that the ones which highly distort them. Formally, let $X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $Y_{n \times p}$ its reduction to $p$ dimensions, and the dissimilarity measurements $\delta_{ij}$ and $\hat{\delta}_{ij}$ defined for all samples $i$ and $j$ in $X$ and $Y$, respectively:
 \begin{align*}
 	Stress &= [\frac{\sum_i \sum_j (\delta_{ij} - \hat{\delta}_{ij})^2}{\sum_i \sum_j \delta_{ij}^2}]^{\frac{1}{2}}
 \end{align*}

@@ -543,7 +543,34 @@ Based on how the learning phase of a problem is, ML algorithms are mostly divide
 	\item[Reinforcement] Through iterative exploration, the learner is positively or negatively reinforced for its actions. The learner's goal is, ultimately, maximize the cumulative reward gained \cite{awa2015}.
 \end{description}
 
-ML algorithms often represent the end-point in the learning process, receiving the result of reduction algorithms as input and learning from them. In this section, we will study a small set of supervised ML algorithms. Later, we will use them to simulate how the reductions produced by ISOMAP are interpreted by real ML algorithms, when compared with the raw data.
+Regarding the nature of what is being learned, ML algorithms can be separated between:
+\begin{description}
+	\item[Classification] Each sample $\vect x$ of the data set $\vect X$ is associated with a label $y_{\vect x} \in \vect Y$, regardless if this label is known or unknown. Moreover $|\vect Y| < \infty$. The ML algorithm goal is to create a model which can infer a label to a given sample.
+	\item[Regression] Samples of the data set $\vect X$ follow a regression function $f$. The goal is to learn such function. A reasonable manner to think of it is to imagine the samples of $\vect X$ being associated with continuous labels \cite{kramer2013dimensionality}.
+\end{description}
+
+ML algorithms often represent the end-point of the learning process, receiving the result of reduction algorithms as input and learning from them instead of the raw data. In this section, we will study a small set of supervised ML algorithms. Later, we will use them to simulate how the reductions produced by ISOMAP are interpreted by real ML algorithms.
+
+\subsection{$K$-Nearest Neighbors}
+
+One might consider using the concepts of locality and proximity to perform classification or regression. $K$-Nearest Neighbors ($K$-NN) can be employed here, being possibly one of the most straight forward methods for prediction \cite{elkan2011nearest}.
+
+\subsubsection{$K$-NN Classifier}
+
+Let $\vect X$ be a data set, $\vect Y$ the array of labels possibly assumed by samples in $\vect X$, $\vect s$ a unlabeled sample and $k \ge 1$ a fixed integer. The $K$-NN classifier will determine $\vect s$'s class based on the most common class shared between $\vect s$'s closest neighbors: if $\vect X_s \subset \vect X$ is the set of neighbors of $\vect s$, consider $E_{\vect X_s}[i]$ the probability of a sample in $\vect X_s$ being associated to the label $i$. Then,
+\begin{align*}
+	y(\vect s) = \arg \max_{i \in Y} E_{\vect X_s}[i]
+\end{align*}
+
+\subsubsection{$K$-NN Regressor}
+
+Let $\vect X$ be a data set, $\vect Y$ the array of instants of the regression function, $\vect s$ a unlabeled sample and $k \ge 1$ a fixed integer.
+The $K$-NN regressor attempts to generalize the regression function by averaging the instants in $\vect Y$ associated with $\vect s$'s nearest neighbors \cite{kramer2013dimensionality}, given by $N_k(s)$:	
+\begin{align*}
+	y(\vect s) = \frac{1}{k} \sum_{\vect x \in N_k(\vect s)} y_{\vect x}
+\end{align*}
+
+In order to increase the accuracy in both classification and regression, the importance of the label/instant associated to each neighbor can be weighted by the distance $d$ between it and $\vect s$, where $d$ is defined based on the context of the problem (although the Euclidean distance is broadly employed \cite{elkan2011nearest}).
 
 \subsection{Support Vector Machine}
 
@@ -671,12 +698,12 @@ Many different kernels exist. Two which are frequently used among all of them\ci
 
 \subsubsection{Multi-class Classification}
 
-Not all problems are binary. In classification, this reflects data sets that have their samples separated into more than two classes. The Iris flower data set is an example of this, when predicting the samples' {\em species}.
+SVMs are constructed over the concept of binary separation, but not all problems are binary. In classification, this reflects data sets that have their samples separated into more than two classes. The Iris flower data set is an example of this, when predicting the samples' {\em species}.
 
 There are many different approaches for multi-class classification \cite{rif2008}. For the scope of this work, consider only the following:
 
 \begin{description}
-	\item[One-vs-All (OVA)] $n$ binary classifiers are built, where $n$ is also the number of classes in the data set. For the classifier $c^j, j \in [1, n]$, all samples of the $j$th class are taken as positive examples, at the same time that all the other samples are considered negative.
+	\item[One-vs-All (OVA)] $n$ binary classifiers are built, where $n$ is also the number of classes in the data set. For the classifier $c^j, j \in [1, n]$, all samples of the $j$th class are taken as positive samples, at the same time that all the other samples are considered negative.
 
 	If $c^j(\vect x)$, the $j$-th classification of sample $\vect x$, is defined as:
 	$$c^j(\vect x) = \sum_{i=1}^{m} \alpha_i^j y_i \vect x \cdot \vect x_i + b$$
@@ -689,13 +716,9 @@ There are many different approaches for multi-class classification \cite{rif2008
 	$$ y(\vect x) = \argmax_i{\sum_{j=1}^{n} \frac{j-i}{|j-i|} c_{\min(i, j) \max(i, j)}(\vect x)} $$
 \end{description}
 
-\subsection{$K$-Nearest Neighbors}
-
-...
-
 \subsection{Evaluating Supervised Learners}
 
-Machine Learning algorithms might be susceptible to data noise, incorrect configuration or even random factors, which would eventually decrease the generated model's accuracy. In order to evaluate this same accuracy, models are quite often tested after trained.
+Machine Learning algorithms might be susceptible to data noise, incorrect configuration or even random factors, which would eventually decrease the generated model's accuracy. Additionally, there is also the change of \textbf{overfitting}, the event where a learner performs sufficiently well over the learned data, but fails to make correct predictions over yet-unseen data. In order to evaluate this accuracy, models are quite often tested after trained.
 
 Considering that testing with the same data used for training will most likely produce unreliable results, a simple way to test a learner is to separate the labeled data set into two chunks, where the first is used for training. The second chunk is then be given to the learner, which attempts to predict the samples. Finally, the predictions made by the learner would be compared with the actual labels.
 
@@ -721,13 +744,15 @@ Naturally, a diagonal matrix represents that all samples of the class $i$ were c
 
 \subsubsection{Cross Validation}
 
-Sometimes (for example, when the data set does not have too many samples), partitioning of the data set into subsets might be malign to the learning process, as the model will be constructed only considering a small, random portion of the samples. This event is known as \textbf{underfitting}. A way to validate an set of parameters for a given algorithm is to. When $k$-fold cross-validating \cite{crossvalid}, the data set can be partitioned into $k$ folds. For each fold $k_i$, a model is trained with all folds, except for $k_i$. The model is then tested over $k_i$. Finally, the score reported by the cross-validation method is the average accuracy when testing over all folds.
+When the estimator at hand accepts different settings (``hyperparameters"), such as $k$ in $K$-NN or $C$ in the SVM, there is still a change of overfitting on the testing set, as these parameters can always be tweaked for optimal performance. In order to avoid this, a third chuck, called validation set, can be divided from the original data set and used to ``validate" the learner current settings.
+
+Sometimes, partitioning the data set into three subsets might be malign to the learning process, as the model will be constructed only considering a small, random portion of the samples (when the data set does not have too many samples, for instance). This event is known as \textbf{underfitting}. Fortunately, cross validation can be used to deal with such cases. When $k$-fold cross-validating \cite{crossvalid}, the data set can be partitioned into $k$ folds. For each fold $k_i$, a model is trained with all folds, except for $k_i$. The model is then tested over $k_i$. Finally, the score reported by the cross-validation method is the average accuracy when testing over all folds.
 
 \subsubsection{Grid Search}
 
-Machine Learning algorithms may require specific parameters to run. For instance, SVM requires $C$ and which $kernel$ it should use. Additionally, kernels might require their own parameters. As these parameters strongly affect how the generated model will be, one cannot choose them arbitrarily.
+As a learner hyperparameters strongly affect how the generated model will perform, one cannot choose them arbitrarily. Furthermore, when learners have a high number of hyperparameters, it becomes difficult to manually define a ``good" setting for them. For example, SVM requires $C$ and which $kernel$ - and the kernel's own parameters, of course - it should use.
 
-Grid Search is a traditional method used to find the parameters that optimize the generalization of learning model over a specific data set \cite{gridsearch}. Given a set of possible parameters, it will exhaustively search for the combination of those that generate the best outcome, which might be evaluated by a validation method such as cross-validation.
+Grid Search is a traditional method used to find the learner's hyperparameters that maximize accuracy optimize the generalization of learning model over a specific data set \cite{gridsearch}. Given a set of possible parameters, it will exhaustively search for the combination of those that generate the best outcome, which might be evaluated by a validation method such as cross-validation.
 
 \subsection{Examples of Learning}
 
