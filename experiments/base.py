@@ -16,14 +16,30 @@ from manifold.learning import algorithms
 
 class Experiment(metaclass=abc.ABCMeta):
     title = None
-
-    _displayer = None
     plotting = False
+    data = target = labels = None
+    _displayer = None
 
     @property
     def displayer(self):
         self._displayer = self._displayer or Displayer(plotting=self.plotting)
         return self._displayer
+
+    def _load_data(self):
+        raise NotImplementedError
+
+    def load_data(self):
+        self._load_data()
+
+        self.displayer \
+            .load(self.data, self.target) \
+            .save('datasets/%s' % self.title) \
+            .dispose()
+
+        print('Data set size: %.2f KB' % (self.data.nbytes / 1024))
+        print('Shape: %s' % str(self.data.shape))
+        print('Correlation matrix:')
+        print(np.corrcoef(self.data, rowvar=0))
 
     def _run(self):
         raise NotImplementedError
@@ -40,8 +56,7 @@ class Experiment(metaclass=abc.ABCMeta):
 
 class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
     learner = svm.SVC
-    data = target = labels = grid = None
-
+    grid = None
     verbose = False
 
     learning_parameters = [
@@ -55,7 +70,6 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
 
     def learn(self):
         print('Learning...')
-
         start = time.time()
 
         X1, X2, y1, y2 = train_test_split(self.data,
@@ -90,31 +104,30 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
 
 
 class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
-    data = original_data = target = None
-
+    original_data = None
     reducer = None
     reduction_method = 'isomap'
-    reduction_params = {
-        'k': 4,
-        'n_components': 3
-    }
-
-    verbose_reduction = True
+    reduction_params = {'k': 4, 'n_components': 3}
 
     knn = neighbors.KNeighborsClassifier(n_neighbors=1, n_jobs=-1)
     test_size = .2
 
-    def reduce(self):
+    def load_data(self):
+        super().load_data()
+
+        self.original_data = data
+
+    def reduce(self, evaluate=False, verbose=True):
         assert self.reduction_method in ('pca', 'mds', 'isomap', 'skisomap'), \
             'Error: unknown reduction method.'
 
         print('Reducing...')
 
-        to_dimension = self.reduction_params[
-            'to_dimension'] if 'to_dimension' in self.reduction_params else \
-            self.reduction_params[
-                'n_components'] if 'n_components' in self.reduction_params else \
-                3
+        to_dimension = 3
+        if 'to_dimension' in self.reduction_params:
+            to_dimension = self.reduction_params['to_dimension']
+        if 'n_components' in self.reduction_params:
+            to_dimension = self.reduction_params['n_components']
 
         data = self.original_data
 
@@ -128,12 +141,12 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             self.data = self.reducer.fit_transform(data)
 
         elif self.reduction_method == 'mds':
-            self.reducer = algorithms.MDS(verbose=self.verbose_reduction,
+            self.reducer = algorithms.MDS(verbose=verbose,
                                           **self.reduction_params)
             self.data = self.reducer.transform(data)
 
         elif self.reduction_method == 'isomap':
-            self.reducer = algorithms.Isomap(verbose=self.verbose_reduction,
+            self.reducer = algorithms.Isomap(verbose=verbose,
                                              **self.reduction_params)
             self.data = self.reducer.transform(data)
 
@@ -141,9 +154,12 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             self.reducer = manifold.Isomap(**self.reduction_params)
             self.data = self.reducer.fit_transform(data)
 
-        self.evaluate()
-        print('Done. (%.6f s)\n' % (time.time() - start))
+        if evaluate:
+            self.evaluate()
+
         self.displayer.load(self.data, self.target)
+
+        print('Done. (%.6f s)\n' % (time.time() - start))
 
     def plot_nearest_neighbors_graph(self, position='reduced'):
         """Draw Nearest Neighbor Graph.
@@ -199,3 +215,24 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
 
         print('\t1-NN score: %.2f' % self.knn.fit(X1, y1).score(X2, y2))
         print('\tsize: %f KB' % (self.data.nbytes / 1024))
+
+
+class CompleteExperiment(LearningExperiment, ReductionExperiment):
+    displaying_cycle_components = (3, 2, 1)
+    learning_cycle_components = (3, 2, 1)
+
+    def _run(self):
+        self.load_data()
+        self.evaluate()
+        self.learn()
+
+        for d in self.displaying_cycle_components:
+            self.reduction_params['n_components'] = d
+            self.reduce()
+
+        self.displayer.save(self.title)
+
+        for d in self.learning_cycle_components:
+            self.reduction_params['n_components'] = d
+            self.reduce(evaluate=True)
+            self.learn()
