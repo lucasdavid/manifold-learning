@@ -24,13 +24,13 @@ Firstly suggested by Tenenbaum, de Silva and Langfor, \textbf{Isometric Feature 
 
 As the original data set might be folded, twisted or curved \cite{ten2000}, we must first find a suitable linear representation for it.
 
-Let $S$ be our original data set, as illustrated in figure \ref{fig:mani_s}.
+Let $\vect S$ be our original data set, as illustrated in figure \ref{fig:mani_s}.
 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
 	\includegraphics[width=.5\linewidth]{datasets/s}
-	\caption{The data set $S$, consisting of $1000$ samples and $3$ features.}
+	\caption{The data set $\vect S$, consisting of $1000$ samples and $3$ features.}
 	\label{fig:mani_s}
 \end{figure}
 
@@ -49,23 +49,25 @@ Now that only distances were kept, an infinite number of $n$-dimensional embeddi
 
 At this moment, not all distances in $G'$ are defined. This can be easily handled, though, by performing the \textbf{Floyd-Warshall} algorithm over $G'$, resulting in the shortest-paths graph $G''$. Alternatively, $G''$ can be achieved by performing \textbf{Dijkstra's algorithm} for all nodes and joining all shortest-path trees found.
 
-Finally, $G''$ is a euclidean graph which roughly lies on a linear subspace. Furthermore, the adjacency matrix associated to $G''$ contains not the distance induced by the $L_2$ norm, but the geodesic pairwise distances \cite{gho2006}. The \textbf{MDS} method can now be used to construct a representation in sub-spaces of the $\mathbb{R}^n$. $S$, specifically, can be reduced to the $\mathbb{R}^2$ or $\mathbb{R}$:
+Finally, $G''$ is a euclidean graph which roughly lies on a linear subspace. Furthermore, the adjacency matrix associated to $G''$ contains not the distance induced by the $L_2$ norm, but the geodesic pairwise distances \cite{gho2006}. The \textbf{MDS} method can now be used to construct a representation in sub-spaces of the $\mathbb{R}^n$. $\vect S$, specifically, can be reduced to the $\mathbb{R}^2$ or $\mathbb{R}$:
 
 \begin{figure}[H]
     \begin{subfigure}{.5\linewidth}
 		\centering
 		\captionsetup{justification=centering}
 		\includegraphics[width=\linewidth]{studying_isomap/embedding_2}
-		\caption{$S$ reduced to two dimensions.}
+		\caption{Reduction to 2D.}
 		\label{fig:mani_s_reduced_1}
 	\end{subfigure}%
 	\begin{subfigure}{.5\linewidth}
 		\centering
 		\captionsetup{justification=centering}
 		\includegraphics[width=.63\linewidth]{studying_isomap/embedding_1}
-		\caption{$S$ reduced to one dimension.}
+		\caption{Reduction to 1D.}
 		\label{fig:mani_s_reduced_2}
 	\end{subfigure}
+	\caption{$\vect S$ reductions.}
+	\label{fig:mani_s_reduced}
 \end{figure}
 
 \newpage
@@ -151,19 +153,19 @@ In practice, ISOMAP's time complexity of $O[n^2 + n^2(k + \log n) + n^3]$ makes 
 
 \subsubsection{ISOMAP as a variation of Kernel PCA}
 
-While ``classic" PCA aims to find the principal components of the covariance matrix $\Sigma = \frac{1}{n} X^T X = \frac{1}{n} \sum_k x_{ik} \cdot x_{kj}, \forall (i, j) \in [0, |S|]^2$ of a centered data set $X$, it can be easily modified to attempt to do the same, but over the matrix $\Sigma' = \frac{1}{n} \sum_i \phi(x)_i \cdot \phi(y)_i = \frac{1}{n} \sum_i K(x, y)$, where $\phi \colon \mathbb{R}^f \to \mathbb{R}^p$ is a function that projects vectors in the original $f$-space to a different $p$-space and $K \colon \mathbb{R}^f \times \mathbb{R}^f \to \mathbb{R}$ is a kernel function. Such modification is named Kernel PCA.
+While ``classic" PCA aims to find the principal components of the covariance matrix $\vect \Sigma = \frac{1}{n} \vect X^\top \vect X = \frac{1}{n} \sum_k x_{ik} \cdot x_{kj}, \forall (i, j) \in [0, |\vect S|]^2$ of a centered data set $\vect X$, it can be easily modified to attempt to do the same, but over the matrix $\vect \Sigma' = \frac{1}{n} \sum_i \phi(x)_i \cdot \phi(y)_i = \frac{1}{n} \sum_i K(x, y)$, where $\phi \colon \mathbb{R}^f \to \mathbb{R}^p$ is a function that projects vectors in the original $f$-space to a different $p$-space and $K \colon \mathbb{R}^f \times \mathbb{R}^f \to \mathbb{R}$ is a kernel function. Such modification is named Kernel PCA.
 
 In his paper, Ghodsi describes how MDS (and therefore, ISOMAP) is equivalent to Kernel PCA, given it is using the following kernel function \cite{gho2006}:
 
 \begin{align*}
-K_{ISOMAP} = -\frac{1}{2}H \delta^2 H
+\vect K_{ISOMAP} = -\frac{1}{2}\vect{H \delta^2 H}
 \end{align*}
 
-Where $H \delta H$ is the double centered dissimilarity matrix, i.e, the double centered geodesic distances between samples found from the shortest-path graph.
+Where $\vect{H \delta^2 H}$ is the double centered squared dissimilarity matrix, i.e, the double centered squared geodesic distances between samples found from the shortest-path graph.
 
 An advantage of substituting the MDS algorithm by Kernel PCA is that the latter provides an embedding, i.e., a transformation matrix from the original space to the reduced one; whereas MDS only embeds the data set \cite{ham2004kernel}. However, Silva and Tenenbaum have shown that MDS's result can be used to reduce new samples (L-MDS) \cite{silva2002global}. More will be discussed ahead, when L-ISOMAP is presented.
 
-Figure \ref{fig:comparison_oriiso_skiso} displays the reduction of the Swiss-roll data set done by the original implementation of ISOMAP (using MDS) and scikit-learn's implementation (using Kernel PCA). Numerically, they are identical (i.e., save from difference $\delta \to 0$).
+Figure \ref{fig:comparison_oriiso_skiso} displays the reduction of the Swiss-roll data set done by the original implementation of ISOMAP (using MDS) and scikit-learn's implementation (using Kernel PCA). Numerically, they are identical (i.e., save from difference which tends to $0$).
 
 \begin{figure}[H]
 	\centering
@@ -179,33 +181,33 @@ The original ISOMAP algorithm reduces the data set in a single execution. Even i
 
 In order to allow ISOMAP to continuously learn from a stream of data, Incremental ISOMAP was proposed \cite{law2006incremental}. Relying on the fact that new data points will unlikely afect a large subset of vertices, it selectively updates the structures kept by ISOMAP. The update is performed as follows.
 
-Let $[X]_{n \times f}$ be a data set with $n$ samples and $f$ features, $\delta_{ab}$ be the dissimilarity measure between two samples $a$ and $b$, $x_i$ be a sample in the nearest neighbor graph, $x_j$ a neighbor of $x_i$ such that their dissimilarity is higher among all $x_i$'s neighbors. Additionally, let $[Y]_{n \times d}$ be the embedding of $X$ in the $d$-dimensional space. Finally, consider $x_{n+1}$ a new sample to increment in the reduction model.
+Let $[\vect X]_{n \times f}$ be a data set with $n$ samples and $f$ features, $\delta_{\vect a \vect b}$ be the dissimilarity measure between two samples $\vect a$ and $\vect b$, $\vect x_i$ be a sample in the nearest neighbor graph, $\vect x_j$ a neighbor of $\vect x_i$ such that their dissimilarity is higher among all $\vect x_i$'s neighbors. Additionally, let $[\vect Y]_{n \times d}$ be the embedding of $\vect X$ in the $d$-dimensional space. Finally, consider $\vect x_{n+1}$ a new sample to increment in the reduction model.
 
 \begin{enumerate}
-	\item The new sample $x_{n+1}$ will replace $x_j$ as a neighbor of $x_i$ if $\delta_{x_ix_{n+1}} < \delta_{x_ix_j}$. A list of added or removed edges should be stored.
+	\item The new sample $\vect x_{n+1}$ will replace $\vect x_j$ as a neighbor of $\vect x_i$ if $\delta_{\vect x_i \vect x_{n+1}} < \delta_{\vect x_i \vect x_j}$. A list of added or removed edges should be stored.
 	
 	\item The update of the shorest-path graph:
 	\begin{enumerate}
-		\item For every edge $(x_i, x_j)$ removed, the shortest-path between any two points $(x_a, x_b)$ that contains $(x_i, x_j)$ must be updated. That involves applying a slightly modified Dijsktra's algorithm, which will focus on finding the paths from a given source $u$ and its unreached destination vertices, i.e., vertices $C(u)=\{c_i\}$ whose  shortest-paths $(u, c_i)$ contained a removed edge.
+		\item For every edge $(\vect x_i, \vect x_j)$ removed, the shortest-path between any two vertices $(\vect x_a, \vect x_b)$ that contains $(\vect x_i, \vect x_j)$ must be updated. That involves applying a slightly modified Dijsktra's algorithm, which will focus on finding the paths from a given source $\vect u$ and its unreached destination vertices, i.e., vertices $C(\vect u)=\{\vect c_i\}$ whose  shortest-paths $(\vect u, \vect c_i)$ contained a removed edge.
 		
-		\item The geodesic distances between all vertices and $x_{n+1}$ must then be calculated. Let $A$ be the set of added edges:
+		\item The geodesic distances between all vertices and $\vect x_{n+1}$ must then be calculated. Let $A$ be the set of added edges:
 		\begin{align*}
 			g[n+1, i] = g[i, n+1] = \min_{j \mid (n+1, j) \in A} (g[i, j]+w(j, n+1)),\forall i.
 		\end{align*}
 		
-		All the added edges are incident on vertex $x_{n+1}$, naturally.  Calculating the shorest-path consists on considering two whichever edges $(a, x_{n+1}), (x_{n+1}, b)$ and relaxing the edge $(a, b)$ by considering the path $a \to x_{n+1} \to b$.
+		All the added edges are incident on vertex $\vect x_{n+1}$, naturally.  Calculating the shorest-path consists on considering two whichever edges $(\vect a, \vect x_{n+1}), (\vect x_{n+1}, \vect b)$ and relaxing the edge $(\vect a, \vect b)$ by considering the path $\vect a \to \vect x_{n+1} \to \vect b$.
 	\end{enumerate}
 	
-	\item Finally, the eigenvectors/eigenvalues of the inner product matrix $B_{new}$ (which contains the recently added sample $x_{n+1}$) can be found through an iterative scheme, where ``a good initial guess for the subspace of dominant eigenvectors is the column space of $Y$" \cite{law2006incremental} (the embedding before the $x_{n+1}$ increment).
-	A better eigen-space for $B_{new}$, and thus $Y_{new}$ can be found by Subspace iteration together with Rayleigh-Ritz acceleration \cite{law2006incremental}:
+	\item Finally, the eigenvectors/eigenvalues of the inner product matrix $\vect B_{new}$ (which contains the recently added sample $\vect x_{n+1}$) can be found through an iterative scheme, where ``a good initial guess for the subspace of dominant eigenvectors is the column space of $\vect Y$" \cite{law2006incremental} (the embedding before the $\vect x_{n+1}$ increment).
+	A better eigen-space for $\vect B_{new}$, and thus $\vect Y_{new}$ can be found by Subspace iteration together with Rayleigh-Ritz acceleration \cite{law2006incremental}:
 	\begin{enumerate}
-		\item Let $Z = B_{new}Y$. Perform QR-decomposition on $Z$: $Z = B_{new}Y = QR$.
+		\item Let $\vect Z = \vect B_{new} \vect Y$. Perform QR-decomposition on $\vect Z$: $\vect{Z = B_{new}Y = QR}$.
 		
-		\item Take $V=Q$ (remember that Q is intrinsically an orthogonal matrix) and $Z^*=V^TB_{new}V$. Perform spectral-decomposition of $[Z^*]_{d \times d}$ to find $\Lambda = diag(\lambda_i)$ and $V = [v_i]_{d \times d}$. This is significantly faster than directly decomposing $B_{new}$, considering the dimensions of both matrices. 
+		\item Take $\vect{V=Q}$ (remember that $\vect Q$ is intrinsically an orthogonal matrix) and $\vect{Z^*=V^\top} \vect B_{new} \vect V$. Perform spectral-decomposition of $[\vect Z^*]_{d \times d}$ to find $\vect \Lambda = diag(\lambda_i)$ and $\vect V = [\vect v_i]_{d \times d}$. This is significantly faster than directly decomposing $\vect B_{new}$, considering the dimensions of both matrices. 
 
-		\item $Y_{new} = [Y, y_{n+1}]^T$, where $y_{n+1}$ is the $d$-dimensional embedding of $x_{n+1}$:
+		\item $\vect Y_{new} = [\vect Y, \vect y_{n+1}]^\top$, where $\vect y_{n+1}$ is the $d$-dimensional embedding of $\vect x_{n+1}$:
 		\begin{align*}
-			y_{n+1} &= (\frac{1}{\sqrt{\lambda_1}} v_1 \cdot f, \dots, \frac{1}{\sqrt{\lambda_d}} v_d \cdot f) \\
+			\vect y_{n+1} &= (\frac{1}{\sqrt{\lambda_1}} v_1 \cdot f, \dots, \frac{1}{\sqrt{\lambda_d}} v_d \cdot f) \\
 			2f_i &\approx \frac{1}{n}[\sum_j g_{ij}^2 - \sum_{lj} g_{lj}^2 + \sum_l g_{l, n+1}^2] -g_{i, n+1}^2
 		\end{align*}
 	\end{enumerate}
@@ -220,21 +222,21 @@ ISOMAP's time complexity dependents mainly on the number of samples. Remember: f
 
 Landmark ISOMAP aims to reduce the complexity of the algorithm by finding the dissimilarities between $n$ landmarks (a small subset of samples) and all the original samples. Its complexity can then be reduced to $O[n^2(\log N + k) + n^2N]$. If $n \ll N$, this represents a expressive performance improvement \cite{silva2002global}.
 
-Let $X$ be the initial data set of interest, $l$ be the dimensionality to which $X$ should be reduced and $\epsilon > 0 \in \mathbb{N}$ a number to ``ensure stability" \cite{silva2002global}. L-ISOMAP is defined as it follows.
+Let $\vect X$ be the initial data set of interest, $l$ be the dimensionality to which $\vect X$ should be reduced and $\epsilon > 0 \in \mathbb{N}$ a number to ``ensure stability" \cite{silva2002global}. L-ISOMAP is defined as it follows.
 
 \begin{enumerate}
-	\item Select $n$ random samples from $X$, such that $n > l + 1 + \epsilon$.
+	\item Select $n$ random samples from $\vect X$, such that $n > l + 1 + \epsilon$.
 	\item Calculate the nearest-neighbors of each selected samples (all the original samples should be considered as neighbors).
-	\item Calculate the shortest-paths from the neighborhood graph obtained in the previous step and the dissimilarity matrix $[\delta]_{n \times N}$.
+	\item Calculate the shortest-paths from the neighborhood graph obtained in the previous step and the dissimilarity matrix $[\vect \delta]_{n \times N}$.
 	\item Perform Landmark MDS, a slightly modified MDS:
 	\begin{enumerate}
-		\item Apply classical MDS to the submatrix of landmarks $[\delta]_{n \times n}$.
+		\item Apply classical MDS to the submatrix of landmarks $[\vect \delta]_{n \times n}$.
 		\item Embbed the remaining points through:
 		\begin{align*}
-			y &= -\frac{1}{2} L^{-1}  (\Delta_x - \bar{\Delta}_n)\\		
-			y &= -\frac{1}{2} \colvec{4}{\frac{v_1^T}{\sqrt{\lambda_1}}}{\frac{v_2^T}{\sqrt{\lambda_2}}}{\dots}{\frac{v_n^T}{\sqrt{\lambda_n}}} (\Delta_x - \bar{\Delta}_n)\\
-		\end{align*}
-		Where $\Delta_x$ is the square dissimilarity column vector from sample $x$ to all landmarks and $\bar{\Delta}_n$ the vector containing the column mean of $\Delta_n$ (the square dissimilarity matrix between landmarks).
+			\vect y &= -\frac{1}{2} L^{-1}  (\vect \Delta_x - \bar{\vect \Delta}_n)\\		
+			\vect y &= -\frac{1}{2} \colvec{4}{\frac{v_1^T}{\sqrt{\lambda_1}}}{\frac{v_2^T}{\sqrt{\lambda_2}}}{\dots}{\frac{v_n^T}{\sqrt{\lambda_n}}} (\vect \Delta_x - \bar{\vect \Delta}_n)\\
+        \end{align*}
+		Where $\vect \Delta_x$ is the square dissimilarity column vector from sample $\vect x$ to all landmarks and $\bar{\vect \Delta}_n$ the vector containing the column mean of $\vect \Delta_n$ (the square dissimilarity matrix between landmarks).
 	\end{enumerate}
 \end{enumerate}
 
@@ -244,39 +246,38 @@ The embedding found by ISOMAP is strongly depentend of the parameters $k$ or $\e
 
 p-ISOMAP is an extension that automatically selects the parameters $k$ or $\epsilon$ \cite{choo2010p}. Assuming an result of ISOMAP for a particular parameter value is available, a new parameter will be considered and p-ISOMAP will iteratively update the soluton by:
 \begin{enumerate}
-	\item Adding/removing neighbors for every vertex in the neighborhood graph regarding the new parameter. This operation has time complexity $O(n \max_i |\Delta e_i|)$, where $|\Delta e_i|$ is the number of inserted/removed edges associated with sample $x_i$.
+	\item Adding/removing neighbors for every vertex in the neighborhood graph regarding the new parameter. This operation has time complexity $O(n \max_i |\vect \Delta e_i|)$, where $|\vect \Delta e_i|$ is the number of inserted/removed edges associated with sample $\vect x_i$.
 	
 	\item Update the shortest-paths described by the pairs of vertices in $F \subset Q$, where $Q$ is the set of all pairs of vertices and $F$ is the set of pairs associated with the updated edges in the previous step.
 	\begin{enumerate}
-		\item	If the parameter value increased in comparison to the previous one, edges might have been added. Updating the shortest-path tree consists in simply relaxing edges associated with any of the vertices in the pairs of $F$. The time complexity is loosely bounded by $O(|A|q|F|)$, where $|A|$ is the number of inserted edges and $q$ is the maximum degree of vertices in G.
+		\item If the parameter value increased in comparison to the previous one, edges might have been added. Updating the shortest-path tree consists in simply relaxing edges associated with any of the vertices in the pairs of $F$. The time complexity is loosely bounded by $O(|A|q|F|)$, where $|A|$ is the number of inserted edges and $q$ is the maximum degree of vertices in G.
 		
-		\item If the parameter was decreased, then edges might have been removed and all pairs of vertices whose shortest-paths contain those edges are added to $F$. Identifying $F$ can be done in $O(n^2)$ times steps to execute, given some optimzation (see \cite{choo2010p}). Now, Dijkstra's can be selectively performed, requiring $O(n \max_i (|E_i'| \log |V_d(i)| + |E_i''|)$, where, given a vertex $x_i$, $V_d(i)=\{x_j | (x_i, x_j) \in F\}$, $E_i'$ is the set of edges connecting whichever pair of vertices in $V_d(i)$ and $E_i''$ is the set of edges connecting the vertices $x_a$ and $x_b$ such that $x_a$ is in $V_d(i)$ and $x_b$ is not.
+		\item If the parameter was decreased, then edges might have been removed and all pairs of vertices whose shortest-paths contain those edges are added to $F$. Identifying $F$ can be done in $O(n^2)$ times steps to execute, given some optimzation (see \cite{choo2010p}). Now, Dijkstra's can be selectively performed, requiring $O(n \max_i (|E_i'| \log |V_d(i)| + |E_i''|)$, where, given a vertex $\vect x_i$, $V_d(i)=\{\vect x_j | (\vect x_i, \vect x_j) \in F\}$, $E_i'$ is the set of edges connecting whichever pair of vertices in $V_d(i)$ and $E_i''$ is the set of edges connecting the vertices $\vect x_a$ and $\vect x_b$ such that $\vect x_a$ is in $V_d(i)$ and $\vect x_b$ is not.
 	\end{enumerate}
 
-	\item Finally, the last step is to update the eigenvectors and eigenvalues associated with the matrix $B$. They can be approximated using the Lanczos algorithm, an iterative refining method that takes an initial solution candiadate. Officially, the time complexity of Lanczoz algorithm is $O(n^2)$ \cite{chen2004machine}. Yet, its timeframe for convergence also strongly depends on the solution candidate given. Assuming the previous inner matrix and the current one are similar, one might use the previous eigenvalues/vectors found as candidate. In this scenario, Lanczoz's will likely finish much faster than other algorithms.
+	\item Finally, the last step is to update the eigenvectors and eigenvalues associated with the matrix $\vect B$. They can be approximated using the Lanczos algorithm, an iterative refining method that takes an initial solution candiadate. Officially, the time complexity of Lanczoz algorithm is $O(n^2)$ \cite{chen2004machine}. Yet, its timeframe for convergence also strongly depends on the solution candidate given. Assuming the previous inner matrix and the current one are similar, one might use the previous eigenvalues/vectors found as candidate. In this scenario, Lanczoz's will likely finish much faster than other algorithms.
 \end{enumerate}
 
-The experiments presented in \cite{choo2010p} have shown p-ISOMAP consistently maintaining a better performance than regular ISOMAP for data sets with a samples count varying between 500 and 3500.
-Additionally, the experiments have also demonstrated how p-ISOMAP performance is sensible to high variances of $K$ and $\epsilon$ values.
+The experiments presented in \cite{choo2010p} have shown p-ISOMAP consistently maintaining a better performance than regular ISOMAP for data sets with a samples count varying between 500 and 3500. Additionally, the experiments have also demonstrated how p-ISOMAP performance is sensible to high variances of $k$ and $\epsilon$ values.
 
 \subsection{Evaluating Reductions}
 
 ISOMAP's aim is to ``unfold" the data set and, of course, it might distort dissimilarities between samples in the process. Hence drastically increasing Kruskal's stress. Clearly, this measure is unsuitable for evaluating ISOMAP. As proposed by L. Shi and J. Gu, Kruskal's stress can be easily updated to match ISOMAP nature. That is, to preserve dissimilarities within neighborhoods \cite{shi2012fast}:
 
-Let $X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $Y_{n \times p}$ its reduction to $p$ dimensions, and $\delta_{ij}$ and $\hat{\delta}_{ij}$ the dissimilarity measurements defined for all samples $i$ and $j$ in both $X$ and $Y$. Furthermore, given a sample $i$ and $\beta \in \mathbb{N} \mid \beta \le n$, take $\Omega=K \bigcup \Theta$, where $K$ is the set containing the nearest neighbors of $i$ and $\Theta$ is a set of random samples such that $|\Theta| \le \beta \le n$:
+Let $\vect X_{n \times f}$ be a data set with $n$ samples and $f$ dimensions, $\vect Y_{n \times p}$ its reduction to $p$ dimensions, and $\delta_{ij}$ and $\hat{\delta}_{ij}$ the dissimilarity measurements defined for all samples $\vect i$ and $\vect j$ in both $\vect X$ and $\vect Y$. Furthermore, given a sample $\vect i$ and $\beta \in \mathbb{N} \mid \beta \le n$, take $\Omega=K \bigcup \Theta$, where $K$ is the set containing the nearest neighbors of $i$ and $\Theta$ is a set of random samples such that $|\Theta| \le \beta \le n$:
 \begin{align*}
 	Stress_{ISOMAP} &= [\frac{\sum_i \sum_{j \in \Omega} (\delta_{ij} - \hat{\delta}_{ij})^2}{\sum_i \sum_{j \in \Omega} \delta_{ij}^2}]^{\frac{1}{2}}
 \end{align*}
 
 \subsection{Applicability and Limitations}
 
-It is quite clear that ISOMAP outperforms PCA on the data set $S$. Unfortunately, this cannot be projected for a generic case considering the strict and artificial nature of $S$. In real-world data sets, the application of ISOMAP may lead to poor low-dimensional embeddings \cite{herik2009}. Bellow are listed some of the issues that have great influence over ISOMAP's results:
+From figure \ref{fig:mani_s_reduced} and the experiment shown in section \ref{sec:experiments}, it is quite clear that ISOMAP outperforms PCA on the data set $\vect S$. Unfortunately, this cannot be projected for a generic case considering the strict and artificial nature of $\vect S$. In real-world data sets, the application of ISOMAP may lead to poor low-dimensional embeddings \cite{herik2009}. Bellow are listed some of the issues that have great influence over ISOMAP's results:
 \begin{description}
 	\item[Manifold Assumption] It refers to the initial assumption that the data lies on a low-dimensional manifold. Although wildly exploited by many authors, it is difficult to assert whether such assumption holds or not in real-world data sets \cite{lin2008riemannian}. Furthermore, even if the data roughly lies on a manifold, discontinuities in the data pattern can characterize the manifold as non-smooth. In these situations, graphs with edges that disrespect locality would be extracted and, hence, poor low-dimensional representations are likely to be produced.
 
 	\newpage
 
-	\item[Manifold Convexity] "ISOMAP relies on the data being geodesically convex." \cite{donoho2002does} This issue becomes clear when dealing with data sets with ``holes" in it that occupy sufficiently large areas, resulting in a neighborhood graph with great disconnected areas that require paths with great curvature to get around. Lerman demonstrated how reducing non-convex data sets with ISOMAP can easily yield distorted results \cite{lerman2005}:
+	\item[Manifold Convexity] ISOMAP assumes that the data is geodesically convex \cite{donoho2002does}. This issue becomes clear when dealing with data sets with ``holes" in it that occupy sufficiently large areas, resulting in a neighborhood graph with great disconnected areas that require paths with great curvature to get around. Lerman demonstrated how reducing non-convex data sets with ISOMAP can easily yield distorted results \cite{lerman2005}:
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[H]{.45\linewidth}
@@ -302,7 +303,7 @@ It is quite clear that ISOMAP outperforms PCA on the data set $S$. Unfortunately
 	\newpage
 	\item[Noise] Noise in data is expressed by samples that somehow diverge from their neighborhood (outliers). As these samples become farthest from its original neighborhood, the chances of being linked to samples from other neighborhood increase, possibly decreasing the quality of the solution. A possible solution is to remove these samples during the pre-processing stage \cite{herik2009}.
 
-	The image bellow illustrates an attempt to use ISOMAP to reduce the $M_{n=.4}$, which is the Swiss-roll data set subjected to a noise factor of $.8$:
+	The image bellow illustrates an attempt to use ISOMAP to reduce the $\vect Swiss_{n=.4}$, which is the Swiss-roll data set subjected to a noise factor of $.8$:
 
 	\begin{figure}[H]
 		\centering
@@ -310,13 +311,13 @@ It is quite clear that ISOMAP outperforms PCA on the data set $S$. Unfortunately
 			\centering
 			\includegraphics[width=\linewidth]{img/noise/sr/1}
 			\captionsetup{justification=centering}
-			\caption{The data set $M_{n=.8}$.}
+			\caption{The data set $\vect Swiss_{n=.8}$.}
 		\end{subfigure}~
 		\begin{subfigure}{.40\linewidth}
 			\centering
 			\includegraphics[width=\linewidth]{img/noise/sr/3}
 			\captionsetup{justification=centering}
-			\caption{The neighborhood graph extracted from $M_{n=.8}$.}
+			\caption{The neighborhood graph extracted from $\vect Swiss_{n=.8}$.}
 			\label{fig:noise_3}
 		\end{subfigure}
 		\newline\newline\newline
@@ -324,7 +325,7 @@ It is quite clear that ISOMAP outperforms PCA on the data set $S$. Unfortunately
 			\centering
 			\includegraphics[width=\linewidth]{img/noise/sr/2}
 			\captionsetup{justification=centering}
-			\caption{$M_{n=.8}$ reduced.}
+			\caption{$\vect Swiss_{n=.8}$ reduced.}
 			\label{fig:noise_2}
 		\end{subfigure}
 		\captionsetup{justification=centering}

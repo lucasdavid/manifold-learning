@@ -1,22 +1,22 @@
 \chapter{Experiments}
+\label{sec:experiments}
 
 This chapter will cover the experiments implemented throughout this project, which focused on reducing data sets with the presented algorithms and evaluating these reductions. Once again, it is quite difficult to evaluate reductions, but a set of metrics were adopted to attempt to understand them as much as possible. All experiments follow the format bellow:
 
-Let $X_{n \times f}$ be a data set with $n$ samples and $f$ features, and $D \subset \mathbb{N} \mid d \in D \implies d \le f$ a  set of dimensions to which $X$ should be reduced.
+Let $\vect X_{n \times f}$ be a data set with $n$ samples and $f$ features, and $\vect D \subset \mathbb{N} \mid d \in \vect D \implies d \le f$ a  set of dimensions to which $\vect X$ should be reduced.
 
 \begin{enumerate}
-	\item The data set $X$ is loaded and its first three features are plotted, given an initial idea of how the data is distributed for those features.
-	\item $X$ is reduced to 3, 2 and 1 dimensions. Each reduction is plotted for visualization.
-	\item Kruskal's stress is calculated for $X$.
-	\item A 1-NN classifier or regressor is trained with 80\% of $X$'s samples and tested with the other 20\%. The score is kept for future reference.
-	%TODO Talk about r2_score and class_score.
-	\item Grid search is executed over $X$ using a SVM classifier or regressor. This step evaluates how a ``real world" algorithm would perform over the original data set.
-	\item for $d \in D$:
+	\item The data set $\vect X$ is loaded and its first three features are plotted, given an initial idea of how the data is distributed for those features.
+	\item $\vect X$ is reduced to 3, 2 and 1 dimensions. Each reduction is plotted for visualization.
+	\item Kruskal's stress is calculated for $\vect X$.
+	\item In an attempt to evaluate local dissimilarity preservation, a 1-NN classifier or regressor is trained with 80\% of $\vect X$'s samples and tested with the other 20\%. The score is kept for future reference.
+	\item Grid search is executed over $\vect X$ using a SVM classifier or regressor. This step evaluates how a ``real world" algorithm would perform over the original data set.
+	\item for $d \in \vect D$:
 	\begin{enumerate}
-		\item $X$ is embbeded into the $\mathbb{R}^d$, creating the data set $Y_{n \times d}$.
-		\item Kruskal's stress is calculated for $Y$.
+		\item $\vect X$ is embedded into the $\mathbb{R}^d$, creating the data set $\vect Y_{n \times d}$.
+		\item Kruskal's stress is calculated for $\vect Y$.
 		\item A 1-NN classifier or regressor is trained with the same samples used in step 4, and tested with all the others. The score is compared to the one retrieved in step 4.
-		\item Grid Search is executed over $Y$ and the score is compared to the one presented in step 5.
+		\item Grid Search is executed over $\vect Y$ and the score is compared to the one presented in step 5.
 	\end{enumerate}
 \end{enumerate}
 
@@ -25,7 +25,7 @@ Let $X_{n \times f}$ be a data set with $n$ samples and $f$ features, and $D \su
 
 \subsection{$K$ Data Set}
 
-The figure bellow illustrates the results of PCA algorithm application over the artificial $K$ data set. Notice that, for the second application, it correctly chose to discard the vertical dimension, as the samples offer less variability in this component.
+The figure bellow illustrates the results of PCA algorithm application over the synthetic data set $\vect K$. Notice that, for the second application, it correctly chose to discard the vertical dimension, as the samples offer less variability in this component.
 
 \begin{figure}[H]
 	\centering
