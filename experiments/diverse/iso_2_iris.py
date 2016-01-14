@@ -1,4 +1,3 @@
-import numpy as np
 from sklearn import datasets
 
 from experiments.base import CompleteExperiment
@@ -15,6 +14,7 @@ class IrisIsomapExperiment(CompleteExperiment):
         iris = datasets.load_iris()
         self.data = iris.data
         self.target = iris.target
+        self.feature_names = iris.feature_names[:3]
 
 
 if __name__ == '__main__':

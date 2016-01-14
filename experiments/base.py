@@ -6,8 +6,9 @@ import networkx as nx
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 from sklearn import neighbors, decomposition, svm, manifold
+from sklearn.cross_validation import train_test_split
+from sklearn.grid_search import GridSearchCV
 from sklearn.metrics import confusion_matrix
-from sklearn.model_selection import train_test_split, GridSearchCV
 
 from manifold.infrastructure import Displayer
 from manifold.infrastructure.base import kruskal_stress, class_stress
@@ -17,7 +18,7 @@ from manifold.learning import algorithms
 class Experiment(metaclass=abc.ABCMeta):
     title = None
     plotting = False
-    data = target = labels = None
+    data = target = labels = feature_names = None
     _displayer = None
 
     @property
@@ -32,7 +33,7 @@ class Experiment(metaclass=abc.ABCMeta):
         self._load_data()
 
         self.displayer \
-            .load(self.data, self.target) \
+            .load(self.data, self.target, axis_labels=self.feature_names) \
             .save('datasets/%s' % self.title) \
             .dispose()
 
@@ -79,9 +80,9 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
             else (self.data, None, self.target, None)
 
         self.grid = GridSearchCV(self.learner(),
-                                                 self.learning_parameters,
-                                                 n_jobs=-1,
-                                                 verbose=self.verbose)
+                                 self.learning_parameters,
+                                 n_jobs=-1,
+                                 verbose=self.verbose)
         self.grid.fit(X1, y1)
 
         print('\tGrid accuracy: %.6f' % self.grid.best_score_)
@@ -115,7 +116,7 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
     def load_data(self):
         super().load_data()
 
-        self.original_data = data
+        self.original_data = self.data
 
     def reduce(self, evaluate=False, verbose=True):
         assert self.reduction_method in ('pca', 'mds', 'isomap', 'skisomap'), \
@@ -173,7 +174,8 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
         assert position in (
             'original', 'reduced'), 'Unknown position %s.' % position
         assert self.data is not None or position != 'reduced', \
-            'Position cannot be "reduced", as reduction has not been performed yet.'
+            'Position cannot be "reduced", as reduction has not ' \
+            'been performed yet.'
 
         print('Plotting Nearest Neighbors...')
         print('\tposition: %s' % position)
@@ -217,7 +219,8 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
         print('\tsize: %f KB' % (self.data.nbytes / 1024))
 
 
-class CompleteExperiment(LearningExperiment, ReductionExperiment):
+class CompleteExperiment(LearningExperiment, ReductionExperiment,
+                         metaclass=abc.ABCMeta):
     displaying_cycle_components = (3, 2, 1)
     learning_cycle_components = (3, 2, 1)
 

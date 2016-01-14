@@ -9,7 +9,7 @@ import numpy as np
 Axes3D
 
 
-class Displayer(object):
+class Displayer:
     colors = [plt.cm.rainbow]
 
     def __init__(self, **kwargs):
@@ -17,8 +17,8 @@ class Displayer(object):
         self.rows = kwargs.pop('rows', None)
         self.columns = kwargs.pop('columns', None)
         self.parent_is_plotting = kwargs.pop('plotting', True)
-        self.saving_folder = kwargs.pop('folder',
-                                        '/home/ldavid/Desktop/reports')
+        self.saving_folder = kwargs.pop('folder', 'D:/reports')
+        self.colors = kwargs.pop('colors', self.colors)
 
         self.parameters = ', '.join(
             ['%s: %s' % (k, str(v)) for k, v in kwargs.items()])
@@ -93,11 +93,11 @@ class Displayer(object):
 
             if axis_labels:
                 if len(axis_labels) > 0:
-                    ax.set_xlabel(axis_labels[0], linespacing=2)
+                    ax.set_xlabel('\n%s' % axis_labels[0], linespacing=3)
                 if len(axis_labels) > 1:
-                    ax.set_ylabel(axis_labels[1], linespacing=2)
+                    ax.set_ylabel('\n%s' % axis_labels[1], linespacing=3)
                 if len(axis_labels) > 2:
-                    ax.set_zlabel(axis_labels[2], linespacing=0)
+                    ax.set_zlabel('\n%s' % axis_labels[2], linespacing=0)
 
             ax.scatter(*components, **{
                 'c': color,

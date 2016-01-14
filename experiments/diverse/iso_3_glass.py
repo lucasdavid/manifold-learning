@@ -1,7 +1,5 @@
-import numpy as np
-
-from manifold.infrastructure import Retriever
 from experiments.base import CompleteExperiment
+from manifold.infrastructure import Retriever
 
 
 class GlassIsomapExperiment(CompleteExperiment):

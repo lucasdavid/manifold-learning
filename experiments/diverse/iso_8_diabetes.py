@@ -1,5 +1,5 @@
-import numpy as np
-from sklearn import datasets, svm
+import matplotlib.pyplot as plt
+
 from experiments.base import CompleteExperiment
 from manifold.infrastructure import Retriever
 
@@ -17,8 +17,13 @@ class DiabetesIsomapExperiment(CompleteExperiment):
 
     def _load_data(self):
         r = Retriever('../../datasets/diabetes/pima-indians-diabetes.data',
-            delimiter=',')
+                      delimiter=',')
         self.data, self.target = r.split_target().retrieve()
+        self.feature_names = ['Number of times pregnant',
+                              'Plasma glucose concentration',
+                              'Diastolic blood pressure (mm Hg)']
+
+        self.displayer.colors = [plt.cm.viridis]
 
 
 if __name__ == '__main__':

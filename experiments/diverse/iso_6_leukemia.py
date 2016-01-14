@@ -1,4 +1,4 @@
-from sklearn import datasets, neighbors, model_selection
+from sklearn import datasets, neighbors
 from experiments.base import CompleteExperiment
 
 
@@ -24,6 +24,8 @@ class LeukemiaExperiment(CompleteExperiment):
     def _load_data(self):
         leukemia = datasets.fetch_mldata('leukemia', transpose_data=True)
         self.data, self.target = leukemia.data, leukemia.target
+
+        self.feature_names = ['A', 'B', 'C']
 
 
 if __name__ == '__main__':

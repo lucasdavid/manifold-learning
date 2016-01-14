@@ -1,4 +1,3 @@
-import numpy as np
 from experiments.base import CompleteExperiment
 from manifold.infrastructure import Retriever
 
@@ -21,6 +20,7 @@ class BreastCancerExperiment(CompleteExperiment):
         # we had the ids removed, it's now in the 1st one.
         self.data, self.target = r.split_target(0).retrieve()
         self.data = self.data.astype(float)
+        self.feature_names = ['radius', 'texture', 'perimeter']
 
 
 if __name__ == '__main__':

@@ -1,4 +1,3 @@
-import numpy as np
 from sklearn import datasets, svm, neighbors
 
 from experiments.base import CompleteExperiment
@@ -13,12 +12,15 @@ class SwissRollExperiment(CompleteExperiment):
 
     learner = svm.SVR
     learning_parameters = [
-        {'C': (1, 10, 100), 'kernel': ('linear',)},
         {'C': (1, 10, 100), 'gamma': (.01, .1), 'kernel': ('rbf',)}
     ]
 
+    displaying_cycle_components = (2, 1)
+    learning_cycle_components = (2, 1)
+
     def _load_data(self):
         self.data, self.target = datasets.make_swiss_roll(1000, random_state=0)
+        self.feature_names = ['A', 'B', 'C']
 
 
 if __name__ == '__main__':
