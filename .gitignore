@@ -112,10 +112,10 @@ report/*.bbl
 report/*.blg
 report/*.lof
 report/*.lot
+report/*.dvi
 report/_minted-report/
 
 *~
 
 *.gummi
 *.tex.swp
-
