@@ -23,10 +23,8 @@ The table bellow illustrates an example of data set, where each row represents a
 		3 & 4.7 & 3.2 & 1.3 & 0.2 & I. setosa \\
 		… & … & … & … & … & … \\
 	\end{tabular}
-	\caption{The first three samples of the Iris flower data set \protect\footnotemark.}
+	\caption{The first three samples of the Iris flower data set \cite{lichman2013}.}
 \end{table}
-
-\footnotetext{Retrieved from \href{https://archive.ics.uci.edu/ml/datasets/Iris}{archive.ics.uci.edu}}
 
 Iris flower is an example of data set broadly used in machine learning demonstrations, being usually interpreted as a classification problem where the feature {\em Species} will be learned from its adjacent features. In that scenario, {\em Species} is denominated \textbf{target feature}.
 
@@ -54,10 +52,8 @@ A data set can have each one of its nominal features enumerated, i.e., mapped to
 		… & … & … & … & … & … & … & … & … & … & … & … \\
 	\end{tabular}
 
-	\caption{The first three samples of the Indian Liver Patient Dataset (ILPD) \protect\footnotemark}
+	\caption{The first three samples of the Indian Liver Patient Dataset (ILPD) \cite{lichman2013}.}
 \end{table}
-
-\footnotetext{Retrieved from \href{https://archive.ics.uci.edu/ml/datasets/ILPD+(Indian+Liver+Patient+Dataset)}{archive.ics.uci.edu}}
 
 Composed by 583 samples and 11 features, the data set ILPD has a nominal feature $Gender \coloneqq \{Male, Female\}$. {\em Gender} can, of course, be mapped on $\{0, 1\}$. ILPD can finally be expressed by the figure bellow:
 
@@ -86,11 +82,9 @@ Differently from Iris flower or ILPD data set, data sets associated with modern 
 		… & … & … & … & … & ... \\
 		72 & -0.455835 & -0.071517 & ... & -0.068667 & 1\\
 	\end{tabular}
-	\caption{The Leukemia data set, with 72 samples and 7130 features \protect\footnotemark.}
+	\caption{The Leukemia data set, with 72 samples and 7130 features \cite{lichman2013}.}
 	\label{tb:ds_leukemia}
 \end{table}
-
-\footnotetext{Available at: \href{http://mldata.org/repository/data/viewslug/leukemia/}{mldata.org}.}
 
 In many cases, there are indicatives that the data set lie near a lower-dimensional manifold embedded in the $\mathbb{R}^n$ \cite{gho2006}; that is, there is a smaller set of features which roughly express the information within. A second encouragement can then be set: it is possible that the data set might be shrunk by combining similar (linearly dependent) features or eliminating the ones that poorly contribute towards the learning process. In order to do this, one must be able to qualify the “contribution” of each feature or even identify dependencies between features.
 
@@ -237,7 +231,7 @@ Formally, a set $M$ is said to be a \textbf{$n$-dimensional topological manifold
 	\label{fig:mani_torus}
 \end{figure}
 
-\footnotetext{Retrieved from \href{Weisstein, Eric W. "Torus." From MathWorld--A Wolfram Web Resource. http://mathworld.wolfram.com/Torus.html}{mathworld.wolfram.com/Torus}}
+\footnotetext{From ``Torus," by E. W. Weisstein, \textit{MathWorld--A Wolfram Web Resource}. Available at: \href{http://mathworld.wolfram.com/Torus.html}{mathworld.wolfram.com/Torus.html}.}
 
 From now on in this report, we will use the word manifold to refer to a $n$-dimensional topological manifold.
 
@@ -253,7 +247,7 @@ The pair $(U_i, \phi_i)$ is called a \textbf{coordinate chart} or \textbf{chart}
 	\label{fig:mani_charts}
 \end{figure}
 
-\footnotetext{Retrieved from \href{https://en.wikipedia.org/wiki/Manifold}{wiki/Manifold/Charts}}
+\footnotetext{From ``Manifold," \textit{Wikipedia - The Free Encyclopedia}. Available at: \href{https://en.wikipedia.org/wiki/Manifold}{wikipedia.org/wiki/Manifold}.}
 
 \subsubsection{Atlas}
 A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a manifold $M$ if $\cup_{i \in A} U_i = M$ \cite{lee2002}.
@@ -279,9 +273,7 @@ A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a man
 
 When talking about the relationship between two topological objects, such as two vector spaces, manifolds or graphs (section \ref{sec:graphs}); it is interesting to imagine a mapping from one object to the other that somehow preserves its original properties.
 
-Let $A$ and $B$ be two topological objects of the same type, a function $\phi \colon A \to B$ is an embedding of A into B if $\phi$ is an isomorphism which preserves the original algebric properties of A \cite{burris2011course}. Shortly, A is said to be \textit{embedded} in B.
-
-% TODO : example of embedding.
+Let $A$ and $B$ be two topological objects of the same type, a function $\phi \colon A \to B$ is an embedding of A into B if $\phi$ is an isomorphism which preserves the original properties of A \cite{burris2011course}, where such properties are relative to the type of the objects at hand. Shortly, A is said to be \textit{embedded} in B.
 
 \section{Graph Theory}
 \label{sec:graphs}
@@ -299,7 +291,7 @@ Let $G$ be the pair $(V, E)$. $G$ is defined as a \textbf{graph} \cite{berge1973
 	\caption{An example of a graph \protect\footnotemark.}
 \end{figure}
 
-\footnotetext{Source: \href{http://people.brunel.ac.uk/~mastjjb/jeb/or/graph.html}{brunel.ac.uk/~mastjjb}.}
+\footnotetext{From ``OR-Notes," by J. E. Beasley. Available at: \href{http://people.brunel.ac.uk/~mastjjb/jeb/or/graph.html}{brunel.ac.uk/~mastjjb/jeb/or/graph.html}.}
 
 \subsubsection{Basic Concepts \cite{berge1973}}
 \begin{description}
@@ -329,8 +321,8 @@ Let $G$ be the pair $(V, E)$. $G$ is defined as a \textbf{graph} \cite{berge1973
 		\label{fig:graph}
 	\end{figure}
 	
-	\footnotetext{Retrieved from \href{https://github.com/Comp-UFSCar/graph-theory}{gihut.com/Comp-UFSCar/graph-theory}.}
-
+	\footnotetext{From ``Graph Theory," by L. David, 2012. Available at: \href{https://comp-ufscar.github.io/graph-theory}{comp-ufscar.github.io/graph-theory}.}
+	
 	\item[Complete graph] A graph $G=(V, E)$ is said to be complete if
 	$$\forall (x, y)\in E, x\ne y, m_G(x, y) \ge 1$$
 
@@ -349,9 +341,11 @@ Let $G$ be the pair $(V, E)$. $G$ is defined as a \textbf{graph} \cite{berge1973
 		\centering
 		\includegraphics[width=.5\linewidth]{graphs/tree}
 		\captionsetup{justification=centering}
-		\caption{A tree extracted (a subgraph) from the \textbf{Les Miserables} graph.}
+		\caption{A tree extracted (a subgraph) from the \textbf{Les Miserables} graph \protect\footnotemark.}
 		\label{tree}
 	\end{figure}
+	
+	\footnotetext{From ``Graph Theory," by L. David, 2012. Available at: \href{https://comp-ufscar.github.io/graph-theory}{comp-ufscar.github.io/graph-theory}.}
 \end{description}
 
 \clearpage
@@ -392,7 +386,7 @@ def nearest_neighbors(V, E, w, epsilon):
         neighbors.add(vs)
     return V, neighbors
 \end{minted}
-\caption{$\epsilon$-Nearest Neighbors Algorithm.}
+\caption{$\epsilon$-Nearest Neighbors Search Algorithm.}
 \end{listing}
 
 \begin{example}
@@ -549,7 +543,7 @@ Regarding the nature of what is being learned, ML algorithms can be separated be
 	\item[Regression] Samples of the data set $\vect X$ follow a regression function $f$. The goal is to learn such function. A reasonable manner to think of it is to imagine the samples of $\vect X$ being associated with continuous labels \cite{kramer2013dimensionality}.
 \end{description}
 
-ML algorithms often represent the end-point of the learning process, receiving the result of reduction algorithms as input and learning from them instead of the raw data. In this section, we will study a small set of supervised ML algorithms. Later, we will use them to simulate how the reductions produced by ISOMAP are interpreted by real ML algorithms.
+ML algorithms often represent the end-point of the learning process, receiving the result of reduction algorithms as input and learning from them instead of the raw data. In this section, we will study a small set of supervised ML algorithms. Later, we will use them to simulate how the reductions produced by ISOMAP are interpreted by ``real-world" ML algorithms.
 
 \subsection{$K$-Nearest Neighbors}
 
@@ -722,25 +716,40 @@ Machine Learning algorithms might be susceptible to data noise, incorrect config
 
 Considering that testing with the same data used for training will most likely produce unreliable results, a simple way to test a learner is to separate the labeled data set into two chunks, where the first is used for training. The second chunk is then be given to the learner, which attempts to predict the samples. Finally, the predictions made by the learner would be compared with the actual labels.
 
-\subsubsection{Confusion Matrix}
+\subsubsection{Confusion Matrix and Prediction Accuracy When Classifying}
 
-When testing classification models, one way to visualize the wrong predictions made by the learner is a confusion matrix, where the item $a_{ij}$ is the number of times that a sample of the class $i$ was classified as being of the class $j$.
+To evaluate classification models, one way to visualize the incorrect predictions made by the learner is a \textbf{confusion matrix}, where the item $a_{ij}$ is the number of times that a sample of the class $i$ was classified as being of the class $j$.
 
 \begin{table}[H]
 	\centering
-	\begin{tabular}{ |c || *{4}{c|} }
-		\hline
-           &   a &   b &   c &   d \\\hline\hline
-		a & 12 &   3 &   2 &   0 \\
-		b &   7 & 12 &   2 &   4 \\
-		c &   0 &   4 & 54 &   8 \\
-		d &   6 &   0 &   1 & 23 \\\hline
+	\begin{tabular}{*{4}{c|}c}
+          &  a &  b &  c &  d \\\hline
+		a & 12 &  3 &  2 &  0 \\
+		b &  7 & 12 &  2 &  4 \\
+		c &  0 &  4 & 54 &  8 \\
+		d &  6 &  0 &  1 & 23
 	\end{tabular}
 
 	\caption{Example of confusion matrix for a data-set with four different classes.}
 \end{table}
 
-Naturally, a diagonal matrix represents that all samples of the class $i$ were classified as $i$, which is the best possible outcome (no errors).
+We define the \textbf{prediction accuracy} of a ML model as the number of correct predictions divided by the total number of predictions made:
+\begin{align*}
+	accuracy = \frac{\sum_i c_{ii}}{\sum_i \sum _j c_{ij}}
+\end{align*}
+
+Where $\vect C$ is a confusion matrix.
+
+Naturally, a diagonal matrix $\vect C$ represents that all samples were correctly classified, being the best possible outcome (no errors).
+
+\subsubsection{Prediction Accuracy When Regressing}
+
+The coefficient of determination, which can be interpreted as how much data variance is explained by a prediction model, can easily be used to evaluate regression models.
+
+Let $\vect X$ be a data set, $\vect y_i$ an observation of the regression function associated with the sample $\vect x \in \vect X$, $\vect y_i^p$ the actual value predicted by the regression model and $\bar{\vect y}$ the average of all observations, then:
+\begin{align*}
+	R^2 = 1 - \frac{\sum_i (y_i^p - y_i)^2}{\sum_i (y_i^p - \bar{\vect y})^2}
+\end{align*}
 
 \subsubsection{Cross Validation}
 

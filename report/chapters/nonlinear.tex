@@ -34,10 +34,10 @@ Let $\vect S$ be our original data set, as illustrated in figure \ref{fig:mani_s
 	\label{fig:mani_s}
 \end{figure}
 
-Additionally, consider the symmetric undirected weighted graph $G=(V, E)$ and $w \colon E \to \mathbb{R} \mid w(x, y) = \delta_{xy}$, where $\delta_{xy}$ is the euclidean distance between the samples $x$ and $y$ in $S$. That is,
-$$\delta_{xy} = \sqrt{\sum_{i} (x_i - y_i)^2}, \forall (x, y) \in S\times S \mid x\ne y$$
+Additionally, consider the symmetric undirected weighted graph $G=(V, E)$ and $w \colon E \to \mathbb{R} \mid w(x, y) = \delta_{xy}$, where $\delta_{xy}$ is the euclidean distance between the samples $\vect x$ and $\vect y$ in $\vect S$. That is,
+$$\delta_{xy} = \sqrt{\sum_{i} (x_i - y_i)^2}, \forall (\vect x, \vect y) \in \vect S \times \vect S \mid \vect x \ne \vect y$$
 
-Now that only distances were kept, an infinite number of $n$-dimensional embeddings can be found with \textbf{MDS}, as every reduction can be transposed, rotated or reflected while maintaining the original dissimilarities. This does not handle the non-linearity of the data, though, as the original distances strictly constraint the samples to their original pattern. In order to ``unfold" the data set, \textbf{Nearest neighbor search} can be performed over $G$, resulting in the graph $G'$. Nearest-neighbor search will preserve edges connecting closer samples, hence preserving local (linear) distances, but erase edges connecting samples which are far from each other (non necessarily linear). Obviously, the search parameters ($K$ or $\epsilon$) must be carefully chosen to limit the connectivity of the vertices to a small (linear) neighborhood while maintaining the graph completely connected.
+Now that only distances were kept, an infinite number of $n$-dimensional embeddings can be found with \textbf{MDS}, as every reduction can be transposed, rotated or reflected while maintaining the original dissimilarities. This does not handle the non-linearity of the data, though, as the original distances strictly constraint the samples to their original pattern. In order to ``unfold" the data set, \textbf{Nearest neighbor search} can be performed over $G$, resulting in the graph $G'$. Nearest-neighbor search will preserve edges connecting closer samples, hence preserving local (linear) distances, but erase edges connecting samples which are far from each other (non necessarily linear). Obviously, the search parameters ($k$ or $\epsilon$) must be carefully chosen to limit the connectivity of the vertices to a small (linear) neighborhood while maintaining the graph completely connected.
 
 \begin{figure}[H]
 	\centering
@@ -66,17 +66,17 @@ Finally, $G''$ is a euclidean graph which roughly lies on a linear subspace. Fur
 		\caption{Reduction to 1D.}
 		\label{fig:mani_s_reduced_2}
 	\end{subfigure}
-	\caption{$\vect S$ reductions.}
+	\caption{$\vect S$' reductions.}
 	\label{fig:mani_s_reduced}
 \end{figure}
 
 \newpage
 \subsection{Formalization of the ISOMAP Algorithm}
 
-Let $X$ be the original data set and $p \in \mathbb{R}$ the number of dimensions desired for the reduced data set \cite{ten2000},
+Let $\vect X$ be the original data set and $p \in \mathbb{R}$ the number of dimensions desired for the reduced data set \cite{ten2000},
 
 \begin{enumerate}
-	\item Construct the weighted graph $G$ from the distances pairwise $\delta_{xy}, \forall (x, y) \in X \times X, x \ne y$ and find the graph $G'$ by applying the \textbf{nearest-neighbor algorithm} on the graph $G$.
+	\item Construct the weighted graph $G$ from the distances pairwise $\delta_{xy}, \forall (\vect x, \vect y) \in \vect X \times \vect X, \vect x \ne \vect y$ and find the graph $G'$ by applying the \textbf{nearest-neighbor algorithm} on the graph $G$.
 
 	\item Compute the shortest path graph $G''$ between all pairs of nodes from graph $G'$. This might be done by the \textbf{all-pairs Dijkstra's} or by the \textbf{Floyd-Warshall} algorithm.
 
@@ -95,7 +95,7 @@ If $n$ is the number of training samples, $f \in \mathbb{R}$ the number of featu
 		\item Dijkstra's algorithm implementation using Fibonacci Heaps have time complexity $O(nk + n \log n)$. As the algorithm must be calculated for each node, this step has time complexity $O[n^2(k + \log n)]$.
 		\item Alternatively, using the Floyd-Warshall algorithm, this step has time complexity equals to $O(n^3)$.
 	\end{enumerate}
-	\item Taking $O(n^3)$ time steps to calculate the spectral decomposition, MDS clearly is the bottleneck of the entire algorithm \cite{cay2005, silva2002global}. As for space complexity, $O(f^2 + nf)$ is required for storing the matrices $\Sigma$ and $U$.
+	\item Taking $O(n^3)$ time steps to calculate the spectral decomposition, MDS clearly is the bottleneck of the entire algorithm \cite{cay2005, silva2002global}. As for space complexity, $O(f^2 + nf)$ is required for storing the matrices $\vect \Sigma$ and $\vect U$.
 \end{enumerate}
 
 The time complexity of the ISOMAP algorithm (when using Dijkstra's) is, therefore, $O[n^2 + n^2(k + \log n) + n^3]$, and the space complexity is $O(n^2 + f^2 + nf)$.
@@ -283,22 +283,25 @@ From figure \ref{fig:mani_s_reduced} and the experiment shown in section \ref{se
 		\begin{subfigure}[H]{.45\linewidth}
 			\includegraphics[width=\linewidth]{img/convexity/original.png}
 			\captionsetup{justification=centering}
-			\caption{The non-convex Swiss-roll.}
+			\caption{The non-convex Swiss-roll \protect\footnotemark[6].}
 		\end{subfigure}
 		~
 		\begin{subfigure}[H]{.45\linewidth}
 			\includegraphics[width=\linewidth]{img/convexity/expected.png}
 			\captionsetup{justification=centering}
-			\caption{The expected reduction.}
+			\caption{The expected reduction \protect\footnotemark[6].}
 		\end{subfigure}
 		\newline\newline
 
 		\begin{subfigure}[H]{.45\linewidth}
 			\includegraphics[width=\linewidth]{img/convexity/actual.png}
 			\captionsetup{justification=centering}
-			\caption{The actual reduction.}
+			\caption{The actual reduction \protect\footnotemark[6].}
 		\end{subfigure}
 	\end{figure}
+	
+	\footnotetext[6]{From ``Manifold Learning Techniques: so which is the best?" by G. Lerman, \textit{University of California, Los Angeles}. Available at:
+	\url{http://math.ucla.edu/~wittman/mani/mani_presentation.pdf}.}
 
 	\newpage
 	\item[Noise] Noise in data is expressed by samples that somehow diverge from their neighborhood (outliers). As these samples become farthest from its original neighborhood, the chances of being linked to samples from other neighborhood increase, possibly decreasing the quality of the solution. A possible solution is to remove these samples during the pre-processing stage \cite{herik2009}.
@@ -307,17 +310,17 @@ From figure \ref{fig:mani_s_reduced} and the experiment shown in section \ref{se
 
 	\begin{figure}[H]
 		\centering
-		\begin{subfigure}{.45\linewidth}
+		\begin{subfigure}{.40\linewidth}
 			\centering
 			\includegraphics[width=\linewidth]{img/noise/sr/1}
 			\captionsetup{justification=centering}
-			\caption{The data set $\vect Swiss_{n=.8}$.}
+			\caption{The data set $\vect{Swiss}_{n=.8}$.}
 		\end{subfigure}~
-		\begin{subfigure}{.40\linewidth}
+		\begin{subfigure}{.35\linewidth}
 			\centering
 			\includegraphics[width=\linewidth]{img/noise/sr/3}
 			\captionsetup{justification=centering}
-			\caption{The neighborhood graph extracted from $\vect Swiss_{n=.8}$.}
+			\caption{The neighborhood graph extracted from $\vect{Swiss}_{n=.8}$.}
 			\label{fig:noise_3}
 		\end{subfigure}
 		\newline\newline\newline
@@ -325,7 +328,7 @@ From figure \ref{fig:mani_s_reduced} and the experiment shown in section \ref{se
 			\centering
 			\includegraphics[width=\linewidth]{img/noise/sr/2}
 			\captionsetup{justification=centering}
-			\caption{$\vect Swiss_{n=.8}$ reduced.}
+			\caption{$\vect{Swiss}_{n=.8}$ reduced.}
 			\label{fig:noise_2}
 		\end{subfigure}
 		\captionsetup{justification=centering}
