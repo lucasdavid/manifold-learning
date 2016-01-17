@@ -11,7 +11,7 @@ from sklearn.grid_search import GridSearchCV
 from sklearn.metrics import confusion_matrix
 
 from manifold.infrastructure import Displayer
-from manifold.infrastructure.base import kruskal_stress, class_stress
+from manifold.infrastructure import base
 from manifold.learning import algorithms
 
 
@@ -85,9 +85,9 @@ class LearningExperiment(Experiment, metaclass=abc.ABCMeta):
                                  verbose=self.verbose)
         self.grid.fit(X1, y1)
 
-        print('\tGrid accuracy: %.6f' % self.grid.best_score_)
+        print('\tGrid accuracy: %.2f' % self.grid.best_score_)
         print('\tBest parameters: %s' % self.grid.best_params_)
-        print('Done. (%.6f s)\n' % (time.time() - start))
+        print('Done. (%.2f s)\n' % (time.time() - start))
 
         if self.test_after_train:
             y2_predicted = self.grid.predict(X2)
@@ -113,6 +113,26 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
     knn = neighbors.KNeighborsClassifier(n_neighbors=1, n_jobs=-1)
     test_size = .2
 
+    def n_neighbors_(self):
+        p = self.reduction_params
+
+        if 'n_neighbors' in p:
+            return p['n_neighbors']
+        if 'k' in p:
+            return p['k']
+
+        return 5
+
+    def n_dimensions_(self):
+        p = self.reduction_params
+
+        if 'd' in p:
+            return p['d']
+        if 'n_components' in p:
+            return p['n_components']
+
+        return 3
+
     def load_data(self):
         super().load_data()
 
@@ -124,12 +144,7 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
 
         print('Reducing...')
 
-        to_dimension = 3
-        if 'to_dimension' in self.reduction_params:
-            to_dimension = self.reduction_params['to_dimension']
-        if 'n_components' in self.reduction_params:
-            to_dimension = self.reduction_params['n_components']
-
+        to_dimension = self.n_dimensions_()
         data = self.original_data
 
         print('\tMethod: %s' % self.reduction_method)
@@ -155,12 +170,14 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
             self.reducer = manifold.Isomap(**self.reduction_params)
             self.data = self.reducer.fit_transform(data)
 
+        end = time.time()
+
         if evaluate:
             self.evaluate()
 
         self.displayer.load(self.data, self.target)
 
-        print('Done. (%.6f s)\n' % (time.time() - start))
+        print('Done. (%.2f s)\n' % (end - start))
 
     def plot_nearest_neighbors_graph(self, position='reduced'):
         """Draw Nearest Neighbor Graph.
@@ -203,12 +220,13 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
         plt.show()
 
     def evaluate(self):
-        print('\tstress: %f'
-              % kruskal_stress(squareform(pdist(self.original_data)),
-                               squareform(pdist(self.data))))
-
-        print('\tclass stress: %f'
-              % class_stress(self.original_data, self.data, self.target))
+        if self.reduction_method in ('pca', 'mds'):
+            s = base.kruskal_stress(squareform(pdist(self.original_data)),
+                               squareform(pdist(self.data)))
+        else:
+            s = base.partial_kruskal_stress(
+                    self.original_data, self.data, self.n_neighbors_())
+        print('\tStress: %.2f' % s)
 
         X1, X2, y1, y2 = train_test_split(self.data,
                                           self.target,
@@ -216,7 +234,7 @@ class ReductionExperiment(Experiment, metaclass=abc.ABCMeta):
                                           random_state=0)
 
         print('\t1-NN score: %.2f' % self.knn.fit(X1, y1).score(X2, y2))
-        print('\tsize: %f KB' % (self.data.nbytes / 1024))
+        print('\tSize: %.2f KB' % (self.data.nbytes / 1024))
 
 
 class CompleteExperiment(LearningExperiment, ReductionExperiment,

@@ -1,9 +1,11 @@
 import abc
 import copy
 import time
+from sklearn import neighbors
+
 import numpy as np
 from scipy.spatial import distance
-from scipy.spatial.distance import pdist
+from scipy.spatial.distance import pdist, squareform
 
 
 class Task(object, metaclass=abc.ABCMeta):
@@ -85,39 +87,42 @@ class Reducer(Task, metaclass=abc.ABCMeta):
 
 
 def kruskal_stress(d_x, d_y):
-    """Calculates Kruskal's stress.
+    """Calculates Kruskal's stress for data sets reduced with ISOMAP.
 
-    Parameters
-    ----------
-    d_x numpy matrix, the dissimilarities between the objects in data set X.
-    d_y numpy matrix, the dissimilarities between the objects in data set Y.
+    :param d_x: the dissimilarities between the objects in data set X.
+    :param d_y: the dissimilarities between the objects in data set Y.
 
-    Returns
-    -------
-
-    Stress, float in the interval [0, 1], where 0 is the best possible fit and 1 is the worse.
+    :return: Stress, float in the interval [0, 1], where 0 is the best possible
+    fit and 1 is the worse.
     """
     return np.sqrt(np.power(d_x - d_y, 2).sum() / np.power(d_x, 2).sum())
 
 
-def _class_stress(X, target):
-    n_samples = X.shape[0]
+def partial_kruskal_stress(X, Y, n_neighbors):
+    """Calculates Kruskal's stress for data sets reduced with ISOMAP.
 
-    coef = distance.pdist(X)
-    coef_sum = coef.sum()
-    coef_mean = coef_sum / coef.shape[0]
-    coef = 2 * coef_mean - coef
+    :param X: the original data set X.
+    :param Y: the data set Y (a reduction of X).
+    :param n_neighbors: how many neighbors should be considered
+        when performing nearest neighbor search.
 
-    stress_X_ = 0
-    current = 0
+    :return: Stress, float in the interval [0, 1], where 0 is the best possible
+    fit and 1 is the worse.
+    """
+    d_x, d_y = squareform(pdist(X)), squareform(pdist(Y))
 
-    for i in range(n_samples):
-        for j in range(i + 1, n_samples):
-            stress_X_ += (coef[current] / coef_sum) \
-                         * abs(target[i] - target[j]) / (
-                         abs(target[i]) + abs(target[j]))
+    nbrs = (neighbors.NearestNeighbors(n_neighbors=n_neighbors, n_jobs=-1)
+            .fit(X)
+            .kneighbors(return_distance=False))
 
-    return stress_X_
+    rows = np.arange(X.shape[0]).reshape(X.shape[0], 1)
+    d_x_omega = d_x[rows, nbrs]
+    d_y_omega = d_y[rows, nbrs]
+
+    del rows, nbrs
+
+    return np.sqrt(np.power(d_x_omega - d_y_omega, 2).sum() /
+                   np.power(d_x_omega, 2).sum())
 
 
 def class_stress(X, Y, target, n_neighbors=5, n_jobs=1):
@@ -146,3 +151,23 @@ def class_stress(X, Y, target, n_neighbors=5, n_jobs=1):
     stress_Y = _class_stress(Y, target)
 
     return abs(stress_X - stress_Y)
+
+
+def _class_stress(X, target):
+    n_samples = X.shape[0]
+
+    coef = distance.pdist(X)
+    coef_sum = coef.sum()
+    coef_mean = coef_sum / coef.shape[0]
+    coef = 2 * coef_mean - coef
+
+    stress_X_ = 0
+    current = 0
+
+    for i in range(n_samples):
+        for j in range(i + 1, n_samples):
+            stress_X_ += (coef[current] / coef_sum) \
+                         * abs(target[i] - target[j]) / (
+                             abs(target[i]) + abs(target[j]))
+
+    return stress_X_
