@@ -362,10 +362,31 @@ The Dermatology data set, composed by 366 samples and 35 features. Here, the tar
 	\label{fig:dsdermatologyiso}
 \end{figure}
 
+From figure \ref{fig:dsdermatologyiso}, we easily infer that two classes are trivially separable. The rest, however, is highly convoluted in the origin of the space, hence higher dimensions might be necessary to achieve high accuracy scores.
+
+\begin{table}[H]
+	\centering
+	
+	\begin{tabular}{|p{.15\linewidth}|p{.12\linewidth}|p{.12\linewidth}|p{.12\linewidth}|p{.12\linewidth}|p{.12\linewidth}|}
+		\hline
+		& \textbf{Original} & $\mathbb{R}^{20}$ & $\mathbb{R}^{10}$ & $\mathbb{R}^3$ & $\mathbb{R}^2$ \\\hline
+		\textbf{1-NN} & .91 & .89 & .91 & .72 & .74 \\\hline
+		\textbf{Score} & .95 & .95 & .96 & .8 & .78 \\\hline
+		\textbf{Best parameters} & k: linear, C: 10 & k: linear, C: 1 & k: linear, C: 1 & k: linear, C: 100 & k: linear, C: 1\\\hline
+		\textbf{GridSearch time} & 2.76 s & 2.61 s & 2.57 s & 14.47 s & 25.66 s \\\hline
+		\textbf{Reduction time} & - & 66.04 s & 65.89 s & 65.85 s & 66.18 s \\\hline
+		\textbf{Kruskal's stress} & - & .02 & .03 & .07 & .1 \\\hline
+		\textbf{Data size} & 97.22 KB & 57.19 KB & 28.59 KB & 8.58 KB & 5.72 KB \\\hline
+	\end{tabular}
+	\captionsetup{justification=centxLering}
+	\caption{Description of predictions and reduction performance for Glass and ISOMAP algorithm.}
+\end{table}
+
 \clearpage
 \section{The Leukemia Data Set}
 
 The Leukemia data set contains 72 samples and 7129 features, which express levels of the genes in a given patient. Each sample belongs to a class $t \in \{-1, 1\}$, tagging which of two variants of leukemia is present in the sample (AML, 25 samples, or ALL, 47 samples) \cite{on:duc_ds}.
+\newline\newline
 
 \begin{figure}[H]
 	\centering
