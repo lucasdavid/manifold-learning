@@ -1,15 +1,26 @@
 \chapter{Nonlinear Dimensionality Reduction}
 
-Although PCA has presented promising results in the previous section, hence its great popularity in dimensionality reduction problems, there are many examples in which PCA will fail in its task. Consider the example bellow:
+Although PCA presents promising results in many cases, hence its great popularity in dimensionality reduction problems, there are many examples in which PCA will fail to understand the structure of the data. Consider the example bellow:
+
+\begin{figure}[H]
+	\centering
+	\captionsetup{justification=centering}
+	
+	\includegraphics[width=.5\linewidth]{datasets/swiss}
+	\caption{The Swiss roll data set.}
+	\label{fig:dsswiss}
+\end{figure}
+
+The application of the PCA algorithm over the Swiss Roll data set results in the following reductions:
 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
 
 	\includegraphics[width=\linewidth]{experiments/pca_swiss}
-	\caption{The \textbf{Swiss-roll manifold} and its reductions to 3, 2 and 1 dimensions, respectively, using the PCA algorithm.}
+	\caption{The Swiss Roll data set reductions to 3, 2 and 1 dimensions, respectively, using the PCA algorithm.}
 	\label{fig:swiss_pca}
-\end{figure}21
+\end{figure}
 
 Looking at figure \ref{fig:swiss_pca} (specially in the last reduction, to a single dimension), it becomes clear that PCA has a big draw back: it assumes that the data lies on a liner subspace \cite{cay2005} and, therefore, applying linear transformations to it will rotate and scale it, without distort the original data structure. When this assumption does not hold, PCA will incorrectly extract the underlying structure, possibly mixing very dissimilar samples.
 

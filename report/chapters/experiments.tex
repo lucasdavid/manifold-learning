@@ -65,6 +65,7 @@ From the table above, one can see that, given the linear nature of $\vect K$, PC
 \section{The Iris Flower Data Set}
 
 The Iris Flower data set, as presented in section \ref{irisdataset}, containing 150 samples and 4 features.
+\newline\newline
 
 \begin{figure}[H]
 	\centering
@@ -137,12 +138,13 @@ It is clear, from figure \ref{fig:dsirisiso}, that the ISOMAP algorithm has also
 	\caption{Description of predictions and reduction performance for the Iris flower and ISOMAP algorithm.}
 \end{table}
 
-The results were very similar to the ones obtained when applying the PCA algorithm. The disparities consist on the Kruskal's stress, which is now limited to 16\% and the reduction time, which has consistently increased considering the higher computational cost of the ISOMAP algorithm.
+The results were very similar to the ones obtained when applying the PCA algorithm. The differences consist on the Kruskal's stress, now limited to 16\% and the reduction time, which has consistently increased due to the higher computational cost of the ISOMAP algorithm.
 
 \clearpage
 \section{The Digits Data Set}
 
 Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sample is a 8x8 image of a hand-written digit from 0 to 9.
+\newline\newline
 
 \begin{figure}[H]
 	\centering
@@ -218,6 +220,7 @@ Digits reductions using ISOMAP, as illustrated in figure \ref{fig:dsdigitsiso}, 
 \section{The Swiss Roll Data Set}
 
 The Swiss Roll data set, with 1000 samples and 3 features.
+\newline\newline
 
 \begin{figure}[H]
 	\centering
@@ -237,9 +240,27 @@ The Swiss Roll data set, with 1000 samples and 3 features.
 	\label{fig:dsswisspca}
 \end{figure}
 
-Figure \ref{fig:dsswisspca} illustrates how the PCA algorithm is not suitable for reducing the Swiss-roll, given its non-linear distribution. Reductions to 2 and 1 dimensions have made very dissimilar samples to become mixed, damaging the original structure of the data set and, of course, decreasing score in the learning process:
+Figure \ref{fig:dsswisspca} illustrates how the PCA algorithm is not suitable for reducing the Swiss-roll, given its non-linear distribution. Reductions to 2 and 1 dimensions have made very dissimilar samples to become mixed, damaging the original structure of the data set and, of course, confusing learners and reducing their score in the learning process:
 
-...
+\begin{table}[H]
+	\centering
+	
+	\begin{tabular}{|p{.20\linewidth}|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|}
+		\hline
+		& \textbf{Original} & $\mathbb{R}^3$ & $\mathbb{R}^2$ & $\mathbb{R}$ \\\hline
+		\textbf{1-NN} & 1 & 1 & .26 & .2 \\\hline
+		\textbf{Score} & 1 & 1 & .68 & .54 \\\hline
+		\textbf{Best parameters} & k: rbf, C: 100, g: 0.01 & C: 100, k: rbf, g: 0.01 & C: 100, k: rbf, g: 0.1 & C: 1, k: rbf, g: 0.1\\\hline
+		\textbf{GridSearch time} & 12.72 s & 15.13 s & 9.07 s & 7.11 s \\\hline
+		\textbf{Reduction time} & - & 2.15 s & 2.02 s & 2.08 s\\\hline
+		\textbf{Kruskal's stress} & - & 0 & .28 & .53 \\\hline
+		\textbf{Data size} & 23.44 KB & 23.44 KB & 15.63 KB & 7.81 KB \\\hline
+	\end{tabular}
+	\captionsetup{justification=centering}
+	\caption{Description of predictions and reduction performance for the Swiss Roll and PCA algorithm.}
+\end{table}
+
+Notice that the learners trained during the grid search can achieve high scores in the original space $\mathbb{R}^3$. When the same search is applied to the data set reductions, learners only manage to retrieve significantly lower scores. Clearly, reducing nonlinear data sets with linear methods has a highly negative impact on the learning process.
 
 \paragraph{Reducing the Swiss Roll Data Set With the ISOMAP Algorithm}
 
@@ -251,14 +272,33 @@ Figure \ref{fig:dsswisspca} illustrates how the PCA algorithm is not suitable fo
 	\label{fig:dsswissiso}
 \end{figure}
 
-Figure \ref{fig:dsswissiso} illustrates the efficacy of the ISOMAP algorithm in reducing the Swiss Roll while still preserving the original structure of the data set (similar samples were maintained close to each other). This has, of course, a positive impact on learning:
+Figure \ref{fig:dsswissiso} illustrates the efficacy of the ISOMAP algorithm in reducing the Swiss Roll while still preserving the original structure of the data set (similar samples were maintained close to each other). Of course, this has a positive impact on learning:
 
-...
+\begin{table}[H]
+	\centering
+	
+	\begin{tabular}{|p{.20\linewidth}|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|}
+		\hline
+		& \textbf{Original} & $\mathbb{R}^3$ & $\mathbb{R}^2$ & $\mathbb{R}$ \\\hline
+		\textbf{1-NN} & 1 & 1 & 1 & 1 \\\hline
+		\textbf{Score} & 1 & 1 & 1 & 1 \\\hline
+		\textbf{Best parameters} & k: rbf, C: 100, g: 0.01 & C: 10, k: rbf, g: 0.01 & C: 100, k: rbf, g: 0.01 & C: 10, k: rbf, g: 0.01 \\\hline
+		\textbf{GridSearch time} & 2.41 s & 2.21 s & 2.13 s & 2.35 s \\\hline
+		\textbf{Reduction time} & - & 16.32 s & 16.75 s & 14.72 s\\\hline
+		\textbf{Kruskal's stress} & - & .49 & .37 & .46 \\\hline
+		\textbf{Data size} & 23.44 KB & 23.44 KB & 15.63 KB & 7.81 KB \\\hline
+	\end{tabular}
+	\captionsetup{justification=centering}
+	\caption{Description of predictions and reduction performance for the Swiss Roll and ISOMAP algorithm.}
+\end{table}
+
+Differently from the reductions with the PCA algorithm, learners trained over reductions retrieved from ISOMAP maintained a perfect score throughout the entire experiment, confirming that ISOMAP is a more adequate method for nonlinear data set reduction.
 
 \clearpage
 \section{The Glass Data Set}
 
-The Glass data set contains 214 samples and 10 features, were the first one is the identification number of a given sample.
+Motivated by criminological investigations, the classification of different types of glasses based on the material composition can be demonstrated by the Glass data set, which contains 214 samples and 10 features, where each sample belongs to a specific class (e.g., building windows glass, tableware and headlamps). Lastly, it must be remarked that the first feature is the identification number of a given sample, and was therefore removed during our experiment.
+\newline\newline
 
 \begin{figure}[H]
 	\centering
@@ -278,10 +318,31 @@ The Glass data set contains 214 samples and 10 features, were the first one is t
 	\label{fig:dsglassiso}
 \end{figure}
 
+We can observe from the representation of Glass in the $\mathbb{R}^3$ (\ref{fig:dsglassiso}) that samples from different classes present little separation from each other. Indeed, learners will have more difficulty when processing such reductions.
+
+\begin{table}[H]
+	\centering
+	
+	\begin{tabular}{|p{.15\linewidth}|p{.12\linewidth}|p{.12\linewidth}|p{.12\linewidth}|p{.12\linewidth}|p{.12\linewidth}|}
+		\hline
+		& \textbf{Original} & $\mathbb{R}^8$ & $\mathbb{R}^6$ & $\mathbb{R}^4$ & $\mathbb{R}^3$ \\\hline
+		\textbf{1-NN} & .63 & .63 & .6 & .63 & .65 \\\hline
+		\textbf{Score} & .64 & .65 & .63 & .65 & .65 \\\hline
+		\textbf{Best parameters} & k: rbf, g: 0.001, C: 1000 & k: rbf, g: 0.01, C: 100 & k: rbf, g: 0.1, C: 100 & k: rbf, g: 0.1, C: 10 & k: rbf, g: 0.1, C: 10\\\hline
+		\textbf{GridSearch time} & 1.96 s & 2.85 s & 2.89 s & 3.21 s & 3.40 s \\\hline
+		\textbf{Reduction time} & - & 2.8 s & 2.96 s & 2.87 s & 2.90 s \\\hline
+		\textbf{Kruskal's stress} & - & .2 & .16 & .15 & .21 \\\hline
+		\textbf{Data size} & 15.05 KB & 13.38 KB & 10.03 KB & 6.69 KB & 5.02 KB \\\hline
+	\end{tabular}
+	\captionsetup{justification=centering}
+	\caption{Description of predictions and reduction performance for Glass and ISOMAP algorithm.}
+\end{table}
+
 \clearpage
 \section{The Dermatology Data Set}
 
 The Dermatology data set, composed by 366 samples and 35 features. Here, the target is to correctly diagnose the erythemato-squamous diseases.
+\newline\newline
 
 \begin{figure}[H]
 	\centering
@@ -314,7 +375,7 @@ The Leukemia data set contains 72 samples and 7129 features, which express level
 \end{figure}
 
 \newpage
-\paragraph{Reducing the Dermatology Data Set With the ISOMAP Algorithm}
+\paragraph{Reducing the Leukemia Data Set With the ISOMAP Algorithm}
 
 \begin{figure}[H]
 	\centering
