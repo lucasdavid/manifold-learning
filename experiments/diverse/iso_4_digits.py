@@ -8,9 +8,10 @@ class DigitsIsomapExperiment(CompleteExperiment):
     plotting = True
 
     reduction_method = 'isomap'
-    # reduction_params = {'k': 4}
+    reduction_params = {'k': 4}
 
     learning_parameters = [
+        {'C': (1, 10), 'kernel': ('linear',)},
         {'C': (1, 10, 100), 'gamma': (.01, .1, 1), 'kernel': ('rbf', 'sigmoid')}
     ]
 
