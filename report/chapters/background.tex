@@ -271,9 +271,18 @@ A set $A = \{(U_i, \phi_i)\}_{i \in A}$ is said to be an \textbf{atlas} on a man
 
 \subsection{Embedding}
 
-When talking about the relationship between two topological objects, such as two vector spaces, manifolds or graphs (section \ref{sec:graphs}); it is interesting to imagine a mapping from one object to the other that somehow preserves its original properties.
+When talking about the relationship between two topological objects, such as two spaces, manifolds or graphs (section \ref{sec:graphs}); it is interesting to imagine a mapping from one object to the other that somehow preserves its original properties.
 
 Let $A$ and $B$ be two topological objects of the same type, a function $\phi \colon A \to B$ is an embedding of A into B if $\phi$ is an isomorphism which preserves the original properties of A \cite{burris2011course}, where such properties are relative to the type of the objects at hand. Shortly, A is said to be \textit{embedded} in B.
+
+\begin{example}[Embedding of Spaces]
+	Consider the vector spaces $\mathbb{R}^p$ and $\mathbb{R}^q, p \leq q, p > 0$ and the isomorphism $t \colon \mathbb{R}^q \to \mathbb{R}^t \mid t(x) = [x | \bar{0}] = y$, where $y$ is the vector $x$ concatenated with $p-q$ zeros. $\mathbb{R}^p$ is embedded on $\mathbb{R}^q$, as the operations sum and scalar multiplication are preserved.
+\end{example}
+
+\begin{example}[Embedding of Manifolds]
+	Let A and B be two manifolds. A is embedded in B if the open sets in A are preserved in B.
+\end{example}
+
 
 \section{Graph Theory}
 \label{sec:graphs}

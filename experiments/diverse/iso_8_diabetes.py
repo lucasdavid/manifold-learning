@@ -10,10 +10,11 @@ class DiabetesIsomapExperiment(CompleteExperiment):
     reduction_method = 'isomap'
     reduction_params = {'k': 20}
 
-    learning_parameters = [{
-        'C': (1, 10, 100, 1000), 'gamma': (.001, .01, .1, 1, 10),
-        'kernel': ('rbf', 'sigmoid')}]
-    learning_cycle_components = (6, 4, 2, 1)
+    learning_parameters = [
+        {'C': (1,), 'kernel': ('linear',)},
+        {'C': (1, 10, 100, 1000), 'gamma': (.001, .01, .1, 1, 10),
+         'kernel': ('rbf', 'sigmoid')}]
+    learning_cycle_components = (6, 4, 2,)
 
     def _load_data(self):
         r = Retriever('../../datasets/diabetes/pima-indians-diabetes.data',

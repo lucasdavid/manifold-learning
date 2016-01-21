@@ -6,10 +6,11 @@ class BreastCancerExperiment(CompleteExperiment):
     title = 'iso-wdbc'
     plotting = True
     reduction_method = 'isomap'
-    learning_parameters = [{
-        'C': (1, 10, 100, 1000), 'gamma': (.01, .1, 1, 10),
-        'kernel': ('rbf', 'sigmoid',)}]
-    learning_cycle_components = (20, 10, 3, 2)
+    learning_parameters = [
+        {'kernel': ('linear',), 'C': (1, 10)},
+        {'C': (1, 10, 100, 1000), 'gamma': (.01, .1, 1, 10),
+         'kernel': ('rbf', 'sigmoid',)}]
+    learning_cycle_components = (20, 10, 3)
 
     def _load_data(self):
         r = Retriever('../../datasets/breast-cancer/wdbc.data', delimiter=',')

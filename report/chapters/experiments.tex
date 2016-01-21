@@ -24,19 +24,23 @@ First, let $\vect X_{n \times f}$ be a data set with $n$ samples and $f$ feature
 \section{K Data Set}
 
 The synthetic data set $\vect K$, with 1000 samples and 2 features.
+\newline\newline
 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
-	\includegraphics[width=.8\linewidth]{datasets/r}
+	\includegraphics[width=\linewidth]{datasets/r}
 	\caption{The $\vect K$ data set.}
 \end{figure}
+
+\newpage
+\paragraph{Reducing K Data Set With the PCA Algorithm}
 
 \begin{figure}[H]
 	\centering
 	\captionsetup{justification=centering}
 	
-	\includegraphics[width=.8\linewidth]{experiments/pca_k}
+	\includegraphics[width=\linewidth]{experiments/pca_k}
 	\caption{The reductions of $\vect K$ to 2 and 1 dimension, respectively.}
 	\label{fig:dsrpca}
 \end{figure}
@@ -321,7 +325,7 @@ Motivated by criminological investigations, the classification of different type
 	\label{fig:dsglassiso}
 \end{figure}
 
-We can observe from the representation of Glass in the $\mathbb{R}^3$ (\ref{fig:dsglassiso}) that samples from different classes present little separation from each other. Indeed, learners will have more difficulty when processing such reductions.
+We can observe from the representation of Glass in the $\mathbb{R}^3$ (figure \ref{fig:dsglassiso}) that samples from different classes present little separation from each other. Indeed, learners will have more difficulty when processing such reductions.
 
 \begin{table}[H]
 	\centering
@@ -440,6 +444,7 @@ Once again, an impressive reduction was performed, where a data set lying on the
 \section{The WDBC Data Set}
 
 The Wisconsin Diagnostic Breast Cancer (WDBC) data set, containing 596 samples and 32 features computed from a breast mass. WDBC has 357 benign samples and 212 malignant. During this experiment, the first feature was disregarded, as it represents the identification numbers of the samples.
+\newline\newline
 
 \begin{figure}[H]
 	\centering
@@ -460,7 +465,23 @@ The Wisconsin Diagnostic Breast Cancer (WDBC) data set, containing 596 samples a
 	\label{fig:dswdbciso}
 \end{figure}
 
-Here, prediction accuracy consistently increased when the data set was reduced.
+\begin{table}[H]
+	\centering
+	
+	\begin{tabular}{|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|}
+		\hline
+		& \textbf{Original} & $\mathbb{R}^{20}$ & $\mathbb{R}^{10}$ & $\mathbb{R}^{3}$ \\\hline
+		\textbf{1-NN} & .91 & .89 & .47 & .89 \\\hline
+		\textbf{Score} & .95 & .89 & .9 & .9 \\\hline
+		\textbf{Best parameters} & C: 1, k: linear & C: 10, k: linear & C: 10, k: linear & C: 10, k: linear \\\hline
+		\textbf{GridSearch time} & 18.54 s & 83.01 s & 78.96 s & 61.51 s \\\hline
+		\textbf{Reduction time} & - & 3.23 s & 3.22 s & 3.3 s \\\hline
+		\textbf{Kruskal's stress} & - & .55 & .47 & .38 \\\hline
+		\textbf{Data size} & 133.36 KB & 88.91 KB & 44.45 KB & 13.34 KB \\\hline
+	\end{tabular}
+	\captionsetup{justification=centering}
+	\caption{Description of predictions and reduction performance for WDBC and ISOMAP algorithm.}
+\end{table}
 
 \newpage
 \section{Diabetes Data Set}
@@ -486,4 +507,20 @@ With 9 features observed from 768 samples collected from residents of Arizona, U
 	\label{fig:dsdiabetesiso}
 \end{figure}
 
-In this experiment, Diabetes was compressed to one forth of its original size (48 KB to 12 KB), and no significant prediction accuracy was lost.
+\begin{table}[H]
+	\centering
+	
+	\begin{tabular}{|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|}
+		\hline
+		& \textbf{Original} & $\mathbb{R}^6$ & $\mathbb{R}^4$ & $\mathbb{R}^2$ \\\hline
+		\textbf{1-NN} & .62 & .68 & .68 & .66  \\\hline
+		\textbf{Score} & .76 & .73 & .74 & .72 \\\hline
+		\textbf{Best parameters} & k: linear, C: 1 & k: linear, C: 1 & k: linear, C: 1 & k: linear, C: 1 \\\hline
+		\textbf{GridSearch time} & 14.13 s & 15.07 s & 15.65 s & 11.82 s \\\hline
+		\textbf{Reduction time} & - & 23.94 s & 23.66 s & 23.80 s \\\hline
+		\textbf{Kruskal's stress} & - & .3 & .25 & .32 \\\hline
+		\textbf{Data size} & 48 KB & 36 KB & 24 KB & 12 KB \\\hline
+	\end{tabular}
+	\captionsetup{justification=centering}
+	\caption{Description of predictions and reduction performance for Diabetes and ISOMAP algorithm.}
+\end{table}
