@@ -22,9 +22,9 @@ The application of the PCA algorithm over the Swiss Roll data set results in the
 	\label{fig:swiss_pca}
 \end{figure}
 
-Looking at figure \ref{fig:swiss_pca} (specially in the last reduction, to a single dimension), it becomes clear that PCA has a big draw back: it assumes that the data lies on a liner subspace \cite{cay2005} and, therefore, applying linear transformations to it will rotate and scale it, without distort the original data structure. When this assumption does not hold, PCA will incorrectly extract the underlying structure, possibly mixing very dissimilar samples.
+Looking at figure \ref{fig:swiss_pca} (specially in the last reduction, to a single dimension), it becomes clear that PCA has a big draw back: it assumes that the data lies on a liner subspace \cite{cay2005} and, therefore, applying linear transformations to it will rotate and scale it, without distort the original data structure. When this assumption does not hold, PCA will incorrectly extract the underlying structure, possibly mixing very dissimilar samples. For a more detailed description, see section \ref{experiments:sr}.
 
-Clearly, linear dimensionality reduction techniques are not adequate to reduce the Swiss-roll. In fact, it is not adequate to reduce any data set lying on a nonlinear manifold.
+Clearly, linear dimensionality reduction techniques are not adequate to reduce the Swiss-roll. Generally, it is not adequate to reduce any data set lying on a nonlinear manifold.
 
 \section{The ISOMAP Algorithm}
 

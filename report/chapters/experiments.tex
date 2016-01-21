@@ -22,6 +22,7 @@ First, let $\vect X_{n \times f}$ be a data set with $n$ samples and $f$ feature
 \newpage
 
 \section{K Data Set}
+\label{experiments:k}
 
 The synthetic data set $\vect K$, with 1000 samples and 2 features.
 \newline\newline
@@ -146,85 +147,8 @@ It is clear, from figure \ref{fig:dsirisiso}, that the ISOMAP algorithm has also
 The results were very similar to the ones obtained when applying the PCA algorithm. The differences consist on the Kruskal's stress, now limited to 16\% and the reduction time, which has consistently increased due to the higher computational cost of the ISOMAP algorithm.
 
 \clearpage
-\section{The Digits Data Set}
-
-Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sample is a 8x8 image of a hand-written digit from 0 to 9.
-\newline\newline
-
-\begin{figure}[H]
-	\centering
-	\captionsetup{justification=centering}
-	\includegraphics[width=\linewidth]{datasets/digits}
-	\caption{The Digits data set.}
-\end{figure}
-
-\newpage
-\paragraph{Reducing the Digits Data Set With the PCA Algorithm}
-
-\begin{figure}[H]
-	\centering
-	\captionsetup{justification=centering}
-	\includegraphics[width=\linewidth]{experiments/pca_digits}
-	\caption{The reductions of Digits to 3, 2 and 1 dimensions, respectively, with the PCA algorithm.}
-	\label{fig:dsdigitspca}
-\end{figure}
-
-From figure \ref{fig:dsdigitspca}, we have glimpse of Digits's samples structure. The many classes' clusters are visible in the 3D, although they become highly mixed in the 2D and 1D, yielding a confusing representation.
-
-\begin{table}[H]
-	\centering
-	
-	\begin{tabular}{|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|}
-		\hline
-		& \textbf{Original} & $\mathbb{R}^{10}$ & $\mathbb{R}^3$ & $\mathbb{R}^2$ & $\mathbb{R}$ \\\hline
-		\textbf{1-NN} & .99 & .97 & .68 & .56 & .28 \\\hline
-		\textbf{Score} & .98 & .95 & .74 & .64 & .39  \\\hline
-		\textbf{Best parameters} & k: rbf, C: 10, g: .001 & k: rbf, C: 10, g: .001 & k: rbf, C: 10, g: .01 & k: rbf, C: 1, g: .01 & k: rbf, C: 10, g: .001\\\hline
-		\textbf{GridSearch time} & 11.75 s & 26.97 s & 150.91 s & 125.64 s & 104.41 s \\\hline
-		\textbf{Reduction time} & - & 6.02 s & 6.54 s & 6.05 s & 6.1 s \\\hline
-		\textbf{Kruskal's stress} & - & .16 & .42 & .54 & .71 \\\hline
-		\textbf{Data size} & 898.5 KB & 140.4 KB & 42.1 KB & 28.08 KB & 14 KB \\\hline
-	\end{tabular}
-	
-	\caption{Description of predictions and reduction performance for Digits and ISOMAP algorithm.}
-\end{table}
-
-Notice that it was possible to eliminate 54 dimensions, consistently reducing the data set size, and only suffering 3\% of prediction accuracy loss. The score drastically decreased, however, when more dimensions were removed. Furthermore, reductions to less than 10 dimensions would generate highly mixed samples, requiring more time for grid searching. Finally, it is also clear that score was inversely proportional to stress.
-
-\paragraph{Reducing the Digits Data Set With the ISOMAP Algorithm}
-
-\begin{figure}[H]
-	\centering
-	\captionsetup{justification=centering}
-	\includegraphics[width=\linewidth]{experiments/iso_digits}
-	\caption{The reductions of Digits to 3, 2 and 1 dimensions, respectively, with the ISOMAP algorithm.}
-	\label{fig:dsdigitsiso}
-\end{figure}
-
-Digits reductions using ISOMAP, as illustrated in figure \ref{fig:dsdigitsiso}, have proven to be much more organized, when compared to the reductions made by the PCA algorithm. Indeed, the representation in the 2D shows much less mixed samples, which translates into better scores:
-
-\begin{table}[H]
-	\centering
-	
-	\begin{tabular}{|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|}
-		\hline
-		& \textbf{Original} & $\mathbb{R}^{10}$ & $\mathbb{R}^3$ & $\mathbb{R}^2$ & $\mathbb{R}$ \\\hline
-		\textbf{1-NN} & .99 & .99 & .97 & .92 & .46 \\\hline
-		\textbf{Score} & .94 & .96 & .93 & .9 & .56 \\\hline
-		\textbf{Best parameters} & k: linear, C: 1 & k: linear, C: 1 & k: linear, C: 1 & k: linear, C: 1 & g: 0.01, k: rbf, C: 100 \\\hline
-		\textbf{GridSearch time} & 7.68 s & 5.1 s & 4.59 s & 4.47 s & 5.44 s \\\hline
-		\textbf{Reduction time} & - & 47.93 s & 47.99 s & 48.31 s & 48.82 s \\\hline
-		\textbf{Kruskal's stress} & - & .16 & .44 & .48 & .63 \\\hline
-		\textbf{Data size} & 898.5 KB & 140.4 KB & 42.1 KB & 28.08 KB & 14 KB \\\hline
-	\end{tabular}
-	
-	\caption{Description of predictions and reduction performance for Digits and ISOMAP algorithm.}
-\end{table}
-
-1-NN's and classification accuracy were kept above 90\% for all reductions down to the $\mathbb{R}^2$, being considerably higher than the scores obtained when testing over Digits reduced with PCA. Noticeable as well is the the reduction time, which has increased significantly given the data set great number of samples.
-
-\clearpage
 \section{The Swiss Roll Data Set}
+\label{experiments:sr}
 
 The Swiss Roll data set, with 1000 samples and 3 features.
 \newline\newline
@@ -302,6 +226,86 @@ Figure \ref{fig:dsswissiso} illustrates the efficacy of the ISOMAP algorithm in 
 Differently from the reductions with the PCA algorithm, learners trained over reductions retrieved from ISOMAP maintained a perfect score throughout the entire experiment, confirming that ISOMAP is a more adequate method for nonlinear data set reduction.
 
 \clearpage
+\section{The Digits Data Set}
+
+Digits data set is composed by 1797 samples, 64 features and 10 classes. Each sample is a 8x8 image of a hand-written digit from 0 to 9.
+\newline\newline
+
+\begin{figure}[H]
+	\centering
+	\captionsetup{justification=centering}
+	\includegraphics[width=\linewidth]{datasets/digits}
+	\caption{The Digits data set.}
+\end{figure}
+
+\newpage
+\paragraph{Reducing the Digits Data Set With the PCA Algorithm}
+
+\begin{figure}[H]
+	\centering
+	\captionsetup{justification=centering}
+	\includegraphics[width=\linewidth]{experiments/pca_digits}
+	\caption{The reductions of Digits to 3, 2 and 1 dimensions, respectively, with the PCA algorithm.}
+	\label{fig:dsdigitspca}
+\end{figure}
+
+From figure \ref{fig:dsdigitspca}, we have glimpse of Digits's samples structure. The many classes' clusters are visible in the 3D, although they become highly mixed in the 2D and 1D, yielding a confusing representation.
+
+\begin{table}[H]
+	\centering
+	
+	\begin{tabular}{|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|}
+		\hline
+		& \textbf{Original} & $\mathbb{R}^{10}$ & $\mathbb{R}^3$ & $\mathbb{R}^2$ & $\mathbb{R}$ \\\hline
+		\textbf{1-NN} & .99 & .97 & .68 & .56 & .28 \\\hline
+		\textbf{Score} & .98 & .95 & .74 & .64 & .39  \\\hline
+		\textbf{Best parameters} & k: rbf, C: 10, g: .001 & k: rbf, C: 10, g: .001 & k: rbf, C: 10, g: .01 & k: rbf, C: 1, g: .01 & k: rbf, C: 10, g: .001\\\hline
+		\textbf{GridSearch time} & 11.75 s & 26.97 s & 150.91 s & 125.64 s & 104.41 s \\\hline
+		\textbf{Reduction time} & - & 6.02 s & 6.54 s & 6.05 s & 6.1 s \\\hline
+		\textbf{Kruskal's stress} & - & .16 & .42 & .54 & .71 \\\hline
+		\textbf{Data size} & 898.5 KB & 140.4 KB & 42.1 KB & 28.08 KB & 14 KB \\\hline
+	\end{tabular}
+	
+	\caption{Description of predictions and reduction performance for Digits and ISOMAP algorithm.}
+\end{table}
+
+Notice that it was possible to eliminate 54 dimensions, consistently reducing the data set size, and only suffering 3\% of prediction accuracy loss. The score drastically decreased, however, when more dimensions were removed. Furthermore, reductions to less than 10 dimensions would generate highly mixed samples, requiring more time for grid searching. Finally, it is also clear that score was inversely proportional to stress.
+
+\paragraph{Reducing the Digits Data Set With the ISOMAP Algorithm}
+
+\begin{figure}[H]
+	\centering
+	\captionsetup{justification=centering}
+	\includegraphics[width=\linewidth]{experiments/iso_digits}
+	\caption{The reductions of Digits to 3, 2 and 1 dimensions, respectively, with the ISOMAP algorithm.}
+	\label{fig:dsdigitsiso}
+\end{figure}
+
+Digits reductions using ISOMAP, as illustrated in figure \ref{fig:dsdigitsiso}, have proven to be much more organized, when compared to the reductions made by the PCA algorithm. Indeed, the representation in the 2D shows much less mixed samples, which translates into better scores:
+
+\begin{table}[H]
+	\centering
+	
+	\begin{tabular}{|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|p{.14\linewidth}|}
+		\hline
+		& \textbf{Original} & $\mathbb{R}^{10}$ & $\mathbb{R}^3$ & $\mathbb{R}^2$ & $\mathbb{R}$ \\\hline
+		\textbf{1-NN} & .99 & .99 & .97 & .92 & .46 \\\hline
+		\textbf{Score} & .94 & .96 & .93 & .9 & .56 \\\hline
+		\textbf{Best parameters} & k: linear, C: 1 & k: linear, C: 1 & k: linear, C: 1 & k: linear, C: 1 & g: 0.01, k: rbf, C: 100 \\\hline
+		\textbf{GridSearch time} & 7.68 s & 5.1 s & 4.59 s & 4.47 s & 5.44 s \\\hline
+		\textbf{Reduction time} & - & 47.93 s & 47.99 s & 48.31 s & 48.82 s \\\hline
+		\textbf{Kruskal's stress} & - & .16 & .44 & .48 & .63 \\\hline
+		\textbf{Data size} & 898.5 KB & 140.4 KB & 42.1 KB & 28.08 KB & 14 KB \\\hline
+	\end{tabular}
+	
+	\caption{Description of predictions and reduction performance for Digits and ISOMAP algorithm.}
+\end{table}
+
+1-NN's and classification accuracy were kept above 90\% for all reductions down to the $\mathbb{R}^2$, being considerably higher than the scores obtained when testing over Digits reduced with PCA. We can compare the reduction time as well, which has increased significantly given the data set great number of samples and the higher complexity of ISOMAP compared to PCA.
+
+The Grid Search performed over the reduction to the $\mathbb{R}^{10}$ only took 58.2\% of the time of this same search when performed over the original data set: a consequence of the great reduction of features, no doubt, filtering the necessary work done by estimators in the learning phase.
+
+\clearpage
 \section{The Glass Data Set}
 
 Motivated by criminological investigations, the classification of different types of glasses based on the material composition can be demonstrated by the Glass data set, which contains 214 samples and 10 features, where each sample belongs to a specific class (e.g., building windows glass, tableware and headlamps). Lastly, it must be remarked that the first feature is the identification number of a given sample, and was therefore removed during our experiment.
@@ -345,7 +349,7 @@ We can observe from the representation of Glass in the $\mathbb{R}^3$ (figure \r
 	\caption{Description of predictions and reduction performance for Glass and ISOMAP algorithm.}
 \end{table}
 
-ISOMAP was able to reduce Glass with little structure deterioration, where 1-NN's and prediction accuracy were maintained throughout the entire experiment, while no complexity increase in the learner parameters is visible.
+ISOMAP was able to reduce Glass with little structure deterioration, where 1-NN's and prediction accuracy were maintained throughout the entire experiment, while no complexity increase in the learner parameters is visible. Grid Search time slightly increased as the linear SVM requires more time given high values of C and the compaction of data, which crunched samples together.
 
 \clearpage
 \section{The Dermatology Data Set}
@@ -371,7 +375,7 @@ The Dermatology data set, composed by 366 samples and 35 features. Here, the tar
 	\label{fig:dsdermatologyiso}
 \end{figure}
 
-From figure \ref{fig:dsdermatologyiso}, we easily infer that two classes are trivially separable. The rest, however, is highly convoluted in the origin of the space, hence higher dimensions might be necessary to achieve high accuracy scores.
+From figure \ref{fig:dsdermatologyiso}, we easily infer that two classes are trivially separable. The rest, however, is highly convoluted in the origin of the space, hence higher dimensions could be necessary to achieve high accuracy scores.
 
 \begin{table}[H]
 	\centering
@@ -417,7 +421,7 @@ The Leukemia data set contains 72 samples and 7129 features, which express level
 	\label{fig:dsleukemiaiso}
 \end{figure}
 
-The Results in this experiment are quite impressive: although visualization has barely changed from 7129 to 3 dimensions, a 7129-dimensional space was reduced to a 10-dimensional one with only 10\% of accuracy loss.
+Visualization has barely changed from 7129 to 3 dimensions, as samples are still very convoluted.
 
 \begin{table}[H]
 	\centering
@@ -437,8 +441,11 @@ The Results in this experiment are quite impressive: although visualization has 
 	\caption{Description of predictions and reduction performance for Leukemia and ISOMAP algorithm.}
 \end{table}
 
-Once again, an impressive reduction was performed, where a data set lying on the $\mathbb{R}^{7129}$ and occupying 4010.06 KB was shrunk to the $\mathbb{R}^{30}$, now only occupying 16.88 KB.
-%TODO needs more details.
+An impressive reduction was performed, where a data set lying on the $\mathbb{R}^{7129}$ and occupying 4010.06 KB was shrunk to the $\mathbb{R}^{30}$, now only occupying 16.88 KB.
+
+We observe very high values for the Kruskal's stress and low values for the 1-NN classifier, which suggests that tests with the SVM would also achieve low prediction accuracy. This, however, did not happen, as scores maintained a baseline of 88\% for all reductions. We therefore take this experiment as an example of how Kruskal's low stress is not always aligned with learners good performance and might not be a suitable metric for evaluation.
+
+Finally, as many features were discarded, Grid Search performed faster when applied over the reductions than when performed over the original data set.
 \clearpage
 
 \section{The WDBC Data Set}
@@ -465,6 +472,8 @@ The Wisconsin Diagnostic Breast Cancer (WDBC) data set, containing 596 samples a
 	\label{fig:dswdbciso}
 \end{figure}
 
+Reductions over WDBC seem to have somewhat contorted the original structure and and do not help significantly in visualization.
+
 \begin{table}[H]
 	\centering
 	
@@ -483,44 +492,4 @@ The Wisconsin Diagnostic Breast Cancer (WDBC) data set, containing 596 samples a
 	\caption{Description of predictions and reduction performance for WDBC and ISOMAP algorithm.}
 \end{table}
 
-\newpage
-\section{Diabetes Data Set}
-
-With 9 features observed from 768 samples collected from residents of Arizona, USA, the Diabetes data set seeks to diagnose whether a patient (sample) shows signs of diabetes (class 1) according to World Health Organization criteria or not (class 0). Is is also important to mention that only 268 samples belong, in fact, to class 1.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{img/datasets/diabetes}
-	\captionsetup{justification=centering}
-	\caption{The Diabetes data set.}
-	\label{fig:dsdiabetes}
-\end{figure}
-
-\newpage
-\paragraph{Reducing the Diabetes Data Set With the ISOMAP Algorithm}
-
-\begin{figure}[H]
-	\centering
-	\captionsetup{justification=centering}
-	\includegraphics[width=\linewidth]{experiments/iso_diabetes}
-	\caption{The reductions of Diabetes to 3, 2 and 1 dimensions, respectively, with the ISOMAP algorithm.}
-	\label{fig:dsdiabetesiso}
-\end{figure}
-
-\begin{table}[H]
-	\centering
-	
-	\begin{tabular}{|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|p{.15\linewidth}|}
-		\hline
-		& \textbf{Original} & $\mathbb{R}^6$ & $\mathbb{R}^4$ & $\mathbb{R}^2$ \\\hline
-		\textbf{1-NN} & .62 & .68 & .68 & .66  \\\hline
-		\textbf{Score} & .76 & .73 & .74 & .72 \\\hline
-		\textbf{Best parameters} & k: linear, C: 1 & k: linear, C: 1 & k: linear, C: 1 & k: linear, C: 1 \\\hline
-		\textbf{GridSearch time} & 14.13 s & 15.07 s & 15.65 s & 11.82 s \\\hline
-		\textbf{Reduction time} & - & 23.94 s & 23.66 s & 23.80 s \\\hline
-		\textbf{Kruskal's stress} & - & .3 & .25 & .32 \\\hline
-		\textbf{Data size} & 48 KB & 36 KB & 24 KB & 12 KB \\\hline
-	\end{tabular}
-	\captionsetup{justification=centering}
-	\caption{Description of predictions and reduction performance for Diabetes and ISOMAP algorithm.}
-\end{table}
+Although prediction accuracy was kept high throughout the whole experiment, Grid Search time has intensively increased, which indicates that the estimators would be having a great difficulty when learning from reductions. We conclude that ISOMAP might not be the ideal option to reduce WDBC for the dimensions specified in the table.
