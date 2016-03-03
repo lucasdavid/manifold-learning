@@ -598,7 +598,7 @@ More elaborately, given any linearly separable data set $\vect X$ containing sam
 	\end{cases}
 \end{align*}
 
-To prevent samples from falling into the margin or being misclassified \cite{wessvmdef}, reinforce that for any positive sample $\vect x_+$, $\vect w \cdot \vect x_+ +b \geq 1$. Similarly for $\vect x_-$ samples, $\vect w \cdot \vect x_- +b \leq 1$. These both constraints can be expressed as
+To prevent samples from falling into the margin or being misclassified \cite{wessvmdef}, reinforce that for any positive sample $\vect x_+$, $\vect w \cdot \vect x_+ +b \geq 1$. Similarly for $\vect x_-$ samples, $\vect w \cdot \vect x_- +b \leq -1$. These both constraints can be expressed as
 \begin{equation} \label{svmconst}
 y_i(\vect w \cdot \vect x_i +b) -1 \geq 0
 \end{equation}
